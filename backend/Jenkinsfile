@@ -15,39 +15,45 @@ pipeline {
 
         stage('Springboot build'){
             steps{
-                sh '''
-                echo 'Springboot build...'
-                chmod +x gradlew
-                        ./gradlew clean build
-                '''
+                dir('backend'){
+                    sh '''
+                    echo 'Springboot build...'
+                    chmod +x gradlew
+                            ./gradlew clean build
+                    '''
+                }
             }
         }
 
         stage('Dockerimage build'){
             steps {
-                script {
-                    def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep ${params.NAME}", returnStatus: true) == 0
+                dir('backend') {
+                    script {
+                        def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep ${params.NAME}", returnStatus: true) == 0
 
-                    if (containerExists) {
-                        sh "docker stop ${params.NAME}"
-                        sh "docker rm ${params.NAME}"
+                        if (containerExists) {
+                            sh "docker stop ${params.NAME}"
+                            sh "docker rm ${params.NAME}"
+                        }
+
+                        sh '''
+                        echo 'Dockerimage build...'
+                        docker rmi docker-springboot:0.0.1
+                        docker build -t docker-springboot:0.0.1 .
+                        '''
                     }
-
-                    sh '''
-                    echo 'Dockerimage build...'
-                    docker rmi docker-springboot:0.0.1
-                    docker build -t docker-springboot:0.0.1 .
-                    '''
                 }
             }
         }
 
         stage('Deploy'){
             steps{
-                sh '''
-                echo 'Deploy BE...'
-                docker run -d -p 8081:8080 --name springboot docker-springboot:0.0.1
-                '''
+                dir('backend'){
+                    sh '''
+                    echo 'Deploy BE...'
+                    docker run -d -p 8081:8080 --name springboot docker-springboot:0.0.1
+                    '''
+                }
             }
         }
     }
