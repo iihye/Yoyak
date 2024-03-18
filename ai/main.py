@@ -16,7 +16,30 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 print("Hello")
-@app.post("/api/upload")
+
+from starlette.middleware.cors import CORSMiddleware
+
+origins = [
+    "https://j10b102.p.ssafy.io",
+    "http://localhost:8000",
+    "http://0.0.0.0:8000",
+    "http://0.0.0.0",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/python/test")
+def test():
+    return "test"
+
+
+@app.post("/python/upload")
 async def upload_file(image: UploadFile = File(...)):
     extension = os.path.splitext(image.filename)[1]
     unique_name = f"{uuid.uuid4()}{extension}"
@@ -53,3 +76,6 @@ async def upload_file(image: UploadFile = File(...)):
     }
 
 
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

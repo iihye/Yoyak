@@ -21,4 +21,6 @@ ENV PATH /opt/conda/envs/torch/bin:$PATH
 # 나머지 애플리케이션 파일 복사
 COPY . .
 
-CMD ["uvicorn", "main:app","--reload"]
+#CMD ["uvicorn", "main:app", "--host=0.0.0.0", "--reload"]
+
+CMD ["python", "main.py"]

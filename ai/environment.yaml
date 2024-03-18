@@ -109,6 +109,7 @@ dependencies:
       - psutil==5.9.8
       - ptyprocess==0.7.0
       - pure-eval==0.2.2
+      - py-cpuinfo==9.0.0
       - pycocotools==2.0.7
       - pydantic==2.6.4
       - pydantic-core==2.16.3
@@ -135,6 +136,7 @@ dependencies:
       - tqdm==4.66.2
       - traitlets==5.14.2
       - tzdata==2024.1
+      - ultralytics==8.1.29
       - uvicorn==0.28.0
       - wcwidth==0.2.13
       - werkzeug==3.0.1
