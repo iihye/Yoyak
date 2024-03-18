@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yoyak/styles/colors/palette.dart';
 
 class AlarmScreen extends StatefulWidget {
   const AlarmScreen({super.key});
@@ -11,7 +12,14 @@ class _AlarmScreenState extends State<AlarmScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("알람 페이지임"),
+      child: const Text(
+        "알람 페이지임",
+        style: TextStyle(
+          color: Palette.MAIN_RED,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 }

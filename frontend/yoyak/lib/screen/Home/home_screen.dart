@@ -9,7 +9,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,9 +16,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Text("Asdf", style: TextStyle(
-              color: Colors.black
-            ),)
+            Text(
+              "asdfassaaa",
+              style: TextStyle(color: Colors.red),
+            )
           ],
         ),
       ),
