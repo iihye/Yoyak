@@ -13,7 +13,11 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         elevation: 0,
         title: Row(
           children: [
-            Text("요약")
+            Text("요약"),
+            IconButton(
+              icon: Icon(Icons.person),
+              onPressed: () {},
+            )
           ],
         )
     );
