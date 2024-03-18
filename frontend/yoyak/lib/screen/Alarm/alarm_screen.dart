@@ -15,7 +15,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
       child: const Text(
         "알람 페이지임",
         style: TextStyle(
-          color: Palette.MAIN_RED,
+          color: Palette.MAIN_BLUE,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
