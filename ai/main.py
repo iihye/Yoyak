@@ -37,5 +37,19 @@ async def upload_file(image: UploadFile = File(...)):
     }
     print("option", option)
     names = run(**option)
-    return {"file_path": file_path}
+
+    medicineList = []
+    for name in names:
+        data = {}
+        splited = name.split("-")
+        data["medicineCode"] = splited[0]
+        data["medicineName"] = splited[1]
+        medicineList.append(data)
+
+
+    return {
+        "count": len(names),
+        "medicineList": medicineList
+    }
+
 
