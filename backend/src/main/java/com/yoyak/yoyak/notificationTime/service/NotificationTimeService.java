@@ -3,8 +3,10 @@ package com.yoyak.yoyak.notificationTime.service;
 import com.yoyak.yoyak.notification.domain.Notification;
 import com.yoyak.yoyak.notification.dto.NotificationListDto;
 import com.yoyak.yoyak.notification.dto.NotificationRegistDto;
+import com.yoyak.yoyak.notification.service.NotificationService;
 import com.yoyak.yoyak.notificationTime.domain.NotificationTime;
 import com.yoyak.yoyak.notificationTime.domain.NotificationTimeRepository;
+import com.yoyak.yoyak.notificationTime.domain.NotificationTimeTaken;
 import com.yoyak.yoyak.notificationTime.dto.MedicationDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 public class NotificationTimeService {
 
     private final NotificationTimeRepository notificationTimeRepository;
+    private final NotificationService notificationService;
 
     // 알림 등록
     public void addNotification(NotificationRegistDto notificationRegistDto,
@@ -42,12 +45,12 @@ public class NotificationTimeService {
                     LocalDateTime localDateTime = LocalDateTime.of(currentDate, t);
                     NotificationTime notificationTime = NotificationTime.builder()
                         .time(localDateTime)
+                        .taken(NotificationTimeTaken.YET_TAKEN)
                         .notification(notification)
                         .build();
                     notificationTimeRepository.save(notificationTime);
                 }
             }
-
             currentDate = currentDate.plusDays(1);
         }
     }
@@ -68,13 +71,13 @@ public class NotificationTimeService {
                     if (localDateTime.isAfter(LocalDateTime.now())) { // 시간 확인
                         NotificationTime notificationTime = NotificationTime.builder()
                             .time(localDateTime)
+                            .taken(NotificationTimeTaken.YET_TAKEN)
                             .notification(notification)
                             .build();
                         notificationTimeRepository.save(notificationTime);
                     }
                 }
             }
-
             currentDate = currentDate.plusDays(1);
         }
     }
@@ -108,6 +111,8 @@ public class NotificationTimeService {
 
     // 알람 삭제
     public void removeNotification(Long notiSeq) {
+        notificationService.findById(notiSeq);
+
         List<NotificationTime> notificationTimes = notificationTimeRepository
             .findAllByNotificationSeq(notiSeq, LocalDateTime.now());
 
@@ -116,12 +121,32 @@ public class NotificationTimeService {
         }
     }
 
-    // 복용 등록
+    // 복용 먹음 등록
     public void addMedication(MedicationDto medicationDto) {
-        NotificationTime notificationTime = notificationTimeRepository.findById(
-                medicationDto.getSeq())
+        NotificationTime notificationTime = findById(medicationDto.getSeq());
+
+        notificationTime.takenNotificationTime(medicationDto.getTakenTime());
+    }
+
+    // 복용 먹지 않음 등록
+    public void addNotMedication(Long notiTimeSeq) {
+        NotificationTime notificationTime = findById(notiTimeSeq);
+
+        notificationTime.notNotificationTime();
+    }
+
+    // 복용 안 먹음 등록
+    public void addYetMedication(Long notiTimeSeq) {
+        NotificationTime notificationTime = findById(notiTimeSeq);
+
+        notificationTime.yetNotificationTime();
+    }
+
+    // 알람 세부 조회
+    public NotificationTime findById(Long seq) {
+        NotificationTime notificationTime = notificationTimeRepository.findById(seq)
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_INVALID));
-        
-        notificationTime.modifyNotificationTime(medicationDto.getTakenTime());
+
+        return notificationTime;
     }
 }

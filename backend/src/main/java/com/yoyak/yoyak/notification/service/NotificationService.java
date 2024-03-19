@@ -11,8 +11,6 @@ import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,15 +39,14 @@ public class NotificationService {
             .account(account)
             .build();
 
-        return notificationRepository.save(notification);
+        Notification notificationSaved = notificationRepository.save(notification);
+
+        return notificationSaved;
     }
 
     // 알림 상세 보기
-    public List<NotificationFindDto> findNotification(Long notiSeq) {
-        List<NotificationFindDto> notificationFindDtos = new ArrayList<>();
-
-        Notification notification = notificationRepository.findById(notiSeq)
-            .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_INVALID));
+    public NotificationFindDto findNotification(Long notiSeq) {
+        Notification notification = findById(notiSeq);
 
         NotificationFindDto notificationFindDto = NotificationFindDto.builder()
             .notiSeq(notification.getSeq())
@@ -60,17 +57,12 @@ public class NotificationService {
             .time(notification.getTime())
             .build();
 
-        notificationFindDtos.add(notificationFindDto);
-
-        return notificationFindDtos;
+        return notificationFindDto;
     }
 
     // 알람 수정
     public Notification modifyNotification(NotificationModifyDto notificationModifyDto) {
-        Notification notification = notificationRepository.findById(
-                notificationModifyDto.getNotiSeq())
-            .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_INVALID));
-
+        Notification notification = findById(notificationModifyDto.getNotiSeq());
         notification.modifyNotification(notificationModifyDto);
 
         return notification;
@@ -78,9 +70,15 @@ public class NotificationService {
 
     // 알람 삭제
     public void removeNotification(Long notiSeq) {
-        Notification notification = notificationRepository.findById(notiSeq)
+        Notification notification = findById(notiSeq);
+        notificationRepository.delete(notification);
+    }
+
+    // 알람 조회
+    public Notification findById(Long seq) {
+        Notification notification = notificationRepository.findById(seq)
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_INVALID));
 
-        notificationRepository.delete(notification);
+        return notification;
     }
 }
