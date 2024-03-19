@@ -22,16 +22,17 @@ public class MedicineEnvelopController {
     private final MedicineEnvelopService medicineEnvelopService;
 
     @PostMapping
-    public StatusResponseDto addMedicineEnvelop(
+    public StatusResponseDto medicineEnvelopAdd(
         @ModelAttribute MedicineEnvelopCreateDto medicineEnvelopCreateDto) {
-        log.info("약 봉투 등록 - Name: {}, Color: {}",
-            medicineEnvelopCreateDto.getName(), medicineEnvelopCreateDto.getColor());
+
+        log.info("약 봉투 등록 - Name: {}, Color: {}", medicineEnvelopCreateDto.getName(),
+            medicineEnvelopCreateDto.getColor());
 
         return medicineEnvelopService.addMedicineEnvelop(medicineEnvelopCreateDto);
     }
 
     @GetMapping("/{medicineEnvelopSeq}")
-    public BasicResponseDto medicineSummaryList(@PathVariable Long medicineEnvelopSeq) {
+    public BasicResponseDto medicineEnvelopDetails(@PathVariable Long medicineEnvelopSeq) {
         log.info("findMedicineSummaryList - medicineEnvelopSeq={}", medicineEnvelopSeq);
         return medicineEnvelopService.findMedicineSummaryList(medicineEnvelopSeq);
     }
