@@ -26,7 +26,7 @@ public class MedicineSavedService {
     public StatusResponseDto addMedicineToEnvelop(
         MedicineToEnvelopRegistrationDto medicineToEnvelopRegistrationDto) {
 
-        Medicine medicine = medicineRepository.findById(
+        Medicine medicine = medicineRepository.findBySeq(
             medicineToEnvelopRegistrationDto.getMedicineSeq()).orElseThrow();
 
         for (Long envelopSeq : medicineToEnvelopRegistrationDto.getEnvelopeSeqList()) {
