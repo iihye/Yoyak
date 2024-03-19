@@ -65,14 +65,14 @@ public class NotificationController {
         Notification notification = notificationService.modifyNotification(notificationModifyDto);
 
         NotificationRegistDto notificationRegistDto = new NotificationRegistDto();
-        notificationRegistDto.setName(notificationModifyDto.getName());
+        notificationRegistDto.setName(notification.getName());
         notificationRegistDto.setStartDate(LocalDate.now());
-        notificationRegistDto.setEndDate(notificationModifyDto.getEndDate());
-        notificationRegistDto.setPeriod(notificationModifyDto.getPeriod());
-        notificationRegistDto.setTime(notificationModifyDto.getTime());
+        notificationRegistDto.setEndDate(notification.getEndDate());
+        notificationRegistDto.setPeriod(notification.getPeriod());
+        notificationRegistDto.setTime(notification.getTime());
 
         notificationTimeService.removeNotification(notificationModifyDto.getNotiSeq());
-        notificationTimeService.addNotification(notificationRegistDto, notification);
+        notificationTimeService.modifyNotification(notificationRegistDto, notification);
 
         StatusResponseDto statusResponseDto = StatusResponseDto.builder()
             .code(200)

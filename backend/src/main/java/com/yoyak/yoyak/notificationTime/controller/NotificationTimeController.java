@@ -2,7 +2,6 @@ package com.yoyak.yoyak.notificationTime.controller;
 
 import com.yoyak.yoyak.notification.dto.NotificationListDto;
 import com.yoyak.yoyak.notificationTime.dto.MedicationDto;
-import com.yoyak.yoyak.notificationTime.dto.NotificationTimeAccountSeqDto;
 import com.yoyak.yoyak.notificationTime.service.NotificationTimeService;
 import com.yoyak.yoyak.util.dto.BasicResponseDto;
 import com.yoyak.yoyak.util.dto.StatusResponseDto;
@@ -26,11 +25,11 @@ public class NotificationTimeController {
     private final NotificationTimeService notificationTimeService;
 
     // 알림 목록
-    @GetMapping()
+    @GetMapping("/{userSeq}")
     public BasicResponseDto notificationList(
-        @RequestBody NotificationTimeAccountSeqDto notificationTimeAccountSeqDto) {
+        @PathVariable Long userSeq) {
         List<NotificationListDto> notificationListDtos = notificationTimeService.findNotification(
-            notificationTimeAccountSeqDto);
+            userSeq);
 
         BasicResponseDto basicResponseDto = BasicResponseDto.builder()
             .count(notificationListDtos.size())

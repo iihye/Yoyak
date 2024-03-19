@@ -6,7 +6,6 @@ import com.yoyak.yoyak.notification.dto.NotificationRegistDto;
 import com.yoyak.yoyak.notificationTime.domain.NotificationTime;
 import com.yoyak.yoyak.notificationTime.domain.NotificationTimeRepository;
 import com.yoyak.yoyak.notificationTime.dto.MedicationDto;
-import com.yoyak.yoyak.notificationTime.dto.NotificationTimeAccountSeqDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import jakarta.transaction.Transactional;
@@ -14,6 +13,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,16 +33,46 @@ public class NotificationTimeService {
         LocalDate startDate = notificationRegistDto.getStartDate();
         LocalDate endDate = notificationRegistDto.getEndDate();
         LocalDate currentDate = startDate;
+        List<DayOfWeek> period = notificationRegistDto.getPeriod();
         List<LocalTime> time = notificationRegistDto.getTime();
 
-        while (!currentDate.isAfter(endDate)) {
-            for (LocalTime t : time) {
-                LocalDateTime localDateTime = LocalDateTime.of(currentDate, t);
-                NotificationTime notificationTime = NotificationTime.builder()
-                    .time(localDateTime)
-                    .notification(notification)
-                    .build();
-                notificationTimeRepository.save(notificationTime);
+        while (!currentDate.isAfter(endDate)) { // 날짜 확인
+            if (period.contains(currentDate.getDayOfWeek())) { // 요일 확인
+                for (LocalTime t : time) {
+                    LocalDateTime localDateTime = LocalDateTime.of(currentDate, t);
+                    NotificationTime notificationTime = NotificationTime.builder()
+                        .time(localDateTime)
+                        .notification(notification)
+                        .build();
+                    notificationTimeRepository.save(notificationTime);
+                }
+            }
+
+            currentDate = currentDate.plusDays(1);
+        }
+    }
+
+    // 알람 수정
+    public void modifyNotification(NotificationRegistDto notificationRegistDto,
+        Notification notification) {
+        LocalDate startDate = notificationRegistDto.getStartDate();
+        LocalDate endDate = notificationRegistDto.getEndDate();
+        LocalDate currentDate = startDate;
+        List<DayOfWeek> period = notificationRegistDto.getPeriod();
+        List<LocalTime> time = notificationRegistDto.getTime();
+
+        while (!currentDate.isAfter(endDate)) { // 날짜 확인
+            if (period.contains(currentDate.getDayOfWeek())) { // 요일 확인
+                for (LocalTime t : time) {
+                    LocalDateTime localDateTime = LocalDateTime.of(currentDate, t);
+                    if (localDateTime.isAfter(LocalDateTime.now())) { // 시간 확인
+                        NotificationTime notificationTime = NotificationTime.builder()
+                            .time(localDateTime)
+                            .notification(notification)
+                            .build();
+                        notificationTimeRepository.save(notificationTime);
+                    }
+                }
             }
 
             currentDate = currentDate.plusDays(1);
@@ -51,28 +81,26 @@ public class NotificationTimeService {
 
     // 알람 목록
     public List<NotificationListDto> findNotification(
-        NotificationTimeAccountSeqDto notificationTimeAccountSeqDto) {
-        List<NotificationListDto> notificationListDtos = null;
+        Long userSeq) {
+        List<NotificationListDto> notificationListDtos = new ArrayList<>();
 
         LocalDateTime currentDate = LocalDateTime.now();
         LocalDateTime startDate = currentDate.minusWeeks(3).with(DayOfWeek.MONDAY);
         LocalDateTime endDate = currentDate.plusWeeks(3).with(DayOfWeek.SATURDAY);
 
-        for (Long seq : notificationTimeAccountSeqDto.getSeq()) {
-            List<NotificationTime> notificationTimes = notificationTimeRepository
-                .findAllByAccountSeqAndTime(seq, startDate, endDate);
+        List<NotificationTime> notificationTimes = notificationTimeRepository
+            .findAllByAccountSeqAndTime(userSeq, startDate, endDate);
 
-            for (NotificationTime notificationTime : notificationTimes) {
-                NotificationListDto notificationListDto = NotificationListDto.builder()
-                    .seq(notificationTime.getSeq())
-                    .name(notificationTime.getNotification().getName())
-                    .time(notificationTime.getTime())
-                    .takenTime(notificationTime.getTakenTime())
-                    .accountSeq(notificationTime.getNotification().getAccount().getSeq())
-                    .notiSeq(notificationTime.getNotification().getSeq())
-                    .build();
-                notificationListDtos.add(notificationListDto);
-            }
+        for (NotificationTime notificationTime : notificationTimes) {
+            NotificationListDto notificationListDto = NotificationListDto.builder()
+                .seq(notificationTime.getSeq())
+                .name(notificationTime.getNotification().getName())
+                .time(notificationTime.getTime())
+                .takenTime(notificationTime.getTakenTime())
+                .accountSeq(notificationTime.getNotification().getAccount().getSeq())
+                .notiSeq(notificationTime.getNotification().getSeq())
+                .build();
+            notificationListDtos.add(notificationListDto);
         }
 
         return notificationListDtos;
@@ -93,7 +121,7 @@ public class NotificationTimeService {
         NotificationTime notificationTime = notificationTimeRepository.findById(
                 medicationDto.getSeq())
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_INVALID));
-        ;
+        
         notificationTime.modifyNotificationTime(medicationDto.getTakenTime());
     }
 }
