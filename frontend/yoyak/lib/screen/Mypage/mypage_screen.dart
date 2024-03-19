@@ -6,7 +6,7 @@ class MypageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("마이페이지임"),
+      child: const Text("마이페이지임"),
     );
   }
 }

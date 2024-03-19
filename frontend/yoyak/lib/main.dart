@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:yoyak/screen/Main/main_screen.dart';
 
-import 'components/BottomBar.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+  class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override

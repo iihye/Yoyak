@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
 
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar: const MainAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "성현님 건강하세요",
                       style: TextStyle(
                         fontSize: 22,
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     RichText(
-                        text: TextSpan(children: [
+                        text: const TextSpan(children: [
                       TextSpan(
                         text: '오늘 드실 약은 ',
                         style: TextStyle(
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   color: Palette.BG_BLUE,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20)),
                   border: Border.all(
@@ -92,19 +92,19 @@ class _HomeScreenState extends State<HomeScreen> {
               
                 child: Column(
                   children: [
-                    Padding(padding: EdgeInsets.only(top: 40),),
+                    const Padding(padding: EdgeInsets.only(top: 40),),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Spacer(),
-                        RoundedRectangle(width: rectangleSize, height: rectangleSize, destination: AlarmScreen(), child: Container(
-                          child: Text(""),
+                        const Spacer(),
+                        RoundedRectangle(width: rectangleSize, height: rectangleSize, destination: const AlarmScreen(), child: Container(
+                          child: const Text(""),
                         )),
-                        Spacer(),
-                        RoundedRectangle(width: rectangleSize, height: rectangleSize, destination: AlarmScreen(),child: Container(
-                          child: Text(""),
+                        const Spacer(),
+                        RoundedRectangle(width: rectangleSize, height: rectangleSize, destination: const AlarmScreen(),child: Container(
+                          child: const Text(""),
                         )),
-                        Spacer(),
+                        const Spacer(),
                       ],
                     ),
                   ],

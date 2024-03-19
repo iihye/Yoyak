@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:yoyak/screen/Alarm/alarm_screen.dart';
-import 'package:yoyak/screen/Mypage/mypage_screen.dart';
 
 class RoundedRectangle extends StatelessWidget {
   final double width, height;
@@ -19,7 +17,7 @@ class RoundedRectangle extends StatelessWidget {
     },
 
       child: Container (
-        margin: EdgeInsets.only(bottom: 16),
+        margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
