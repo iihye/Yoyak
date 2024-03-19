@@ -1,10 +1,21 @@
 package com.yoyak.yoyak.notificationTime.domain;
 
 import com.yoyak.yoyak.notification.domain.Notification;
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.time.LocalDate;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -20,13 +31,17 @@ public class NotificationTime {
     private Long seq;
 
     @Column(nullable = false)
-    private LocalDate date;
+    private LocalDateTime time;
 
-    @Column(nullable = false)
-    private LocalDate takenDate;
+    @Column(nullable = true)
+    private LocalTime takenTime;
 
     @ManyToOne
     @JoinColumn(name = "notification_seq", nullable = false)
     private Notification notification;
+
+    public void modifyNotificationTime(LocalTime takenTime) {
+        this.takenTime = takenTime;
+    }
 
 }
