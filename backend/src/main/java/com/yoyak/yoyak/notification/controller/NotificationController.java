@@ -2,13 +2,11 @@ package com.yoyak.yoyak.notification.controller;
 
 import com.yoyak.yoyak.notification.domain.Notification;
 import com.yoyak.yoyak.notification.dto.NotificationFindDto;
-import com.yoyak.yoyak.notification.dto.NotificationListDto;
 import com.yoyak.yoyak.notification.dto.NotificationModifyDto;
 import com.yoyak.yoyak.notification.dto.NotificationRegistDto;
 import com.yoyak.yoyak.notification.service.NotificationService;
 import com.yoyak.yoyak.notificationTime.service.NotificationTimeService;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -65,16 +63,6 @@ public class NotificationController {
         notificationTimeService.modifyNotification(notificationRegistDto, notification);
 
         return ResponseEntity.ok().build();
-    }
-
-    // 알림 목록
-    @GetMapping("/{userSeq}")
-    public ResponseEntity<Object> notificationList(
-        @PathVariable Long userSeq) {
-        List<NotificationListDto> notificationListDtos = notificationTimeService.findNotification(
-            userSeq);
-
-        return ResponseEntity.ok().body(notificationListDtos);
     }
 
     // 알림 삭제
