@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yoyak/components/MainAppBar.dart';
 import 'package:yoyak/components/RoundedRectangle.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
+import 'package:yoyak/screen/Camera/Camera.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +17,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
+
+    goTo(Widget destination) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => destination),
+      );
+    }
 
     return Scaffold(
       appBar: const MainAppBar(),
@@ -78,38 +86,47 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               color: Colors.blueAccent,
               child: Container(
-                decoration: BoxDecoration(
-                  color: Palette.BG_BLUE,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
-                  border: Border.all(
-                    width: 0.1,
-                    color: Colors.grey.withOpacity(0.5),
-                  ),),
-                width: screenWidth,
-                height: 560,
-              
-                child: Column(
-                  children: [
-                    const Padding(padding: EdgeInsets.only(top: 40),),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Spacer(),
-                        RoundedRectangle(width: rectangleSize, height: rectangleSize, destination: const AlarmScreen(), child: Container(
-                          child: const Text(""),
-                        )),
-                        const Spacer(),
-                        RoundedRectangle(width: rectangleSize, height: rectangleSize, destination: const AlarmScreen(),child: Container(
-                          child: const Text(""),
-                        )),
-                        const Spacer(),
-                      ],
+                  decoration: BoxDecoration(
+                    color: Palette.BG_BLUE,
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                    border: Border.all(
+                      width: 0.1,
+                      color: Colors.grey.withOpacity(0.5),
                     ),
-                  ],
-                )
-              ),
+                  ),
+                  width: screenWidth,
+                  height: 560,
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 40),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Spacer(),
+                          RoundedRectangle(
+                              width: rectangleSize,
+                              height: rectangleSize,
+                              onTap: () => goTo(AlarmScreen()),
+                              child: Container(
+                                child: const Text(""),
+                              )),
+                          const Spacer(),
+                          RoundedRectangle(
+                              width: rectangleSize,
+                              height: rectangleSize,
+                              onTap: () => {},
+                              child: Container(
+                                child: const Text(""),
+                              )),
+                          const Spacer(),
+                        ],
+                      ),
+                    ],
+                  )),
             )
           ],
         ),

@@ -32,13 +32,11 @@ class _MainScreenState extends State<MainScreen> {
      });
 }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: mainTabs[curTabIdx],
-      bottomNavigationBar: BottomBar(curTabIdx: curTabIdx, setCurTabIdx: setCurTabIdx, mainTabs: mainTabs),
+      bottomNavigationBar: BottomBar(curTabIdx: curTabIdx, setCurTabIdx: setCurTabIdx, mainTabs: mainTabs,),
     );
   }
 }
