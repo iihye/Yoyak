@@ -70,7 +70,7 @@ public class AccountService {
     public AccountDetailDto detailAccount(Long accountSeq) {
         Account account = findById(accountSeq);
 
-        AccountDetailDto accountDetailDto = AccountDetailDto.builder()
+        return AccountDetailDto.builder()
             .seq(account.getSeq())
             .name(account.getName())
             .nickname(account.getNickname())
@@ -79,8 +79,6 @@ public class AccountService {
             .disease(account.getDisease())
             .profileImg(account.getProfileImg())
             .build();
-
-        return accountDetailDto;
     }
 
     // 계정 수정
