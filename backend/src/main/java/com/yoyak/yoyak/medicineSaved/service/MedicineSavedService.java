@@ -25,23 +25,25 @@ public class MedicineSavedService {
 
     @Transactional
     public StatusResponseDto addMedicineToEnvelop(
-        MedicineToEnvelopRegistrationDto medicineToEnvelopRegistrationDto) {
+        MedicineToEnvelopRegistrationDto requestDto) {
 
-        Medicine medicine = medicineRepository.findBySeq(
-            medicineToEnvelopRegistrationDto.getMedicineSeq()).orElseThrow();
+        Medicine medicine = medicineRepository.
+            findBySeq(requestDto.getMedicineSeq())
+            .orElseThrow();
+        log.info("seq ={}, medicine ={}", requestDto.getMedicineSeq(), medicine);
 
-        for (Long envelopSeq : medicineToEnvelopRegistrationDto.getEnvelopeSeqList()) {
-            MedicineEnvelop medicineEnvelop = medicineEnvelopRepository.findById(envelopSeq)
-                .orElseThrow();
+        MedicineEnvelop envelop = medicineEnvelopRepository
+            .findById(requestDto.getEnvelopeSeq())
+            .orElseThrow();
+        log.info("seq ={}, envelop ={}", requestDto.getEnvelopeSeq(), envelop);
 
-            MedicineSaved medicineSaved = MedicineSaved.builder()
-                .accountSeq(medicineToEnvelopRegistrationDto.getAccountSeq())
-                .medicineEnvelop(medicineEnvelop)
-                .medicine(medicine).build();
-
-            log.info("medicineSaved={}", medicineSaved);
-            medicineSavedRepository.save(medicineSaved);
-        }
+        MedicineSaved medicineSaved = MedicineSaved.builder()
+            .accountSeq(requestDto.getAccountSeq())
+            .medicineEnvelop(envelop)
+            .medicine(medicine)
+            .build();
+        log.info("medicineSaved ={}", medicineSaved);
+        medicineSavedRepository.save(medicineSaved);
 
         return StatusResponseDto.builder()
             .code(200)

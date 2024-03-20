@@ -22,12 +22,13 @@ public class MedicineSavedController {
     private final MedicineSavedService medicineSavedService;
 
     @PostMapping()
-    public StatusResponseDto addMedicineToEnvelop(
-        @RequestBody MedicineToEnvelopRegistrationDto medicineToEnvelopeRegistrationDto) {
+    public ResponseEntity<StatusResponseDto> addMedicineToEnvelop(
+        @RequestBody MedicineToEnvelopRegistrationDto requestDto) {
 
-        log.info("addMedicineToEnvelop={}", medicineToEnvelopeRegistrationDto);
+        log.info("addMedicineToEnvelop={}", requestDto);
 
-        return medicineSavedService.addMedicineToEnvelop(medicineToEnvelopeRegistrationDto);
+        return ResponseEntity.ok().body(
+            medicineSavedService.addMedicineToEnvelop(requestDto));
     }
 
     @DeleteMapping

@@ -14,5 +14,5 @@ public class MedicineToEnvelopRegistrationDto {
 
     private Long accountSeq;
     private Long medicineSeq;
-    private List<Long> envelopeSeqList;
+    private Long envelopeSeq;
 }
