@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,6 +31,18 @@ public class MedicineEnvelopController {
 
         return medicineEnvelopService.addMedicineEnvelop(medicineEnvelopCreateDto);
     }
+
+    @GetMapping
+    public BasicResponseDto medicineEnvelopList(
+        @RequestParam(name = "userSeq", required = true) Long userSeq,
+        @RequestParam(name = "itemSeq", required = false) Long itemSeq
+    ) {
+
+        log.info("userSeq({})의 약 봉투 조회 {} -", userSeq, itemSeq);
+
+        return medicineEnvelopService.findMedicineEnvelopList(userSeq, itemSeq);
+    }
+
 
     @GetMapping("/{medicineEnvelopSeq}")
     public BasicResponseDto medicineEnvelopDetails(@PathVariable Long medicineEnvelopSeq) {

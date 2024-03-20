@@ -5,12 +5,14 @@ import com.yoyak.yoyak.account.domain.AccountRepository;
 import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelop;
 import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelopRepository;
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopCreateDto;
+import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopDto;
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineSummaryDto;
 import com.yoyak.yoyak.util.dto.BasicResponseDto;
 import com.yoyak.yoyak.util.dto.StatusResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Env;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +26,7 @@ public class MedicineEnvelopService {
     public StatusResponseDto addMedicineEnvelop(
         MedicineEnvelopCreateDto medicineEnvelopeCreateDto) {
 
-        Account account = accountRepository.findById(1L).orElseThrow();
+        Account account = accountRepository.findById(2L).orElseThrow();
         MedicineEnvelop medicineEnvelop = MedicineEnvelop.builder()
             .name(medicineEnvelopeCreateDto.getName())
             .color(medicineEnvelopeCreateDto.getColor())
@@ -49,6 +51,17 @@ public class MedicineEnvelopService {
         return BasicResponseDto.builder()
             .count(medicineSummaryDtoList.size())
             .result(medicineSummaryDtoList)
+            .build();
+    }
+
+    public BasicResponseDto findMedicineEnvelopList(Long userSeq, Long itemSeq) {
+
+        List<MedicineEnvelopDto> medicineEnvelopDtoList =
+            medicineEnvelopRepository.findMedicineEnvelopByAccountSeq(userSeq, itemSeq);
+
+        return BasicResponseDto.builder()
+            .count(medicineEnvelopDtoList.size())
+            .result(medicineEnvelopDtoList)
             .build();
     }
 }
