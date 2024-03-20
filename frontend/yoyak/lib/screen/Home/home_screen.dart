@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yoyak/components/MainAppBar.dart';
 import 'package:yoyak/components/RoundedRectangle.dart';
+import 'package:yoyak/screen/Alarm/alarm_create.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
@@ -16,6 +17,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
+
+    goTo(destination) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => destination),
+      );
+    }
 
     return Scaffold(
       appBar: const MainAppBar(),
@@ -102,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () => (),
+                              onTap: () {},
                               child: Container(
                                 child: const Text(""),
                               )),
@@ -110,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () => (),
+                              onTap: () {},
                               child: Container(
                                 child: const Text(""),
                               )),
