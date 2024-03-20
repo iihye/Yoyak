@@ -6,6 +6,7 @@ import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelop;
 import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelopRepository;
 import com.yoyak.yoyak.medicineSaved.domain.MedicineSaved;
 import com.yoyak.yoyak.medicineSaved.domain.MedicineSavedRepository;
+import com.yoyak.yoyak.medicineSaved.dto.MedicineFromEnvelopeRemovalDto;
 import com.yoyak.yoyak.medicineSaved.dto.MedicineToEnvelopRegistrationDto;
 import com.yoyak.yoyak.util.dto.StatusResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -47,4 +48,17 @@ public class MedicineSavedService {
             .message("sucess")
             .build();
     }
+
+    public StatusResponseDto deleteMedicineToEnvelop(
+        MedicineFromEnvelopeRemovalDto requestDto) {
+
+        medicineSavedRepository.deleteByMedicineEnvelopSeqAndMedicineSeq(
+            requestDto.getEnvelopeSeq(), requestDto.getMedicineSeq());
+
+        return StatusResponseDto.builder()
+            .code(200)
+            .message("success")
+            .build();
+    }
 }
+
