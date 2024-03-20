@@ -44,12 +44,6 @@ class _BottomBarState extends State<BottomBar> {
             icon: Icon(Icons.outlined_flag, color: Color(0xFFD3D3D3)),
             activeIcon: Icon(Icons.flag, color: Colors.blueAccent),
           ),
-          BottomNavigationBarItem(
-            label: '검색페이지',
-            backgroundColor: Colors.white,
-            icon: Icon(Icons.search, color: Color(0xFFD3D3D3)),
-            activeIcon: Icon(Icons.search, color: Colors.blueAccent),
-          ),
         ]);
   }
 }

@@ -11,7 +11,17 @@ class PhotoSearchScreen extends StatelessWidget {
     double rectangleHeight = MediaQuery.of(context).size.width * 0.5;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('알약 검색',
+            style: TextStyle(
+              color: Palette.MAIN_BLACK,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+            )),
+        centerTitle: true,
+        toolbarHeight: 55,
+      ),
       body: Container(
         width: double.infinity,
         color: Palette.SUB_BLUE,

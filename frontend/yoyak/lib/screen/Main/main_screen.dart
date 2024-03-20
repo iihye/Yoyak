@@ -23,7 +23,6 @@ class _MainScreenState extends State<MainScreen> {
     const AlarmScreen(),
     const HomeScreen(),
     const ChallengeScreen(),
-    const PhotoSearchScreen()
   ];
 
   // tabIdx 수정
