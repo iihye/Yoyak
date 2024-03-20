@@ -39,16 +39,14 @@ public class NotificationService {
             .account(account)
             .build();
 
-        Notification notificationSaved = notificationRepository.save(notification);
-
-        return notificationSaved;
+        return notificationRepository.save(notification);
     }
 
     // 알림 상세 보기
     public NotificationFindDto findNotification(Long notiSeq) {
         Notification notification = findById(notiSeq);
 
-        NotificationFindDto notificationFindDto = NotificationFindDto.builder()
+        return NotificationFindDto.builder()
             .notiSeq(notification.getSeq())
             .name(notification.getName())
             .startDate(notification.getStartDate())
@@ -57,7 +55,6 @@ public class NotificationService {
             .time(notification.getTime())
             .build();
 
-        return notificationFindDto;
     }
 
     // 알람 수정
@@ -76,9 +73,7 @@ public class NotificationService {
 
     // 알람 조회
     public Notification findById(Long seq) {
-        Notification notification = notificationRepository.findById(seq)
+        return notificationRepository.findById(seq)
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_INVALID));
-
-        return notification;
     }
 }

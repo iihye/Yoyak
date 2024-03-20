@@ -144,9 +144,7 @@ public class NotificationTimeService {
 
     // 알람 세부 조회
     public NotificationTime findById(Long seq) {
-        NotificationTime notificationTime = notificationTimeRepository.findById(seq)
+        return notificationTimeRepository.findById(seq)
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_INVALID));
-
-        return notificationTime;
     }
 }
