@@ -36,7 +36,7 @@ class PhotoSearchScreen extends StatelessWidget {
                   color: Palette.MAIN_BLACK,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
-                  fontSize: 14),
+                  fontSize: 15),
             ),
             Text(
               "밝은 곳에서 알약의 문자가 잘 보이게 촬영해주세요.",
@@ -44,7 +44,7 @@ class PhotoSearchScreen extends StatelessWidget {
                   color: Palette.MAIN_BLACK,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
-                  fontSize: 14),
+                  fontSize: 15),
             ),
             // Spacer(),
             Container(
@@ -52,7 +52,7 @@ class PhotoSearchScreen extends StatelessWidget {
               child: RoundedRectangle(
                 width: rectangleWidth,
                 height: rectangleHeight,
-                boxshadow: [
+                boxShadow: [
                   BoxShadow(
                     color: Palette.SHADOW_GREY,
                     blurRadius: 3,
@@ -67,6 +67,7 @@ class PhotoSearchScreen extends StatelessWidget {
                 ),
               ),
             ),
+            // => 이미지, 촬영 일러스트 변경하기!
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -77,7 +78,7 @@ class PhotoSearchScreen extends StatelessWidget {
                       RoundedRectangle(
                         width: MediaQuery.of(context).size.width * 0.35,
                         height: MediaQuery.of(context).size.width * 0.35,
-                        boxshadow: [
+                        boxShadow: [
                           BoxShadow(
                             color: Palette.SHADOW_GREY,
                             blurRadius: 3,
@@ -91,7 +92,15 @@ class PhotoSearchScreen extends StatelessWidget {
                           // child: Image.asset('assets/images/guide.png'),
                         ),
                       ),
-                      Text("이미지 업로드")
+                      SizedBox(height: 10),
+                      Text(
+                        "이미지 업로드",
+                        style: TextStyle(
+                            color: Palette.MAIN_BLACK,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16),
+                      )
                     ],
                   ),
                 ),
@@ -102,7 +111,7 @@ class PhotoSearchScreen extends StatelessWidget {
                       RoundedRectangle(
                         width: MediaQuery.of(context).size.width * 0.35,
                         height: MediaQuery.of(context).size.width * 0.35,
-                        boxshadow: [
+                        boxShadow: [
                           BoxShadow(
                             color: Palette.SHADOW_GREY,
                             blurRadius: 3,
@@ -116,7 +125,15 @@ class PhotoSearchScreen extends StatelessWidget {
                           // child: Image.asset('assets/images/guide.png'),
                         ),
                       ),
-                      Text("촬영하기")
+                      SizedBox(height: 10),
+                      Text(
+                        "촬영하기",
+                        style: TextStyle(
+                            color: Palette.MAIN_BLACK,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16),
+                      )
                     ],
                   ),
                 ),
