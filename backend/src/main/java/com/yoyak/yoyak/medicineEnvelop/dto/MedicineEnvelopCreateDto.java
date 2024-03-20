@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 public class MedicineEnvelopCreateDto {
 
+    private Long userSeq;
     private String name;
     private String color;
 }

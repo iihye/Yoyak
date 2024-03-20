@@ -23,12 +23,13 @@ public class MedicineEnvelopService {
     private final AccountRepository accountRepository;
 
     public StatusResponseDto addMedicineEnvelop(
-        MedicineEnvelopCreateDto medicineEnvelopeCreateDto) {
+        MedicineEnvelopCreateDto requestDto) {
 
-        Account account = accountRepository.findById(2L).orElseThrow();
+        Account account = accountRepository.findById(requestDto.getUserSeq()).orElseThrow();
+
         MedicineEnvelop medicineEnvelop = MedicineEnvelop.builder()
-            .name(medicineEnvelopeCreateDto.getName())
-            .color(medicineEnvelopeCreateDto.getColor())
+            .name(requestDto.getName())
+            .color(requestDto.getColor())
             .account(account)
             .build();
 
