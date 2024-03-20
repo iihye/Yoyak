@@ -13,23 +13,6 @@ public interface MedicineEnvelopRepository extends JpaRepository<MedicineEnvelop
             + "FROM MedicineSaved m WHERE m.medicineEnvelop.seq = :medicineEnvelopSeq")
     List<MedicineSummaryDto> findMedicineSummaryByEnvelopSeq(Long medicineEnvelopSeq);
 
-    /*
-        @Query(
-            "SELECT new com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopDto(m.seq, m.name, m.color, a.seq, a.nickname) "
-                + "FROM MedicineEnvelop m "
-                + "JOIN m.account a "
-                + "WHERE a.seq = :userSeq")
-        */
-/*
-    @Query("SELECT new com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopDto(" +
-        "m.seq, m.name, m.color, a.seq, a.nickname, " +
-        "CASE WHEN ms.seq IS NOT NULL THEN true ELSE false END) " +
-        "FROM MedicineEnvelop m " +
-        "JOIN m.account a " +
-        "LEFT JOIN m.medicinesSavedList ms " +
-        "WITH ms.medicine IS NOT NULL " +
-        "WHERE a.seq = :userSeq")
-        */
     @Query("SELECT new com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopDto("
         + "m.seq, m.name, m.color, a.seq, a.nickname, "
         + "     (SELECT CASE WHEN COUNT(ms) > 0 THEN true ELSE false END "

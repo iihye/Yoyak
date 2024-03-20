@@ -12,7 +12,6 @@ import com.yoyak.yoyak.util.dto.StatusResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Env;
 import org.springframework.stereotype.Service;
 
 @Service
