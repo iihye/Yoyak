@@ -1,14 +1,13 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
 class AlarmCreate extends StatefulWidget {
   final int? notiSeq;
+
   const AlarmCreate({
     super.key,
-    this.notiSeq,
+    required this.notiSeq,
   });
 
   @override
@@ -16,32 +15,42 @@ class AlarmCreate extends StatefulWidget {
 }
 
 class _AlarmCreateState extends State<AlarmCreate> {
+  var data = [
+    {
+      "accountSeq": 1,
+      "notiSeq": 4,
+      "name": "감기약3",
+      "startDate": "2024-01-03",
+      "endDate": "2024-01-05",
+      "period": ["MONDAY", "TUESDAY", "WEDNESDAY"],
+      "time": ["09:00:00", "13:00:00", "20:00:00"]
+    }
+  ];
+
   DateTimeRange dateTimeRange = DateTimeRange(
     start: DateTime.now(),
     end: DateTime(2024, 03, 30),
   );
 
   final _formKey = GlobalKey<FormState>();
-  final String _alarmName = '';
-  final DateTime _alarmTime = DateTime.now();
-  final String _alarmDuration = '';
 
-  @override
-  void dispose() {
-    print(_alarmTime);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   print(_alarmTime);
+  //   super.dispose();
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    print(_alarmTime);
-    print(widget.notiSeq);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   print(_alarmTime);
+  //   print(widget.notiSeq);
+  //   checkAlarmName();
+  // }
 
-  checkAlarmName() {
-    print('$_alarmName, $_alarmTime, $_alarmDuration');
-  }
+  // checkAlarmName() {
+  //   print('$_alarmName, $_alarmTime, $_alarmDuration');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +58,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
     final end = dateTimeRange.end;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
@@ -89,7 +99,8 @@ class _AlarmCreateState extends State<AlarmCreate> {
                         selectDateRange();
                       },
                       child: Text(
-                          '${start.year % 100}.${start.month.toString().padLeft(2, '0')}.${start.day}'),
+                        '${start.year % 100}.${start.month.toString().padLeft(2, '0')}.${start.day}',
+                      ),
                     ),
                   ),
                   const SizedBox(
