@@ -3,6 +3,8 @@ import 'package:yoyak/components/MainAppBar.dart';
 import 'package:yoyak/components/RoundedRectangle.dart';
 import 'package:yoyak/screen/Alarm/alarm_create.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
+import 'package:yoyak/screen/Search/filter_search_screen.dart';
+import 'package:yoyak/screen/Search/photo_search_screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -110,7 +112,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PhotoSearchScreen()));
+                              },
                               child: Container(
                                 child: const Text(""),
                               )),
@@ -118,7 +126,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const FilterSearchScreen()));
+                              },
                               child: Container(
                                 child: const Text(""),
                               )),
