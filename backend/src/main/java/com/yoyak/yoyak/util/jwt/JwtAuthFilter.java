@@ -1,55 +1,58 @@
 package com.yoyak.yoyak.util.jwt;
 
-import com.yoyak.yoyak.user.domain.User;
-import com.yoyak.yoyak.user.service.UserService;
+import com.yoyak.yoyak.util.user.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@Slf4j
 @RequiredArgsConstructor
-public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilter -> 한 번 실행 보장
+public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final UserService userService;
+    private final CustomUserDetailsService customUserDetailsService;
     private final JwtUtil jwtUtil;
 
     @Override
-    /**
-     * JWT 토큰 검증 필터 수행
-     */
+    // JWT 토큰 검증 필터
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
 
-        //JWT가 헤더에 있는 경우
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
+        // JWT가 헤더에 있는 경우(Authorization: Bearer {{token}})
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
-            //JWT 유효성 검증
+
+            // JWT 유효성 검증
             if (jwtUtil.validateToken(token)) {
                 Long userSeq = jwtUtil.getUserSeq(token);
 
-                //유저와 토큰 일치 시 userDetails 생성
-                User user = userService.findById(userSeq);
-//                UserDto userDto = customUserDetailsService.loadUserByUsername(
-//                    userSeq.toString());
+                // 사용자와 token 사용자가 일치하면 userDetails 생성
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(
+                    userSeq.toString());
 
-                if (user != null) {
-                    //UserDetsils, Password, Role -> 접근권한 인증 Token 생성
+                // userDetails가 생성되면
+                if (userDetails != null) {
+                    //userDetails, Password, Role -> 접근권한 인증 Token 생성
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(user, null);
+                        new UsernamePasswordAuthenticationToken(userDetails, null,
+                            userDetails.getAuthorities());
 
-                    //현재 Request의 Security Context에 접근권한 설정
+                    // 현재 Request의 Security Context에 접근권한 설정
                     SecurityContextHolder.getContext()
                         .setAuthentication(usernamePasswordAuthenticationToken);
                 }
             }
         }
 
-        filterChain.doFilter(request, response); // 다음 필터로 넘기기
+        // 다음 필터로 넘기기
+        filterChain.doFilter(request, response);
     }
 }

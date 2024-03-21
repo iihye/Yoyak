@@ -1,6 +1,6 @@
 package com.yoyak.yoyak.util.jwt;
 
-import com.yoyak.yoyak.util.dto.UserDto;
+import com.yoyak.yoyak.util.dto.UserInfoDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -32,33 +32,22 @@ public class JwtUtil {
         this.accessTokenExpTime = accessTokenExpTime;
     }
 
-    /**
-     * Access Token 생성
-     *
-     * @param user
-     * @return Access Token String
-     */
-    public String createAccessToken(UserDto user) {
+    // access token 생성
+    public String createAccessToken(UserInfoDto user) {
         return createToken(user, accessTokenExpTime);
     }
 
 
-    /**
-     * JWT 생성
-     *
-     * @param user
-     * @param expireTime
-     * @return JWT String
-     */
-    private String createToken(UserDto user, long expireTime) {
+    // jwt 생성
+    private String createToken(UserInfoDto user, long expireTime) {
         Claims claims = Jwts.claims();
         claims.put("userSeq", user.getUserSeq());
         claims.put("userId", user.getUserId());
         claims.put("name", user.getName());
         claims.put("nickname", user.getNickname());
         claims.put("gender", user.getGender());
-//        claims.put("birth", user.getBirth());
         claims.put("platform", user.getPlatform());
+        claims.put("role", user.getRole());
 
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tokenValidity = now.plusSeconds(expireTime);
@@ -72,23 +61,13 @@ public class JwtUtil {
     }
 
 
-    /**
-     * Token에서 User ID 추출
-     *
-     * @param token
-     * @return userSeq
-     */
+    // token에서 userSeq 추출
     public Long getUserSeq(String token) {
         return parseClaims(token).get("userSeq", Long.class);
     }
 
 
-    /**
-     * JWT 검증
-     *
-     * @param token
-     * @return IsValidate
-     */
+    // jwt 검증
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -106,12 +85,7 @@ public class JwtUtil {
     }
 
 
-    /**
-     * JWT Claims 추출
-     *
-     * @param accessToken
-     * @return JWT Claims
-     */
+    // jwt claims 추출
     public Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken)
