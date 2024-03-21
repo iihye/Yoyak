@@ -3,7 +3,7 @@ package com.yoyak.yoyak.user.service;
 import com.yoyak.yoyak.user.domain.User;
 import com.yoyak.yoyak.user.domain.UserRepository;
 import com.yoyak.yoyak.user.dto.LoginRequestDto;
-import com.yoyak.yoyak.util.dto.UserDto;
+import com.yoyak.yoyak.util.dto.UserInfoDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import com.yoyak.yoyak.util.jwt.JwtUtil;
@@ -23,11 +23,14 @@ public class UserService {
 
     // 일반 로그인
     public String login(LoginRequestDto loginRequestDto) {
-        User user = userRepository.findByUserIdAndPassword(loginRequestDto.getUserId(),
-                loginRequestDto.getPassword())
+        User user = userRepository.findByUserId(loginRequestDto.getUserId())
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.LOGIN_WRONG));
 
-        UserDto userDto = UserDto.builder()
+        if (!user.getPassword().equals(loginRequestDto.getPassword())) {
+            throw new CustomException(CustomExceptionStatus.LOGIN_WRONG);
+        }
+
+        UserInfoDto userInfoDto = UserInfoDto.builder()
             .userSeq(user.getSeq())
             .userId(user.getUserId())
             .name(user.getName())
@@ -37,7 +40,7 @@ public class UserService {
             .platform(user.getPlatform())
             .build();
 
-        String accessToken = jwtUtil.createAccessToken(userDto);
+        String accessToken = jwtUtil.createAccessToken(userInfoDto);
         return accessToken;
     }
 

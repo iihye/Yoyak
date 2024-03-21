@@ -1,2 +1,5 @@
-package com.yoyak.yoyak.user.domain;public class UserRole {
+package com.yoyak.yoyak.user.domain;
+
+public enum UserRole {
+    USER, ADMIN
 }

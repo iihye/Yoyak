@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("select u from User u where u.userId = :userId and u.password = :password")
-    Optional<User> findByUserIdAndPassword(String userId, String password);
+    @Query("select u from User u where u.userId = :userId")
+    Optional<User> findByUserId(String userId);
 }
