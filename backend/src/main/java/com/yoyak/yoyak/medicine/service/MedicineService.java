@@ -18,6 +18,7 @@ public class MedicineService {
     public List<MedicineDto> findOrderParameters(MedicineSearchParametersDto parameters) {
         log.info("param={}", parameters.getFormCodeName());
         return medicineRepository.findByParameters(
+            parameters.getSearchName(),
             parameters.getDrugShape(),
             parameters.getColorClass(),
             parameters.getFormCodeName(),
