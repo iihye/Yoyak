@@ -37,7 +37,7 @@ public class MedicineEnvelop {
     private String color;
 
     @ManyToOne
-    @JoinColumn(name = "account_seq")
+    @JoinColumn(name = "account_seq", nullable = false)
     @JsonBackReference
     private Account account;
 

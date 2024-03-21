@@ -25,7 +25,7 @@ public class MedicineEnvelopService {
     public StatusResponseDto addMedicineEnvelop(
         MedicineEnvelopCreateDto requestDto) {
 
-        Account account = accountRepository.findById(requestDto.getUserSeq()).orElseThrow();
+        Account account = accountRepository.findById(requestDto.getAccountSeq()).orElseThrow();
 
         MedicineEnvelop medicineEnvelop = MedicineEnvelop.builder()
             .name(requestDto.getName())
@@ -57,7 +57,7 @@ public class MedicineEnvelopService {
     public BasicResponseDto findMedicineEnvelopList(Long userSeq, Long itemSeq) {
 
         List<MedicineEnvelopDto> medicineEnvelopDtoList =
-            medicineEnvelopRepository.findMedicineEnvelopByAccountSeq(userSeq, itemSeq);
+            medicineEnvelopRepository.findMedicineEnvelopByUserSeq(userSeq, itemSeq);
 
         return BasicResponseDto.builder()
             .count(medicineEnvelopDtoList.size())

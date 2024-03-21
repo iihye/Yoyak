@@ -27,10 +27,7 @@ public class MedicineEnvelopController {
     public ResponseEntity<StatusResponseDto> medicineEnvelopAdd(
         @RequestBody MedicineEnvelopCreateDto requestDto) {
 
-        log.info("{}의 약 봉투 등록 - Name: {}, Color: {}",
-            requestDto.getUserSeq(),
-            requestDto.getName(),
-            requestDto.getColor());
+        log.info("약 봉투 등록 - {}", requestDto);
 
         return ResponseEntity
             .ok()
@@ -40,7 +37,7 @@ public class MedicineEnvelopController {
     @GetMapping
     public ResponseEntity<BasicResponseDto> medicineEnvelopList(
         @RequestParam(name = "userSeq", required = true) Long userSeq,
-        @RequestParam(name = "itemSeq", required = false) Long itemSeq
+        @RequestParam(name = "medicineSeq", required = false) Long itemSeq
     ) {
 
         log.info("userSeq({})의 약 봉투 조회 {} -", userSeq, itemSeq);

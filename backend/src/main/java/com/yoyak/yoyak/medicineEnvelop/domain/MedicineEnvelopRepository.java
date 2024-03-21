@@ -21,6 +21,6 @@ public interface MedicineEnvelopRepository extends JpaRepository<MedicineEnvelop
         + "     )) "
         + "FROM MedicineEnvelop m "
         + "JOIN m.account a "
-        + "WHERE a.seq = :userSeq")
-    List<MedicineEnvelopDto> findMedicineEnvelopByAccountSeq(Long userSeq, Long itemSeq);
+        + "WHERE a.user.seq = :userSeq")
+    List<MedicineEnvelopDto> findMedicineEnvelopByUserSeq(Long userSeq, Long itemSeq);
 }
