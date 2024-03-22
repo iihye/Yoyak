@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yoyak/components/RoundedRectangle.dart';
+import 'package:yoyak/components/rounded_rectangle.dart';
 import '../../styles/colors/palette.dart';
 
 class PhotoSearchScreen extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yoyak/components/BottomBar.dart';
+import 'package:yoyak/components/bottom_bar.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/screen/Search/photo_search_screen.dart';

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yoyak/components/MainAppBar.dart';
-import 'package:yoyak/components/RoundedRectangle.dart';
+import 'package:yoyak/components/main_appbar.dart';
+import 'package:yoyak/components/rounded_rectangle.dart';
+import 'package:yoyak/hooks/goto_screen.dart';
+import 'package:yoyak/screen/Alarm/alarm_create.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Search/filter_search_screen.dart';
 import 'package:yoyak/screen/Search/photo_search_screen.dart';
@@ -18,6 +20,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
+
+    goTo(destination) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => destination),
+      );
+    }
 
     return Scaffold(
       appBar: const MainAppBar(),
@@ -105,11 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: rectangleSize,
                               height: rectangleSize,
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PhotoSearchScreen()));
+                                goToScreen(context, const AlarmScreen());
                               },
                               child: Container(
                                 child: const Text(""),

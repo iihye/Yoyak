@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yoyak/components/RoundedRectangle.dart';
+import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/screen/Search/filter_component.dart';
 import 'package:yoyak/screen/Search/text_search_screen.dart';
 import '../../styles/colors/palette.dart';
@@ -137,7 +137,7 @@ class FilterSearchScreen extends StatelessWidget {
                     ),
                     Text(
                       "약의 이름, 증상을 입력해주세요",
-                      style: TextStyle(color: Palette.TEXT_GREY),
+                      style: TextStyle(color: Palette.SUB_BLACK),
                     ),
                   ],
                 ),
