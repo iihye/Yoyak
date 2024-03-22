@@ -17,7 +17,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text("요약"),
+            Image.asset("assets/images/logo.png"),
             GestureDetector(
               onTap: () {
                 Navigator.push(context,
