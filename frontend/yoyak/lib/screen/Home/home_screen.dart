@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:yoyak/components/MainAppBar.dart';
 import 'package:yoyak/components/RoundedRectangle.dart';
+import 'package:yoyak/hooks/goto_screen.dart';
+import 'package:yoyak/screen/Alarm/alarm_create.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Camera/Camera.dart';
+import 'package:yoyak/screen/Search/filter_search_screen.dart';
+import 'package:yoyak/screen/Search/photo_search_screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
 
-    goTo(Widget destination) {
+    goTo(destination) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => destination),
@@ -110,7 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () => goTo(AlarmScreen()),
+                              onTap: () {
+                                goToScreen(context, const AlarmScreen());
+                              },
                               child: Container(
                                 child: const Text(""),
                               )),
@@ -118,7 +124,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () => {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const FilterSearchScreen()));
+                              },
                               child: Container(
                                 child: const Text(""),
                               )),

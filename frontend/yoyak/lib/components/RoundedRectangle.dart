@@ -6,6 +6,7 @@ import 'package:yoyak/styles/colors/palette.dart';
 
 class RoundedRectangle extends StatelessWidget {
   final double width, height;
+  final Color? color;
   final Widget child;
   final List<BoxShadow>? boxShadow;
   final Function()? onTap;
@@ -20,6 +21,7 @@ class RoundedRectangle extends StatelessWidget {
     required this.width,
     required this.height,
     required this.child,
+    this.color,
     this.boxShadow,
     this.onTap,
   });
@@ -31,7 +33,7 @@ class RoundedRectangle extends StatelessWidget {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: color ?? Colors.white,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
                 width: 0.1,
@@ -43,7 +45,7 @@ class RoundedRectangle extends StatelessWidget {
                       color: Palette.SUB_BLACK.withOpacity(0.15),
                       spreadRadius: 2,
                       blurRadius: 10,
-                      offset: const Offset(0, 0),
+                      offset: const Offset(0, 2),
                     ),
                   ]),
           width: width,
