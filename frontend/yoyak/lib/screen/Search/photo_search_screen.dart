@@ -12,19 +12,20 @@ class PhotoSearchScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('알약 검색',
+        title: const Text('알약 검색',
             style: TextStyle(
               color: Palette.MAIN_BLACK,
               fontFamily: 'Pretendard',
               fontWeight: FontWeight.w400,
               fontSize: 15,
             )),
+        backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
         toolbarHeight: 55,
       ),
       body: Container(
         width: double.infinity,
-        color: Palette.SUB_BLUE,
+        color: Palette.BG_BLUE,
         padding: EdgeInsets.all(40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
