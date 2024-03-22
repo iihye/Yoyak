@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'package:yoyak/components/RoundedRectangle.dart';
+import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/format_time.dart';
 import 'package:yoyak/screen/Alarm/alarm_create.dart';
 import 'package:yoyak/styles/colors/palette.dart';

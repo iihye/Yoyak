@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:yoyak/components/RoundedRectangle.dart';
+import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
