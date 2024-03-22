@@ -15,7 +15,7 @@ public class MedicineService {
 
     private final MedicineRepository medicineRepository;
 
-    public List<MedicineDto> findOrderParameters(MedicineSearchParametersDto parameters) {
+    public List<MedicineDto> findMedicine(MedicineSearchParametersDto parameters) {
         log.info("param={}", parameters.getFormCodeName());
         return medicineRepository.findByParameters(
             parameters.getSearchName(),

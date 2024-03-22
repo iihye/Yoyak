@@ -14,7 +14,7 @@ public class MedicineDetailService {
 
     final private MedicineDetailRepository medicineDetailRepository;
 
-    public MedicineDetailDto findOrder(Long itemSeq) {
+    public MedicineDetailDto findMedicineDetail(Long itemSeq) {
 
         MedicineDetail medicineDetail = medicineDetailRepository.findBySeq(itemSeq)
             .orElseThrow(() -> new RuntimeException("MedicineDetail not found: " + itemSeq));

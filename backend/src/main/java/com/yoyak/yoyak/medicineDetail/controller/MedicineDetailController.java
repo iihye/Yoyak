@@ -19,11 +19,11 @@ public class MedicineDetailController {
     private final MedicineDetailService medicineDetailService;
 
     @GetMapping("/{itemSeq}")
-    public ResponseEntity<MedicineDetailDto> orderDetails(@PathVariable("itemSeq") Long itemSeq) {
+    public ResponseEntity<MedicineDetailDto> medicineDetail(@PathVariable("itemSeq") Long itemSeq) {
         log.info("[{}.{}] itemSeq = {}", this.getClass().getName(),
             Thread.currentThread().getStackTrace()[1].getMethodName(), itemSeq);
 
-        MedicineDetailDto medicineDetailDto = medicineDetailService.findOrder(itemSeq);
+        MedicineDetailDto medicineDetailDto = medicineDetailService.findMedicineDetail(itemSeq);
 
         log.info("[{}.{}] MedicineDetailDto = {}", this.getClass().getName(),
             Thread.currentThread().getStackTrace()[1].getMethodName(), itemSeq);
