@@ -11,7 +11,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("챌린지 페이지임"),
+      child: const Text("챌린지 페이지임"),
     );
   }
 }

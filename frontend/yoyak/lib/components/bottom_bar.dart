@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget {
@@ -17,8 +16,8 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
         backgroundColor: Colors.white,
-        selectedLabelStyle: TextStyle(color: Colors.blueAccent),
-        unselectedLabelStyle: TextStyle(color: Color(0xFFD3D3D3)),
+        selectedLabelStyle: const TextStyle(color: Colors.blueAccent),
+        unselectedLabelStyle: const TextStyle(color: Color(0xFFD3D3D3)),
         showUnselectedLabels: false,
         showSelectedLabels: false,
         currentIndex: widget.curTabIdx,

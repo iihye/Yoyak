@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class MypageScreen extends StatelessWidget {
-  const MypageScreen({super.key});
+class SearchScreen extends StatelessWidget {
+  const SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: const Text("마이페이지임"),
+      child: const Text("검색화면임"),
     );
   }
 }
