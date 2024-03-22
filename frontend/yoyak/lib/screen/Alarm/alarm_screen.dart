@@ -336,6 +336,7 @@ class AlarmCreateButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     void goToAlarmCreate(int? notiSeq) {
       Navigator.push(
         context,
@@ -969,7 +970,7 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                     child: TextButton(
                       onPressed: () {
                         // 시간 수정 api 연결
-                        Navigator.pop(context);
+                        Navigator.popUntil(context, (route) => route.isFirst);
                       },
                       child: Text(
                         selectedPeriodIndex == 0
