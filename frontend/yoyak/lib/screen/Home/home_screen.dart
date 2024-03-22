@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:yoyak/components/main_appbar.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
-import 'package:yoyak/hooks/goto_screen.dart';
-import 'package:yoyak/screen/Alarm/alarm_create.dart';
-import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Login/kakao_login_screen.dart';
 import 'package:yoyak/screen/Search/filter_search_screen.dart';
 import 'package:yoyak/screen/Search/photo_search_screen.dart';
 import 'package:yoyak/screen/Camera/Camera.dart';
-import 'package:yoyak/screen/Search/filter_search_screen.dart';
-import 'package:yoyak/screen/Search/photo_search_screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
 class HomeScreen extends StatefulWidget {
