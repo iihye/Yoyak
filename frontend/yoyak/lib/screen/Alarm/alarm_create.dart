@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:yoyak/components/BaseButton.dart';
-import 'package:yoyak/components/RoundedRectangle.dart';
+import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
@@ -72,7 +71,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
               // 알림 이름
               Column(
                 children: [
-                  const inputTitle(title: '알림 이름'),
+                  const inputLabel(title: '알림 이름'),
                   const SizedBox(
                     height: 10,
                   ),
@@ -85,41 +84,74 @@ class _AlarmCreateState extends State<AlarmCreate> {
                 height: 20,
               ),
 
-              const Column(
-                children: [inputTitle(title: '주기')],
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(ScreenSize.getWidth(context) * 0.9, 48),
-                  backgroundColor: Palette.MAIN_BLUE,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              Column(
+                children: [
+                  const inputLabel(title: '주기'),
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // 폼의 모든 TextFormField의 onSaved를 호출
-                    _formKey.currentState!.save();
-
-                    // 이제 _alarmName, _alarmTime 등에 사용자의 입력값이 저장되어 있습니다.
-                    print(
-                      '$_alarmName, $_alarmTime, $_alarmStartDate, $_alarmEndDate, $_alarmDuration',
-                    );
-                  }
-                },
-                child: const Center(
-                  child: Text(
-                    '완료',
-                    style: TextStyle(
-                      color: Palette.MAIN_WHITE,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RoundedRectangle(
+                        width: ScreenSize.getWidth(context) * 0.85,
+                        height: 40,
+                        onTap: () {
+                          setState(() {
+                            _alarmDuration.clear();
+                            _alarmDuration.add('매일');
+                          });
+                        },
+                        color: Palette.WHITE_BLUE,
+                        boxShadow: const [],
+                        child: const Center(
+                          child: Text(
+                            '매일',
+                            style: TextStyle(
+                              color: Palette.MAIN_BLACK,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          fixedSize: Size(ScreenSize.getWidth(context), 48),
+          backgroundColor: Palette.MAIN_BLUE,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
+        ),
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            // 폼의 모든 TextFormField의 onSaved를 호출
+            _formKey.currentState!.save();
+
+            // 이제 _alarmName, _alarmTime 등에 사용자의 입력값이 저장되어 있습니다.
+            print(
+              '$_alarmName, $_alarmTime, $_alarmStartDate, $_alarmEndDate, $_alarmDuration',
+            );
+          }
+        },
+        child: const Center(
+          child: Text(
+            '완료',
+            style: TextStyle(
+              color: Palette.MAIN_WHITE,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
           ),
         ),
       ),
@@ -182,8 +214,8 @@ class _AlarmCreateState extends State<AlarmCreate> {
   }
 }
 
-class inputTitle extends StatelessWidget {
-  const inputTitle({
+class inputLabel extends StatelessWidget {
+  const inputLabel({
     super.key,
     required this.title,
   });
@@ -197,14 +229,14 @@ class inputTitle extends StatelessWidget {
     return Row(
       children: [
         const SizedBox(width: 20),
-        inputName(title: title),
+        InputName(title: title),
       ],
     );
   }
 }
 
-class inputName extends StatelessWidget {
-  const inputName({
+class InputName extends StatelessWidget {
+  const InputName({
     super.key,
     required this.title,
   });
@@ -221,6 +253,17 @@ class inputName extends StatelessWidget {
         fontWeight: FontWeight.w700,
         fontSize: 16,
       ),
+    );
+  }
+}
+
+class InputSelectDay extends StatelessWidget {
+  const InputSelectDay({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      children: [],
     );
   }
 }

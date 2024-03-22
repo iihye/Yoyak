@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yoyak/components/MainAppBar.dart';
-import 'package:yoyak/components/RoundedRectangle.dart';
+import 'package:yoyak/components/main_appbar.dart';
+import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/goto_screen.dart';
 import 'package:yoyak/screen/Alarm/alarm_create.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';

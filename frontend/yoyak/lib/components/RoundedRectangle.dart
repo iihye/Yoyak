@@ -43,7 +43,7 @@ class RoundedRectangle extends StatelessWidget {
                   [
                     BoxShadow(
                       color: Palette.SUB_BLACK.withOpacity(0.15),
-                      spreadRadius: 2,
+                                              spreadRadius: 2,
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:yoyak/components/BaseButton.dart';
-import 'package:yoyak/components/RoundedRectangle.dart';
+
+import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/format_time.dart';
 import 'package:yoyak/screen/Alarm/alarm_create.dart';
 import 'package:yoyak/styles/colors/palette.dart';
@@ -336,7 +336,6 @@ class AlarmCreateButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     void goToAlarmCreate(int? notiSeq) {
       Navigator.push(
         context,
@@ -347,14 +346,15 @@ class AlarmCreateButton extends StatelessWidget {
       );
     }
 
-    return BaseButton(
+    return SizedBox(
       width: 80,
-      height: 40,
+      height: 43,
       child: FloatingActionButton(
+        backgroundColor: Palette.MAIN_BLUE,
+        elevation: 3,
         onPressed: () {
           goToAlarmCreate(null);
         },
-        backgroundColor: Palette.MAIN_BLUE,
         child: const Padding(
           padding: EdgeInsets.only(right: 4.6),
           child: Row(
@@ -965,7 +965,7 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                   ),
                   Container(
                     width: ScreenSize.getWidth(context),
-                    height: 50,
+                    height: 50.8,
                     color: Palette.MAIN_BLUE,
                     child: TextButton(
                       onPressed: () {
