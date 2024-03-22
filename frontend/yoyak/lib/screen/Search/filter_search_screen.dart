@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
-import 'package:yoyak/screen/Search/filter_component.dart';
+import 'package:yoyak/components/search_filter.dart';
 import 'package:yoyak/screen/Search/text_search_screen.dart';
 import '../../styles/colors/palette.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
-import '../../styles/colors/palette.dart';
+import '../styles/colors/palette.dart';
 
 // Filter Container 모델
 // widht, h 설정하기
@@ -186,7 +186,7 @@ class _FilterComponentState extends State<FilterComponent> {
                                 fontSize: 15,
                                 color: selectedOption == widget.options[index]
                                     ? Palette.MAIN_BLUE
-                                    : Palette.SUB_BLACK),
+                                    : Palette.MAIN_BLACK),
                           ),
                         ],
                       ),

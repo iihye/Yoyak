@@ -7,6 +7,8 @@ class RoundedRectangle extends StatelessWidget {
   final Widget child;
   final List<BoxShadow>? boxShadow;
   final Function()? onTap;
+  final BorderRadius? borderRadius;
+  final Border? border;
 
 // width, height 필수
 // child 필수
@@ -21,6 +23,8 @@ class RoundedRectangle extends StatelessWidget {
     this.color,
     this.boxShadow,
     this.onTap,
+    this.borderRadius,
+    this.border,
   });
 
   @override
@@ -30,11 +34,8 @@ class RoundedRectangle extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: color ?? Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              width: 0.1,
-              color: Colors.white,
-            ),
+            borderRadius: borderRadius ?? BorderRadius.circular(15),
+            border: border,
             boxShadow: boxShadow ??
                 [
                   BoxShadow(
