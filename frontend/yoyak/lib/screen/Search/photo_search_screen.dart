@@ -26,13 +26,13 @@ class PhotoSearchScreen extends StatelessWidget {
       body: Container(
         width: double.infinity,
         color: Palette.BG_BLUE,
-        padding: EdgeInsets.all(40),
+        padding: const EdgeInsets.all(40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.only(bottom: 10),
-              child: Text(
+              margin: const EdgeInsets.only(bottom: 10),
+              child: const Text(
                 "사진으로 알약 검색",
                 style: TextStyle(
                     color: Palette.MAIN_BLACK,
@@ -41,7 +41,7 @@ class PhotoSearchScreen extends StatelessWidget {
                     fontSize: 24),
               ),
             ),
-            Text(
+            const Text(
               "인식률을 높이기 위해, ",
               style: TextStyle(
                   color: Palette.MAIN_BLACK,
@@ -49,7 +49,7 @@ class PhotoSearchScreen extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   fontSize: 15),
             ),
-            Text(
+            const Text(
               "밝은 곳에서 알약의 문자가 잘 보이게 촬영해주세요.",
               style: TextStyle(
                   color: Palette.MAIN_BLACK,
@@ -59,22 +59,19 @@ class PhotoSearchScreen extends StatelessWidget {
             ),
             // Spacer(),
             Container(
-              margin: EdgeInsets.only(top: 50, bottom: 40),
+              margin: const EdgeInsets.only(top: 50, bottom: 40),
               child: RoundedRectangle(
                 width: rectangleWidth,
                 height: rectangleHeight,
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Palette.SHADOW_GREY,
                     blurRadius: 3,
                     offset: Offset(0, 2),
                   )
                 ],
-                child: Container(
-                  child: Image(
-                    image: AssetImage('assets/images/guide.png'),
-                  ),
-                  // child: Image.asset('assets/images/guide.png'),
+                child: const Image(
+                  image: AssetImage('assets/images/guide.png'),
                 ),
               ),
             ),
@@ -83,28 +80,25 @@ class PhotoSearchScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  margin: EdgeInsets.only(),
+                  margin: const EdgeInsets.only(),
                   child: Column(
                     children: [
                       RoundedRectangle(
                         width: MediaQuery.of(context).size.width * 0.35,
                         height: MediaQuery.of(context).size.width * 0.35,
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Palette.SHADOW_GREY,
                             blurRadius: 3,
                             offset: Offset(0, 2),
                           )
                         ],
-                        child: Container(
-                          child: Image(
-                            image: AssetImage('assets/images/guide.png'),
-                          ),
-                          // child: Image.asset('assets/images/guide.png'),
+                        child: const Image(
+                          image: AssetImage('assets/images/guide.png'),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text(
+                      const SizedBox(height: 10),
+                      const Text(
                         "이미지 업로드",
                         style: TextStyle(
                             color: Palette.MAIN_BLACK,
@@ -116,28 +110,25 @@ class PhotoSearchScreen extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(),
+                  margin: const EdgeInsets.only(),
                   child: Column(
                     children: [
                       RoundedRectangle(
                         width: MediaQuery.of(context).size.width * 0.35,
                         height: MediaQuery.of(context).size.width * 0.35,
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Palette.SHADOW_GREY,
                             blurRadius: 3,
                             offset: Offset(0, 2),
                           )
                         ],
-                        child: Container(
-                          child: Image(
-                            image: AssetImage('assets/images/guide.png'),
-                          ),
-                          // child: Image.asset('assets/images/guide.png'),
+                        child: const Image(
+                          image: AssetImage('assets/images/guide.png'),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text(
+                      const SizedBox(height: 10),
+                      const Text(
                         "촬영하기",
                         style: TextStyle(
                             color: Palette.MAIN_BLACK,
