@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:yoyak/components/base_input.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
@@ -69,21 +70,14 @@ class _AlarmCreateState extends State<AlarmCreate> {
               ),
 
               // 알림 이름
-              Column(
-                children: [
-                  const inputLabel(title: '알림 이름'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  alarmnameInput(),
-                ],
-              ),
+              BaseInput(placeholder: '알림 이름', child: alarmnameInput()),
 
               // 여백
               const SizedBox(
                 height: 20,
               ),
 
+              // 주기
               Column(
                 children: [
                   const inputLabel(title: '주기'),
@@ -159,49 +153,33 @@ class _AlarmCreateState extends State<AlarmCreate> {
   }
 
   Widget alarmnameInput() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            width: ScreenSize.getWidth(context) * 0.85,
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Palette.WHITE_BLUE,
-            ),
-            child: TextFormField(
-              autofocus: true,
-              maxLength: 10,
-              cursorColor: Palette.MAIN_BLUE,
-              style: const TextStyle(
-                color: Palette.MAIN_BLACK,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(left: 15, bottom: 8),
-                // placeholder
-                hintText: '알람 이름을 입력해주세요.',
-                // 글자수 제한 안내문구 삭제
-                counterText: '',
-              ),
-              onSaved: (value) {
-                _alarmName = value!;
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return '알람 이름을 입력해주세요';
-                }
-                return null;
-              },
-            ),
-          ),
-        ),
-      ],
+    return TextFormField(
+      autofocus: true,
+      maxLength: 10,
+      cursorColor: Palette.MAIN_BLUE,
+      style: const TextStyle(
+        color: Palette.MAIN_BLACK,
+        fontFamily: 'Pretendard',
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
+      ),
+      decoration: const InputDecoration(
+        border: InputBorder.none,
+        contentPadding: EdgeInsets.only(left: 15, bottom: 8),
+        // placeholder
+        hintText: '알람 이름을 입력해주세요.',
+        // 글자수 제한 안내문구 삭제
+        counterText: '',
+      ),
+      onSaved: (value) {
+        _alarmName = value!;
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return '알람 이름을 입력해주세요';
+        }
+        return null;
+      },
     );
   }
 

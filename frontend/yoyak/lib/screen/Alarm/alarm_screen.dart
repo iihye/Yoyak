@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:yoyak/components/bottom_modal.dart';
 
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/format_time.dart';
@@ -479,275 +480,297 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
     required int notiSeq,
     required DateTime? takenTime,
   }) {
+    
     Widget modalContent;
     switch (widget.taken) {
       // 약 복용을 했을 때
       case 'TAKEN':
-        modalContent = Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                // 알람 이름
-                Text(
-                  name,
-                  style: const TextStyle(
-                    color: Palette.MAIN_BLACK,
-                    fontSize: 15,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w700,
+        modalContent = Padding(
+          padding: const EdgeInsets.only(
+            top: 20,
+            left: 30,
+            right: 30,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  // 알람 이름
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 15,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
 
-                const SizedBox(
-                  width: 20,
-                ),
-
-                // 복용 시간
-                Text(
-                  formatTime(takenTime as DateTime),
-                  style: const TextStyle(
-                    color: Palette.MAIN_BLACK,
-                    fontSize: 15,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w700,
+                  const SizedBox(
+                    width: 20,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // 먹지 않았어요 버튼
-                RoundedRectangle(
-                  width: 110,
-                  height: 100,
-                  // 나중에 수정 api 연결
-                  onTap: () => {Navigator.pop(context)},
-                  color: Palette.SUB_WHITE,
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.close, color: Palette.SUB_BLACK, size: 55),
-                      Text(
-                        '먹지 않았어요',
-                        style: TextStyle(
-                          color: Palette.SUB_BLACK,
-                          fontSize: 15,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
+
+                  // 복용 시간
+                  Text(
+                    formatTime(takenTime as DateTime),
+                    style: const TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 15,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // 먹지 않았어요 버튼
+                  RoundedRectangle(
+                    width: 110,
+                    height: 100,
+                    // 나중에 수정 api 연결
+                    onTap: () => {Navigator.pop(context)},
+                    color: Palette.SUB_WHITE,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.close, color: Palette.SUB_BLACK, size: 55),
+                        Text(
+                          '먹지 않았어요',
+                          style: TextStyle(
+                            color: Palette.SUB_BLACK,
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
 
-                SizedBox(
-                  width: ScreenSize.getWidth(context) * 0.1,
-                ),
+                  SizedBox(
+                    width: ScreenSize.getWidth(context) * 0.1,
+                  ),
 
-                // 시간 수정 버튼
-                RoundedRectangle(
-                  width: 110,
-                  height: 100,
-                  color: Palette.SUB_BLUE,
-                  onTap: () {
-                    timeSelectorModal(
-                      context: context,
-                      notiSeq: notiSeq,
-                      takenTime: takenTime,
-                    );
-                  },
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image(
-                        image: AssetImage('assets/images/retime.png'),
-                        width: 50,
-                        height: 57,
-                      ),
-                      Text(
-                        '시간 수정',
-                        style: TextStyle(
-                          color: Palette.MAIN_BLUE,
-                          fontSize: 15,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
+                  // 시간 수정 버튼
+                  RoundedRectangle(
+                    width: 110,
+                    height: 100,
+                    color: Palette.SUB_BLUE,
+                    onTap: () {
+                      timeSelectorModal(
+                        context: context,
+                        notiSeq: notiSeq,
+                        takenTime: takenTime,
+                      );
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image(
+                          image: AssetImage('assets/images/retime.png'),
+                          width: 50,
+                          height: 57,
                         ),
-                      ),
-                    ],
+                        Text(
+                          '시간 수정',
+                          style: TextStyle(
+                            color: Palette.MAIN_BLUE,
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         );
         break;
 
       // 약 복용을 하지 않았을 때
       case 'NOT_TAKEN':
-        modalContent = Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                // 알람 이름
-                Text(
-                  name,
-                  style: const TextStyle(
-                    color: Palette.MAIN_BLACK,
-                    fontSize: 15,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w700,
+        modalContent = Padding(
+          padding: const EdgeInsets.only(
+            top: 20,
+            left: 30,
+            right: 30,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  // 알람 이름
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 15,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
 
-                const SizedBox(
-                  width: 20,
-                ),
-
-                // 복용 시간
-                Text(
-                  formatTime(time),
-                  style: const TextStyle(
-                    color: Palette.MAIN_BLACK,
-                    fontSize: 15,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w700,
+                  const SizedBox(
+                    width: 20,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // 먹지 않았어요 버튼
-                RoundedRectangle(
-                  width: 110,
-                  height: 100,
-                  // 나중에 수정 api 연결
-                  onTap: () => {Navigator.pop(context)},
-                  color: Palette.SUB_WHITE,
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.close, color: Palette.SUB_BLACK, size: 55),
-                      Text(
-                        '건너뛰기 취소',
-                        style: TextStyle(
-                          color: Palette.SUB_BLACK,
-                          fontSize: 15,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
+
+                  // 복용 시간
+                  Text(
+                    formatTime(time),
+                    style: const TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 15,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // 먹지 않았어요 버튼
+                  RoundedRectangle(
+                    width: 110,
+                    height: 100,
+                    // 나중에 수정 api 연결
+                    onTap: () => {Navigator.pop(context)},
+                    color: Palette.SUB_WHITE,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.close, color: Palette.SUB_BLACK, size: 55),
+                        Text(
+                          '건너뛰기 취소',
+                          style: TextStyle(
+                            color: Palette.SUB_BLACK,
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         );
         break;
 
       // 아직 복용하지 않은 경우
       case 'YET_TAKEN':
-        modalContent = Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                // 알람 이름
-                Text(
-                  name,
-                  style: const TextStyle(
-                    color: Palette.MAIN_BLACK,
-                    fontSize: 15,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w700,
+        modalContent = Padding(
+          padding: const EdgeInsets.only(
+            top: 20,
+            left: 30,
+            right: 30,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  // 알람 이름
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 15,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
 
-                const SizedBox(
-                  width: 20,
-                ),
-
-                // 복용 시간
-                Text(
-                  formatTime(time),
-                  style: const TextStyle(
-                    color: Palette.MAIN_BLACK,
-                    fontSize: 15,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w700,
+                  const SizedBox(
+                    width: 20,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // 건너 뛰었어요 버튼
-                RoundedRectangle(
-                  width: 110,
-                  height: 100,
-                  color: Palette.SUB_WHITE,
-                  onTap: () => {Navigator.pop(context)},
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.close, color: Palette.SUB_BLACK, size: 55),
-                      Text(
-                        '건너 뛰었어요',
-                        style: TextStyle(
-                          color: Palette.SUB_BLACK,
-                          fontSize: 15,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
+
+                  // 복용 시간
+                  Text(
+                    formatTime(time),
+                    style: const TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 15,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // 건너 뛰었어요 버튼
+                  RoundedRectangle(
+                    width: 110,
+                    height: 100,
+                    color: Palette.SUB_WHITE,
+                    onTap: () => {Navigator.pop(context)},
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.close, color: Palette.SUB_BLACK, size: 55),
+                        Text(
+                          '건너 뛰었어요',
+                          style: TextStyle(
+                            color: Palette.SUB_BLACK,
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
 
-                SizedBox(
-                  width: ScreenSize.getWidth(context) * 0.1,
-                ),
+                  SizedBox(
+                    width: ScreenSize.getWidth(context) * 0.1,
+                  ),
 
-                // 먹었어요 버튼
-                RoundedRectangle(
-                  width: 110,
-                  height: 100,
-                  color: Palette.SUB_BLUE,
-                  onTap: () => {Navigator.pop(context)},
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.check, color: Palette.MAIN_BLUE, size: 55),
-                      Text(
-                        '먹었어요',
-                        style: TextStyle(
-                          color: Palette.MAIN_BLUE,
-                          fontSize: 15,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
+                  // 먹었어요 버튼
+                  RoundedRectangle(
+                    width: 110,
+                    height: 100,
+                    color: Palette.SUB_BLUE,
+                    onTap: () => {Navigator.pop(context)},
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.check, color: Palette.MAIN_BLUE, size: 55),
+                        Text(
+                          '먹었어요',
+                          style: TextStyle(
+                            color: Palette.MAIN_BLUE,
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         );
         break;
 
@@ -760,24 +783,12 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
     return showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return RoundedRectangle(
-          height: 200,
-          width: ScreenSize.getWidth(context),
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 20,
-              left: 30,
-              right: 30,
-            ),
-            child: modalContent,
-          ),
-        );
+        return BottomModal(child: modalContent);
       },
     );
   }
 
-  Future<dynamic> timeSelectorModal({
+  Future<void> timeSelectorModal({
     required BuildContext context,
     required int notiSeq,
     required DateTime takenTime,
@@ -902,22 +913,6 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                                       ),
                                       onChanged: (newValue) {
                                         setState(() {
-                                          // // 시간이 12에서 1로 바뀔 때 오전/오후 전환
-                                          // if (selectedHour == 12 &&
-                                          //     newValue == 11) {
-                                          //   selectedPeriodIndex =
-                                          //       (selectedPeriodIndex == 0)
-                                          //           ? 1
-                                          //           : 0;
-                                          // }
-                                          // // 시간이 1에서 12로 바뀔 때 오전/오후 전환
-                                          // else if (selectedHour == 11 &&
-                                          //     newValue == 12) {
-                                          //   selectedPeriodIndex =
-                                          //       (selectedPeriodIndex == 0)
-                                          //           ? 1
-                                          //           : 0;
-                                          // }
                                           selectedHour = newValue;
                                         });
                                       },
@@ -934,7 +929,7 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                                       textMapper: (String value) {
                                         return int.parse(value) < 10
                                             ? '0$value'
-                                            : value; // 10 미만일 때 '0'을 추가
+                                            : value;
                                       },
                                       textStyle: const TextStyle(
                                         color: Palette.SUB_BLACK,
