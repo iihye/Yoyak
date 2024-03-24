@@ -3,7 +3,7 @@ import 'package:yoyak/components/rounded_rectangle.dart';
 import '../styles/colors/palette.dart';
 
 // Filter Container 모델
-// widht, h 설정하기
+// widht, height 설정하기
 class FilterContainer {
   final String? imagePath;
   final String text;

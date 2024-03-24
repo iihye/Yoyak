@@ -55,6 +55,12 @@ class BaseButton extends StatelessWidget {
       backgroundColor: MaterialStateProperty.all(backgroundColor),
       // 물결 효과 제거
       overlayColor: MaterialStateProperty.all(Colors.transparent),
+      shape: MaterialStateProperty.all(
+        RoundedRectangleBorder(
+          // 사용시에는 borderRadius: BorderRadius.circular(원하는값),
+          borderRadius: borderRadius ?? BorderRadius.circular(30),
+        ),
+      ),
     ).merge(style); // 추가적으로 제공된 스타일과 병합
 
     return SizedBox(
