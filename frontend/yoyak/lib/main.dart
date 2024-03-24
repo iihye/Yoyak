@@ -8,7 +8,6 @@ import 'package:yoyak/security/Security.dart';
 import 'package:yoyak/store/camera_store.dart';
 import 'package:yoyak/store/login_store.dart';
 
-
 void main() async {
   //Kakao SDK 초기화 : 카카오 Api 가져다 쓰려면 이렇게 초기화해줘야 함
   KakaoSdk.init(nativeAppKey: Security.NATIVE_APP_KEY);
@@ -25,25 +24,24 @@ void main() async {
   );
 }
 
-  class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const SafeArea(
-      child: MaterialApp(
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [
-          Locale('ko', ''),
-          Locale('en', ''),
-        ],
-        debugShowCheckedModeBanner: false,
-        home: MainScreen(),
-      )
-    );
+        child: MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('ko', ''),
+        Locale('en', ''),
+      ],
+      debugShowCheckedModeBanner: false,
+      home: MainScreen(),
+    ));
   }
 }

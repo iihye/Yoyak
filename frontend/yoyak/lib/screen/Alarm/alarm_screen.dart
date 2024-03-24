@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:yoyak/components/bottom_modal.dart';
-
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/format_time.dart';
 import 'package:yoyak/screen/Alarm/alarm_create.dart';
@@ -239,7 +238,7 @@ class AlarmItem extends StatelessWidget {
           builder: (context) => AlarmCreate(notiSeq: notiSeq),
         ),
       );
-      print(notiSeq);
+      print('왔니 $notiSeq');
     }
 
     return Container(
@@ -401,9 +400,6 @@ class CheckEatPillButton extends StatefulWidget {
 }
 
 class _CheckEatPillButtonState extends State<CheckEatPillButton> {
-  int selectedHour = DateTime.now().hour;
-  int selectedMinute = DateTime.now().minute;
-
   @override
   Widget build(BuildContext context) {
     String name = widget.name;
@@ -480,7 +476,6 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
     required int notiSeq,
     required DateTime? takenTime,
   }) {
-    
     Widget modalContent;
     switch (widget.taken) {
       // 약 복용을 했을 때
@@ -500,7 +495,7 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                   Text(
                     name,
                     style: const TextStyle(
-                      color: Palette.MAIN_BLACK,
+                      color: Palette.MAIN_BLUE,
                       fontSize: 15,
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w700,
@@ -513,9 +508,9 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
 
                   // 복용 시간
                   Text(
-                    formatTime(takenTime as DateTime),
+                    formatTime(time),
                     style: const TextStyle(
-                      color: Palette.MAIN_BLACK,
+                      color: Palette.MAIN_BLUE,
                       fontSize: 15,
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w700,
@@ -566,7 +561,7 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                       timeSelectorModal(
                         context: context,
                         notiSeq: notiSeq,
-                        takenTime: takenTime,
+                        takenTime: takenTime as DateTime,
                       );
                     },
                     child: const Column(
@@ -750,7 +745,13 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                     width: 110,
                     height: 100,
                     color: Palette.SUB_BLUE,
-                    onTap: () => {Navigator.pop(context)},
+                    onTap: () => {
+                      Navigator.pop(context),
+                      // 이걸 담아서 주면 됨
+                      print(
+                        DateTime.now(),
+                      )
+                    },
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -824,10 +825,10 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                             Text(
                               '복용 시간',
                               style: TextStyle(
-                                color: Palette.MAIN_BLACK,
+                                color: Palette.MAIN_BLUE,
                                 fontSize: 20,
                                 fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
