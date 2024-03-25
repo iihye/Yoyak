@@ -108,22 +108,17 @@ class _AlarmCreateState extends State<AlarmCreate> {
     });
   }
 
-  void handleSpecificDaySelected(String day) {
+  void handleSpecificDaySelected() {
     setState(() {
-      isEveryday = false;
-      if (_alarmDays.contains(day)) {
-        _alarmDays.remove(day);
-      } else {
-        _alarmDays.add(day);
+      if (isEveryday) {
+        _alarmDays.clear();
+        isEveryday = false;
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // final start = DateTime.now();
-    // final end = DateTime.now();
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -293,6 +288,24 @@ class _AlarmCreateState extends State<AlarmCreate> {
             return;
           }
 
+          if (_alarmDays.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                backgroundColor: Palette.MAIN_RED,
+                content: Text(
+                  '알람 요일을 선택해주세요.',
+                  style: TextStyle(
+                    color: Palette.MAIN_WHITE,
+                    fontSize: 16,
+                    fontFamily: 'pretendard',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                duration: Duration(seconds: 2),
+              ),
+            );
+            return;
+          }
           if (_alarmTime.isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -372,7 +385,6 @@ class _AlarmCreateState extends State<AlarmCreate> {
           data: ThemeData.light().copyWith(
             colorScheme: const ColorScheme.light(
               primary: Palette.MAIN_BLUE, // 선택된 날짜 및 확인 버튼 색상
-              // onPrimary: Palette.MAIN_WHITE, // 선택된 날짜의 텍스트 색상
               secondary: Palette.SUB_BLUE,
             ),
             textTheme: const TextTheme(
@@ -626,8 +638,6 @@ class _AlarmCreateState extends State<AlarmCreate> {
                           selectedMinute,
                         );
 
-                        // _alarmTime 리스트에 추가
-
                         // 중복 체크
                         if (!_alarmTime.contains(selectedTime)) {
                           // 중복이 아니면 리스트에 추가하고 시간 순으로 정렬
@@ -709,9 +719,9 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
 class InputSelectDay extends StatelessWidget {
   final List<String> selectedDays;
-  final bool isEveryday;
+  final bool? isEveryday;
   final Function onEverydaySelected;
-  final Function(String) onSpecificDaySelected;
+  final Function() onSpecificDaySelected;
   final Function(List<String>) onDaysChanged;
 
   const InputSelectDay({
@@ -813,7 +823,9 @@ class InputSelectDay extends StatelessWidget {
                           'SATURDAY',
                           'SUNDAY'
                         ];
-                        onDaysChanged(allDays); // 모든 요일을 전달하는 콜백 호출
+                        onEverydaySelected();
+                        onDaysChanged(allDays); // 모든 요일 선택
+                        Navigator.pop(context);
                       },
                       child: Container(
                         width: ScreenSize.getWidth(context) * 0.85,
@@ -856,7 +868,13 @@ class InputSelectDay extends StatelessWidget {
                         ),
                       ),
                       onTap: () {
-                        Navigator.pop(context);
+                        print('if 전 $selectedDays $isEveryday');
+                        if (isEveryday != null && isEveryday == true) {
+                          selectedDays.clear();
+                          onSpecificDaySelected();
+                        }
+
+                        print(' $selectedDays');
                         showSpecificDayModal(
                             context: context, selectedDays: selectedDays);
                       },
@@ -923,6 +941,7 @@ class InputSelectDay extends StatelessWidget {
                       onPressed: () {
                         onDaysChanged(selectedDays);
                         Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                       child: const Text(
                         '완료',
@@ -942,7 +961,10 @@ class InputSelectDay extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SelectedDay(day: 'SUNDAY', selectedDays: selectedDays),
+                    SelectedDay(
+                      day: 'SUNDAY',
+                      selectedDays: selectedDays,
+                    ),
                     SelectedDay(day: 'MONDAY', selectedDays: selectedDays),
                     SelectedDay(day: 'TUESDAY', selectedDays: selectedDays),
                     SelectedDay(day: 'WEDNESDAY', selectedDays: selectedDays),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
 class SelectedDay extends StatefulWidget {
-  final String day; // 'MONDAY', 'TUESDAY', 등
+  final String day;
   final List<String> selectedDays;
 
   const SelectedDay({
