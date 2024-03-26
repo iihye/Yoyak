@@ -21,6 +21,8 @@ final Map<String, dynamic> dummyPillData = {
   ]
 };
 
+// 페이지네이션 필요
+
 class PhotoResultScreen extends StatelessWidget {
   const PhotoResultScreen({super.key});
 

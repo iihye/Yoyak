@@ -9,7 +9,8 @@ import '../../styles/colors/palette.dart';
 // 효능, 사용법, 보관방법, 경고, 주의사항, 부작용
 final Map<String, dynamic> dummyDetailData = {
   "medicineSeq": 199907335,
-  "imagePath": "https://www.druginfo.co.kr/drugimg/251234.jpg",
+  // "imagePath": "https://www.druginfo.co.kr/drugimg/251234.jpg",
+  "imagePath": null,
   "itemName": "한미알마게이트정500밀리그램(알마게이트)",
   "entpName": "한미약품(주)",
   "efficacy": null,
@@ -78,14 +79,24 @@ class PillDetailScreen extends StatelessWidget {
                         height: MediaQuery.of(context).size.width * 0.08,
                       ),
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(17),
-                        child: Image.network(
-                          dummyDetailData["imagePath"],
-                          width: MediaQuery.of(context).size.width * 0.60,
-                          height: MediaQuery.of(context).size.width * 0.30,
-                          fit: BoxFit.cover, // 모서리 각진거 이걸로 해결
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(17),
+                          child: dummyDetailData["imagePath"] != null
+                              ? Image.network(
+                                  dummyDetailData["imagePath"],
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.60,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.30,
+                                  fit: BoxFit.cover, // 모서리 각진거 이걸로 해결
+                                )
+                              : Image.asset(
+                                  'assets/images/pillbox.jpg',
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.60,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.30,
+                                  fit: BoxFit.cover,
+                                )),
                       SizedBox(
                         height: MediaQuery.of(context).size.width * 0.07,
                       ),

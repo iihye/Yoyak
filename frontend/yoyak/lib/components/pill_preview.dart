@@ -6,15 +6,15 @@ import 'package:yoyak/screen/Search/pill_detail_screen.dart';
 import '../styles/colors/palette.dart';
 
 class PillPreview extends StatelessWidget {
-  final String imgPath;
+  final int medicineSeq;
+  final String? imgPath;
   final String itemName;
   final String entpName;
-  final int medicineSeq;
   final Function()? onTap;
 
   const PillPreview({
     super.key,
-    required this.imgPath,
+    this.imgPath,
     required this.itemName,
     required this.medicineSeq,
     required this.entpName,
@@ -54,19 +54,22 @@ class PillPreview extends StatelessWidget {
               ),
               // 사진 크기, 둥글기는 API 받아오면 그때 다시 설정하자
               ClipRRect(
-                // 자식요소 크기 강제 설정
-                borderRadius: BorderRadius.circular(17),
-                // db에서 이미지를 받아오는 거 고민
-                child: Image.network(
-                  imgPath,
-                  // width: 100,
-                  width: MediaQuery.of(context).size.width * 0.25,
-                  // height: 55,
-                  height: MediaQuery.of(context).size.width * 0.13,
-                  // .cover: 이미지 비율 유지하면서 이미지 크기 조절(이미지 잘림, 근데 둥글게 가능)
-                  fit: BoxFit.cover,
-                ),
-              ),
+                  // 자식요소 크기 강제 설정
+                  borderRadius: BorderRadius.circular(17),
+                  // db에서 이미지를 받아오는 거 고민
+                  child: imgPath != null
+                      ? Image.network(
+                          imgPath!, // null이 아님
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          height: MediaQuery.of(context).size.width * 0.13,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          'assets/images/pillbox.jpg',
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          height: MediaQuery.of(context).size.width * 0.13,
+                          fit: BoxFit.cover,
+                        )),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.07,
               ),

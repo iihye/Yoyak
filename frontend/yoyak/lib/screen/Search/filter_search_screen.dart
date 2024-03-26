@@ -56,6 +56,8 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
       },
       'default': '색상     전체',
     },
+  ];
+  final List<Map<String, dynamic>> filterOptionsNoDi = [
     {
       'options': {
         '제형     전체': null,
@@ -134,11 +136,10 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
               height: 20,
             ),
             Container(
-              padding: const EdgeInsets.only(left: 10, right: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: RoundedRectangle(
                 width: double.infinity,
-                // width: MediaQuery.of(context).size.width * 0.95,
-                height: MediaQuery.of(context).size.width * 0.10,
+                height: MediaQuery.of(context).size.width * 0.1,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -160,20 +161,26 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                     Icon(
                       Icons.search,
                       color: Palette.MAIN_BLUE,
+                      size: 25,
                     ),
                     SizedBox(
                       width: 15,
                     ),
                     Text(
                       "약의 이름, 증상을 입력해주세요",
-                      style: TextStyle(color: Palette.SUB_BLACK),
+                      style: TextStyle(
+                        color: Palette.SUB_BLACK,
+                        fontSize: 15,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
 
             // filterOptions 순회하면서 FilterComponent 출력
@@ -182,6 +189,24 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
             // selectedOptions를 이용하여 현재 선택된 옵션을 전달
             // default로 선택된 옵션을 전달
             ...filterOptions.map<Widget>((filterOption) {
+              var options =
+                  filterOption['options'].entries.map<FilterContainer>((e) {
+                return FilterContainer(imagePath: e.value, text: e.key);
+              }).toList();
+
+              return FilterComponent(
+                options: options,
+                selectedOption: options.firstWhere(
+                    (option) => option.text == filterOption['default']),
+                // selectedOption: selectedOptions[filterOption['default']]!,
+                onSelectionChanged: (newSelection) {
+                  print('Selected option: ${newSelection.text}');
+                },
+              );
+            }),
+
+            // 화살표 없어야하는 영역 (제형, 분할선)
+            ...filterOptionsNoDi.map<Widget>((filterOption) {
               var options =
                   filterOption['options'].entries.map<FilterContainer>((e) {
                 return FilterContainer(imagePath: e.value, text: e.key);

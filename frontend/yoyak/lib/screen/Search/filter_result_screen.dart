@@ -10,7 +10,7 @@ final Map<String, dynamic> dummyPillData = {
   "result": [
     {
       "medicineSeq": 195900043,
-      "imgPath": "https://www.druginfo.co.kr/drugimg/251234.jpg",
+      "imgPath": null,
       "itemName": "아네모정",
       "entpName": "삼진제약(주)"
     },
