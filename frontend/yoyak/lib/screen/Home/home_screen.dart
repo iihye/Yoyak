@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:yoyak/components/challenge_card.dart';
 import 'package:yoyak/components/main_appbar.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
+import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/screen/Login/kakao_login_screen.dart';
 import 'package:yoyak/screen/Search/filter_search_screen.dart';
 import 'package:yoyak/screen/Search/photo_search_screen.dart';
 import 'package:yoyak/screen/Camera/Camera.dart';
 import 'package:yoyak/styles/colors/palette.dart';
+
+import '../../components/icon_in_rectangle.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,14 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
-      appBar: const MainAppBar(),
+      appBar: const MainAppBar(
+        color: Palette.MAIN_BLUE,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
               width: screenWidth,
               height: 180,
-              color: Colors.blueAccent,
+              color: Palette.MAIN_BLUE,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
                 child: Column(
@@ -118,8 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         builder: (context) =>
                                             const PhotoSearchScreen()));
                               },
-                              child: InnerRectangle(subTitle: "AI가 약을 찾아줘요", title: "사진 찍기", imagePath: "assets/images/camera.png",)
-                          ),
+                              child: const IconInRectangle(
+                                subTitle: "AI가 약을 찾아줘요",
+                                title: "사진 찍기",
+                                imagePath: "assets/images/camera.png",
+                              )),
                           const Spacer(),
                           RoundedRectangle(
                               width: rectangleSize,
@@ -131,11 +140,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                         builder: (context) =>
                                             const FilterSearchScreen()));
                               },
-                              child: InnerRectangle(subTitle: "사진 찍기 힘들다면", title: "검색하기", imagePath: "assets/images/search.png",)),
+                              child: const IconInRectangle(
+                                subTitle: "사진 찍기 힘들다면",
+                                title: "검색하기",
+                                imagePath: "assets/images/search.png",
+                              )),
                           const Spacer(),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Row(
@@ -145,9 +158,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () => goTo(CameraScreen()),
-                              child: Container(
-                                child: InnerRectangle(subTitle: "복용 중인 약을 한눈에", title: "MY 약 봉투", imagePath: "assets/images/envelop.png",),
+                              onTap: () => goTo(const CameraScreen()),
+                              child: const IconInRectangle(
+                                subTitle: "복용 중인 약을 한눈에",
+                                title: "MY 약 봉투",
+                                imagePath: "assets/images/envelop.png",
                               )),
                           const Spacer(),
                           RoundedRectangle(
@@ -160,74 +175,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                         builder: (context) =>
                                             const FilterSearchScreen()));
                               },
-                              child: Container(
-                                child: InnerRectangle(subTitle: "복약 시간 놓치지 마세요", title: "알림", imagePath: "assets/images/alarm.png",),
+                              child: const IconInRectangle(
+                                subTitle: "복약 시간 놓치지 마세요",
+                                title: "알림",
+                                imagePath: "assets/images/alarm.png",
                               )),
                           const Spacer(),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       RoundedRectangle(
                           width: screenWidth * 0.91,
-                          height: 400,
-                          onTap: () => goTo(KakaoLoginScreen()),
-                          child: Container(
-                            child: InnerRectangle(subTitle: "꾸준히 복용해봐요", title: "챌린지 참여하기", titleImagePath: "assets/images/flag.png", hasContent: true,),
-                          )),
-                      SizedBox(
+                          height: 180,
+                          onTap: () => goTo(const ChallengeScreen()),
+                          child: const IconInRectangle(
+                              subTitle: "꾸준히 복용해봐요",
+                              title: "챌린지 참여하기",
+                              imagePath: "assets/images/flag.png")),
+                      const SizedBox(
                         height: 20,
                       ),
-
                     ],
                   )),
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class InnerRectangle extends StatelessWidget {
-  const InnerRectangle({super.key, this.subTitle, this.title, this.imagePath, this.titleImagePath, this.hasContent});
-  final subTitle, title, imagePath, titleImagePath, hasContent;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("$subTitle", style: const TextStyle(
-              fontFamily: "Pretendard",
-              color: Palette.SHADOW_GREY,
-              fontWeight: FontWeight.w500,
-              fontSize: 15),),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("$title", style: const TextStyle(
-                  fontFamily: "Pretendard",
-                  color: Palette.MAIN_BLACK,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 19),),
-              if (titleImagePath != null)
-                Image.asset(titleImagePath, height: 35,)
-            ],
-          ),
-          if (imagePath != null) Spacer(),
-          if (imagePath != null) // 이미지가 있는 경우에만 보여짐
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Image.asset(imagePath, width: 75, height: 75,),
-              ],
-            ) else
-              Container(child: Text("asdf"),)
-          ]
       ),
     );
   }

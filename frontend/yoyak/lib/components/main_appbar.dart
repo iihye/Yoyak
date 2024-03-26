@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:yoyak/screen/Mypage/mypage_screen.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MainAppBar({super.key});
+  const MainAppBar({super.key, this.color});
+  final color;
 
   @override
   Size get preferredSize => const Size.fromHeight(10 + kToolbarHeight);
@@ -12,7 +13,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: color,
         elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
