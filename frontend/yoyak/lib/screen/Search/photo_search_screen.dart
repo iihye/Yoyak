@@ -12,13 +12,15 @@ class PhotoSearchScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('알약 검색',
-            style: TextStyle(
-              color: Palette.MAIN_BLACK,
-              fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w400,
-              fontSize: 15,
-            )),
+        title: const Text(
+          '알약 검색',
+          style: TextStyle(
+            color: Palette.MAIN_BLACK,
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w400,
+            fontSize: 15,
+          ),
+        ),
         backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
         toolbarHeight: 55,
@@ -27,6 +29,7 @@ class PhotoSearchScreen extends StatelessWidget {
         width: double.infinity,
         color: Palette.BG_BLUE,
         padding: const EdgeInsets.all(40),
+        // padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -93,8 +96,13 @@ class PhotoSearchScreen extends StatelessWidget {
                             offset: Offset(0, 2),
                           )
                         ],
-                        child: const Image(
-                          image: AssetImage('assets/images/guide.png'),
+                        child: Center(
+                          // 이미지 크기 조절
+                          child: Image.asset(
+                            'assets/images/mountain.png',
+                            width: rectangleHeight * 0.55,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -123,8 +131,12 @@ class PhotoSearchScreen extends StatelessWidget {
                             offset: Offset(0, 2),
                           )
                         ],
-                        child: const Image(
-                          image: AssetImage('assets/images/guide.png'),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/images/camera.png',
+                            fit: BoxFit.cover,
+                            width: rectangleHeight * 0.55,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10),

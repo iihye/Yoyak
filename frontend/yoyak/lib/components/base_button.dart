@@ -70,6 +70,7 @@ class BaseButton extends StatelessWidget {
         onPressed: onPressed,
         style: buttonStyle,
         child: Text(
+          textAlign: TextAlign.center,
           text,
           style: TextStyle(
             color: textColor,

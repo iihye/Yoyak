@@ -112,7 +112,7 @@ class _FilterComponentState extends State<FilterComponent> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: RoundedRectangle(
-        width: MediaQuery.of(context).size.width * 0.85,
+        width: MediaQuery.of(context).size.width * 0.90,
         height: MediaQuery.of(context).size.width * 0.25,
         boxShadow: const [
           BoxShadow(
@@ -158,7 +158,7 @@ class _FilterComponentState extends State<FilterComponent> {
                       padding: const EdgeInsets.symmetric(
                         horizontal: 3,
                       ),
-                      width: MediaQuery.of(context).size.width * 0.15,
+                      width: MediaQuery.of(context).size.width * 0.16,
                       decoration: BoxDecoration(
                         // 현재 선택된 옵션이면 배경을 파란색.
                         color: selectedOption == widget.options[index]

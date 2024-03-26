@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:yoyak/components/pill_preview.dart';
 import '../../styles/colors/palette.dart';
@@ -23,8 +21,8 @@ final Map<String, dynamic> dummyPillData = {
   ]
 };
 
-class FilterResult extends StatelessWidget {
-  const FilterResult({super.key});
+class PhotoResultScreen extends StatelessWidget {
+  const PhotoResultScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +69,18 @@ class FilterResult extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.only(left: 10),
-                      child: const Text(
-                        "필터로 알약 검색",
-                        style: TextStyle(
-                            color: Palette.MAIN_BLACK,
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 24),
+                      child: const Column(
+                        children: [
+                          Text(
+                            "사진으로 알약 검색",
+                            style: TextStyle(
+                                color: Palette.MAIN_BLACK,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 24),
+                          ),
+                          // 보낸 사진 띄우기 영역!!!!!!!!!!
+                        ],
                       ),
                     ),
                     const SizedBox(

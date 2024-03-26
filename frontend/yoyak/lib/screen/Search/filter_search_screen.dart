@@ -115,157 +115,153 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
       body: Container(
         width: double.infinity,
         color: Palette.BG_BLUE,
-        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                child: const Text(
-                  "필터로 알약 검색",
-                  style: TextStyle(
-                      color: Palette.MAIN_BLACK,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 24),
-                ),
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 10),
+              child: const Text(
+                "필터로 알약 검색",
+                style: TextStyle(
+                    color: Palette.MAIN_BLACK,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 10, right: 20),
-                child: RoundedRectangle(
-                  width: MediaQuery.of(context).size.width * 0.85,
-                  height: MediaQuery.of(context).size.width * 0.10,
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const TextSearchScreen()));
-                  },
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Palette.SHADOW_GREY,
-                      blurRadius: 3,
-                      offset: Offset(0, 2),
-                    )
-                  ],
-                  child: const Row(
-                    children: [
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Icon(
-                        Icons.search,
-                        color: Palette.MAIN_BLUE,
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        "약의 이름, 증상을 입력해주세요",
-                        style: TextStyle(color: Palette.SUB_BLACK),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-
-              // filterOptions 순회하면서 FilterComponent 출력
-              // type을 List<FilterContainer>로 바꿔줌
-
-              // selectedOptions를 이용하여 현재 선택된 옵션을 전달
-              // default로 선택된 옵션을 전달
-              ...filterOptions.map<Widget>((filterOption) {
-                var options =
-                    filterOption['options'].entries.map<FilterContainer>((e) {
-                  return FilterContainer(imagePath: e.value, text: e.key);
-                }).toList();
-
-                return FilterComponent(
-                  options: options,
-                  selectedOption: options.firstWhere(
-                      (option) => option.text == filterOption['default']),
-                  // selectedOption: selectedOptions[filterOption['default']]!,
-                  onSelectionChanged: (newSelection) {
-                    print('Selected option: ${newSelection.text}');
-                  },
-                );
-              }),
-              // 초기화, 검색하기 버튼
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 45),
-                child: Row(
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: RoundedRectangle(
+                width: double.infinity,
+                // width: MediaQuery.of(context).size.width * 0.95,
+                height: MediaQuery.of(context).size.width * 0.10,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TextSearchScreen()));
+                },
+                boxShadow: const [
+                  BoxShadow(
+                    color: Palette.SHADOW_GREY,
+                    blurRadius: 3,
+                    offset: Offset(0, 2),
+                  )
+                ],
+                child: const Row(
                   children: [
-                    BaseButton(
-                      onPressed: () {
-                        setState(() {
-                          // _resetSelectedOptions();
-                          // 초기화 버튼을 누르면 다시 rebuild
-                          Navigator.pushReplacement(
-                            // 현재 화면을 스택에서 제거하고 새로운 화면을 띄움
-                            context,
-                            PageRouteBuilder(
-                              // 커스텀 페이지 전환
-                              // context : 현재의 build context
-                              pageBuilder: (context, animation1, animation2) =>
-                                  const FilterSearchScreen(),
-                              transitionDuration:
-                                  const Duration(seconds: 0), // 화면전환 애니메이션 X
-                            ),
-                          );
-                        });
-                      },
-                      text: '초기화',
-                      // colorMode: 'blue',
-                      colorMode: 'white',
+                    SizedBox(
+                      width: 15,
                     ),
-                    const SizedBox(
-                      width: 40,
+                    Icon(
+                      Icons.search,
+                      color: Palette.MAIN_BLUE,
                     ),
-                    BaseButton(
-                      // selectedOptions을 get으로 보내기
-                      // 결과를 상태관리에 저장
-                      // 그 후 검색 결과 화면으로 이동
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const FilterResult()));
-                      },
-                      text: '검색하기',
-                      colorMode: 'blue',
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "약의 이름, 증상을 입력해주세요",
+                      style: TextStyle(color: Palette.SUB_BLACK),
                     ),
                   ],
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+
+            // filterOptions 순회하면서 FilterComponent 출력
+            // type을 List<FilterContainer>로 바꿔줌
+
+            // selectedOptions를 이용하여 현재 선택된 옵션을 전달
+            // default로 선택된 옵션을 전달
+            ...filterOptions.map<Widget>((filterOption) {
+              var options =
+                  filterOption['options'].entries.map<FilterContainer>((e) {
+                return FilterContainer(imagePath: e.value, text: e.key);
+              }).toList();
+
+              return FilterComponent(
+                options: options,
+                selectedOption: options.firstWhere(
+                    (option) => option.text == filterOption['default']),
+                // selectedOption: selectedOptions[filterOption['default']]!,
+                onSelectionChanged: (newSelection) {
+                  print('Selected option: ${newSelection.text}');
+                },
+              );
+            }),
+            // 초기화, 검색하기 버튼
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 30),
+              child: Row(
+                children: [
+                  BaseButton(
+                    onPressed: () {
+                      setState(() {
+                        // _resetSelectedOptions();
+                        // 초기화 버튼을 누르면 다시 rebuild
+                        Navigator.pushReplacement(
+                          // 현재 화면을 스택에서 제거하고 새로운 화면을 띄움
+                          context,
+                          PageRouteBuilder(
+                            // 커스텀 페이지 전환
+                            // context : 현재의 build context
+                            pageBuilder: (context, animation1, animation2) =>
+                                const FilterSearchScreen(),
+                            transitionDuration:
+                                const Duration(seconds: 0), // 화면전환 애니메이션 X
+                          ),
+                        );
+                      });
+                    },
+                    text: '초기화',
+                    // colorMode: 'blue',
+                    colorMode: 'white',
+                  ),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  BaseButton(
+                    // selectedOptions을 get으로 보내기
+                    // 결과를 상태관리에 저장
+                    // 그 후 검색 결과 화면으로 이동
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const FilterResult()));
+                    },
+                    text: '검색하기',
+                    colorMode: 'blue',
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
   Widget filterComponent(BuildContext context) {
-    return Container(
-      child: RoundedRectangle(
-        width: MediaQuery.of(context).size.width * 0.85,
-        height: MediaQuery.of(context).size.width * 0.25,
-        boxShadow: const [
-          BoxShadow(
-            color: Palette.SHADOW_GREY,
-            blurRadius: 3,
-            offset: Offset(0, 2),
-          )
-        ],
-        child: const Row(),
-      ),
+    return RoundedRectangle(
+      width: MediaQuery.of(context).size.width * 0.85,
+      height: MediaQuery.of(context).size.width * 0.25,
+      boxShadow: const [
+        BoxShadow(
+          color: Palette.SHADOW_GREY,
+          blurRadius: 3,
+          offset: Offset(0, 2),
+        )
+      ],
+      child: const Row(),
     );
   }
 }
