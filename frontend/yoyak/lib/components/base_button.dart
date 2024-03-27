@@ -10,6 +10,8 @@ class BaseButton extends StatelessWidget {
   final double? height;
   final BorderRadius? borderRadius;
   final double? fontSize;
+  final backgroundColor;
+  final borderWidth;
 
   // 필수 값
   // 눌렀을 때 실행시킬 함수, 버튼 글자, 컬러 모드(흰색, 파랑색)
@@ -26,6 +28,8 @@ class BaseButton extends StatelessWidget {
     this.height,
     this.width,
     this.fontSize,
+    this.backgroundColor,
+    this.borderWidth,
   });
 
   @override
@@ -44,13 +48,15 @@ class BaseButton extends StatelessWidget {
       borderColor = Palette.MAIN_BLUE;
       backgroundColor = Palette.MAIN_BLUE;
       textColor = Palette.MAIN_WHITE;
+    } else if (colorMode == 'gray') {
+      backgroundColor = Palette.SHADOW_GREY;
     }
 
     // 버튼을 눌렀을 때  기본효과(inkwell)를 제거하기 위한 ButtonStyle
     final ButtonStyle buttonStyle = ButtonStyle(
       side: MaterialStateProperty.all(BorderSide(
         color: borderColor,
-        width: 1.5,
+        width: borderWidth ?? 1.5,
       )),
       backgroundColor: MaterialStateProperty.all(backgroundColor),
       // 물결 효과 제거

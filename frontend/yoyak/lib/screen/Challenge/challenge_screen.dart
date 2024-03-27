@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:yoyak/components/card_in_rectangle.dart';
+import 'package:yoyak/components/my_challenge_card.dart';
+import 'package:yoyak/components/challenge_appbar.dart';
 import 'package:yoyak/components/main_appbar.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
+
+import '../../components/other_challenge_card.dart';
 
 class ChallengeScreen extends StatefulWidget {
   const ChallengeScreen({super.key});
@@ -17,17 +20,18 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.BG_BLUE,
-      appBar: const MainAppBar(
+      appBar: const ChallengeaAppBar(
         color: Palette.BG_BLUE,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 40, 20, 25),
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 챌린지 아직 시작 안했을 때
                   RichText(
                       text: const TextSpan(children: [
                     TextSpan(
@@ -35,7 +39,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                       style: TextStyle(
                         fontSize: 27,
                         color: Palette.MAIN_BLACK,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w400,
                         fontFamily: 'Pretendard',
                       ),
                     ),
@@ -44,7 +48,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                       style: TextStyle(
                         fontSize: 27,
                         color: Palette.MAIN_BLUE,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w700,
                         fontFamily: 'Pretendard',
                       ),
                     ),
@@ -53,7 +57,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                       style: TextStyle(
                         fontSize: 27,
                         color: Palette.MAIN_BLACK,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w400,
                         fontFamily: 'Pretendard',
                       ),
                     ),
@@ -63,11 +67,11 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                     style: TextStyle(
                       fontSize: 27,
                       color: Palette.MAIN_BLACK,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                       fontFamily: 'Pretendard',
                     ),
                   ),
-                  const SizedBox(height: 40,),
+                  const SizedBox(height: 60,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
@@ -112,7 +116,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 17,),
+                  const SizedBox(height: 20,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -132,12 +136,12 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                     ],
                   ),
                   const SizedBox(height: 40,),
-                  const CardInRectangle(
+                  const MyChallengeCard(
                     title: "성현님이 진행 중인 챌린지",
                     titleImagePath: "assets/images/medal.png",
                   ),
                   const SizedBox(height: 15,),
-                  const CardInRectangle(
+                  const OtherChallengeCard(
                     title: "챌린지 둘러보기",
                     titleImagePath: "assets/images/medal.png",
                   ),

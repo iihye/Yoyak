@@ -122,12 +122,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const PhotoSearchScreen()));
+                                            const FilterSearchScreen()));
                               },
                               child: const IconInRectangle(
-                                subTitle: "AI가 약을 찾아줘요",
-                                title: "사진 찍기",
-                                imagePath: "assets/images/camera.png",
+                                subTitle: "사진 찍기 힘들다면",
+                                title: "검색하기",
+                                imagePath: "assets/images/search.png",
                               )),
                           const Spacer(),
                           RoundedRectangle(
@@ -138,12 +138,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const FilterSearchScreen()));
+                                            const PhotoSearchScreen()));
                               },
                               child: const IconInRectangle(
-                                subTitle: "사진 찍기 힘들다면",
-                                title: "검색하기",
-                                imagePath: "assets/images/search.png",
+                                subTitle: "AI가 약을 찾아줘요",
+                                title: "사진 찍기",
+                                imagePath: "assets/images/camera.png",
                               )),
                           const Spacer(),
                         ],
@@ -158,9 +158,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () => goTo(const CameraScreen()),
+                              onTap: () => goTo(const KakaoLoginScreen()),
                               child: const IconInRectangle(
-                                subTitle: "복용 중인 약을 한눈에",
+                                subTitle: "내 약을 한눈에",
                                 title: "MY 약 봉투",
                                 imagePath: "assets/images/envelop.png",
                               )),
@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             const FilterSearchScreen()));
                               },
                               child: const IconInRectangle(
-                                subTitle: "복약 시간 놓치지 마세요",
+                                subTitle: "복약 시간 알려드려요",
                                 title: "알림",
                                 imagePath: "assets/images/alarm.png",
                               )),

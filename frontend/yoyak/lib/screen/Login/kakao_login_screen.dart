@@ -40,7 +40,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
                     width: inputWidth,
                     height: 55,
                     child: TextButton(
-                      child: Row(
+                      child: const Row(
                         children: [
                           SizedBox(
                             width: 5,
