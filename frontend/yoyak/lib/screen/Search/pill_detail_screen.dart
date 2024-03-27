@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:yoyak/components/base_button.dart';
+import 'package:yoyak/components/pill_bag.dart';
 import 'package:yoyak/components/pill_description.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import '../../styles/colors/palette.dart';
@@ -23,6 +24,37 @@ final Map<String, dynamic> dummyDetailData = {
   "sideEffect": "변비, 설사 등이 나타나는 경우 복용을 즉각 중지하고 의사 또는 약사와 상의하십시오."
 };
 
+// 약 봉투 dummy data
+final Map<String, dynamic> dummyPillBag = {
+  "count": 3,
+  "result": [
+    {
+      "medicineEnvelopSeq": 1,
+      "color": "orange",
+      "accountSeq": 1,
+      "nickname": "gildong_acc",
+      "isSavedMedicine": false,
+      "envelopName": "감기약 봉투"
+    },
+    {
+      "medicineEnvelopSeq": 2,
+      "color": "green",
+      "accountSeq": 2,
+      "nickname": "seobang_acc",
+      "isSavedMedicine": false,
+      "envelopName": "두통약 봉투"
+    },
+    {
+      "medicineEnvelopSeq": 3,
+      "color": "blue",
+      "accountSeq": 2,
+      "nickname": "seobang_acc",
+      "isSavedMedicine": false,
+      "envelopName": "상비약 봉투"
+    }
+  ]
+};
+
 class PillDetailScreen extends StatelessWidget {
   final int medicineSeq;
 
@@ -30,6 +62,77 @@ class PillDetailScreen extends StatelessWidget {
     super.key,
     required this.medicineSeq,
   });
+
+  // 약 봉투 모달
+  void _showPillBagModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        // 위젯을 포함하는 함수
+        return RoundedRectangle(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.width * 1.5,
+          color: Colors.white,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              // Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const SizedBox(
+                    width: 50,
+                  ),
+                  const Text(
+                    "약 봉투에 저장하기",
+                    style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17,
+                    ),
+                  ),
+                  // const SizedBox(
+                  //   width: 70,
+                  // ),
+                  // 클릭 시, 약 봉투 생성
+                  Image.asset(
+                    'assets/images/pillbag.png',
+                    width: 40,
+                    height: 40,
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              // 돌보미 필터
+
+              // 약 봉투 리스트
+              Column(
+                children: [
+                  for (var pillBag in dummyPillBag["result"])
+                    PillBag(
+                      envelopName: pillBag["envelopName"],
+                      medicineSeq: 1,
+                      accountSeq: pillBag["accountSeq"],
+                      nickname: pillBag["nickname"],
+                      isSavedMedicine: pillBag["isSavedMedicine"],
+                      onClick: () {
+                        // 약 봉투에 저장하기 함수..?
+                        print('클릭');
+                      },
+                    )
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +233,9 @@ class PillDetailScreen extends StatelessWidget {
                       ),
                       // 저장하기 버튼
                       BaseButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _showPillBagModal(context);
+                        },
                         text: "저장하기",
                         colorMode: "blue",
                         width: 104,

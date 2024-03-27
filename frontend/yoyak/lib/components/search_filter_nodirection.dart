@@ -4,22 +4,22 @@ import '../styles/colors/palette.dart';
 
 // Filter Container 모델
 // widht, height 설정하기
-class FilterContainer {
+class FilterContainerNoDi {
   final String? imagePath;
   final String text;
 
-  FilterContainer({this.imagePath, required this.text});
+  FilterContainerNoDi({this.imagePath, required this.text});
 }
 
 // 제네릭타입 <T>
-class FilterComponent extends StatefulWidget {
-  final List<FilterContainer> options; // 선택 가능한 모든 옵션 리스트
-  final FilterContainer selectedOption; // 현재 선택된 옵션
-  final ValueChanged<FilterContainer>
+class FilterComponentNoDi extends StatefulWidget {
+  final List<FilterContainerNoDi> options; // 선택 가능한 모든 옵션 리스트
+  final FilterContainerNoDi selectedOption; // 현재 선택된 옵션
+  final ValueChanged<FilterContainerNoDi>
       onSelectionChanged; // 선택이 변경될 때, 실행될 콜백 함수
   // final Widget Function(BuildContext, FilterContainer) buildOption; // 각 옵션을 어떻게 렌더링 할 지 결정하는 함수
 
-  const FilterComponent({
+  const FilterComponentNoDi({
     super.key,
     required this.options,
     required this.selectedOption,
@@ -28,11 +28,11 @@ class FilterComponent extends StatefulWidget {
   });
 
   @override
-  State<FilterComponent> createState() => _FilterComponentState();
+  State<FilterComponentNoDi> createState() => _FilterComponentState();
 }
 
-class _FilterComponentState extends State<FilterComponent> {
-  late FilterContainer selectedOption;
+class _FilterComponentState extends State<FilterComponentNoDi> {
+  late FilterContainerNoDi selectedOption;
 
   @override
   void initState() {
@@ -43,9 +43,7 @@ class _FilterComponentState extends State<FilterComponent> {
     // 초기 화살표 상태를 정확하게 설정
   }
 
-  // 화살표 스크롤
-
-  void _handleTap(FilterContainer option) {
+  void _handleTap(FilterContainerNoDi option) {
     setState(() {
       // 선택된 옵션을 사용자가 탭한 옵션으로 변경
       selectedOption = option;

@@ -104,6 +104,7 @@ class _FilterComponentState extends State<FilterComponent> {
       selectedOption = option;
     });
     // 변경된 옵션을 부모 위젯에 알림
+    // onSelectionChanged 콜백 함수를 호출하여 선택된 옵션을 전달(변경했어요!)
     widget.onSelectionChanged(option);
   }
 
