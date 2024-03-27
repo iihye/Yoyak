@@ -53,13 +53,13 @@ class _CameraScreenState extends State<CameraScreen> {
             height: 300,
           )
         : RoundedRectangle(
+            width: 400,
+            height: 300,
             child: Container(
               width: 400,
               height: 300,
               color: Colors.grey,
             ),
-            width: 400,
-            height: 300,
           );
   }
 

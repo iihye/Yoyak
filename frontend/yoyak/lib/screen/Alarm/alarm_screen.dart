@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:numberpicker/numberpicker.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/components/bottom_modal.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/format_time.dart';
 import 'package:yoyak/screen/Alarm/alarm_create.dart';
+import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
@@ -21,66 +27,20 @@ class _AlarmScreenState extends State<AlarmScreen> {
   DateTime? _selectedDay;
   MediaQueryData? queryData;
 
-  var data = [
-    {
-      "notiTimeSeq": 1,
-      "name": "감기약이다",
-      "time": "2024-03-18T10:00:00",
-      "taken": "TAKEN",
-      "takenTime": "2024-03-18T12:20:00",
-      "accountSeq": 1,
-      "notiSeq": 4
-    },
-    {
-      "notiTimeSeq": 2,
-      "name": "감기약이다",
-      "time": "2024-03-18T13:00:00",
-      "taken": "NOT_TAKEN",
-      "takenTime": null,
-      "accountSeq": 1,
-      "notiSeq": 4
-    },
-    {
-      "notiTimeSeq": 3,
-      "name": "감기약이다",
-      "time": "2024-03-18T18:00:00",
-      "taken": "YET_TAKEN",
-      "takenTime": null,
-      "accountSeq": 1,
-      "notiSeq": 4
-    },
-    {
-      "notiTimeSeq": 4,
-      "name": "감기약이다",
-      "time": "2024-03-18T00:01:00",
-      "taken": "TAKEN",
-      "takenTime": "2024-03-18T00:03:00",
-      "accountSeq": 1,
-      "notiSeq": 4
-    },
-    {
-      "notiTimeSeq": 5,
-      "name": "감기약이다",
-      "time": "2024-03-18T18:00:00",
-      "taken": "YET_TAKEN",
-      "takenTime": null,
-      "accountSeq": 1,
-      "notiSeq": 4
-    },
-    {
-      "notiTimeSeq": 6,
-      "name": "감기약이다",
-      "time": "2024-03-18T18:00:00",
-      "taken": "YET_TAKEN",
-      "takenTime": null,
-      "accountSeq": 1,
-      "notiSeq": 4
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     double paddingValue = ScreenSize.getWidth(context) * 0.03;
+
+    DateTime now = DateTime.now();
+
+    var alarmList = context.watch<AlarmStore>().alarms;
+
+    var filteredAlarmList = _selectedDay != null
+        ? alarmList.where((alarm) {
+            return alarm.time != null && isSameDay(_selectedDay, alarm.time);
+          }).toList()
+        : alarmList;
+
     return Scaffold(
       // 배경색
       backgroundColor: Palette.BG_BLUE,
@@ -111,7 +71,12 @@ class _AlarmScreenState extends State<AlarmScreen> {
               headerVisible: false,
               calendarFormat: _calendarFormat,
               firstDay: DateTime.utc(2024, 01, 01),
-              lastDay: DateTime.utc(2024, 04, 06),
+              // 오늘에서 14일 후 토요일까지 보여줌
+              lastDay: now
+                  .add(const Duration(days: 14))
+                  .subtract(Duration(
+                      days: now.add(const Duration(days: 14)).weekday % 7))
+                  .add(const Duration(days: 6)),
               focusedDay: _focusedDay,
               selectedDayPredicate: (day) {
                 return isSameDay(_selectedDay, day);
@@ -125,21 +90,21 @@ class _AlarmScreenState extends State<AlarmScreen> {
               calendarStyle: const CalendarStyle(
                 // 오늘 날짜 스타일
                 todayDecoration: BoxDecoration(
-                  color: Palette.MAIN_BLUE,
+                  color: Palette.SUB_BLUE,
                   shape: BoxShape.circle,
                 ),
                 todayTextStyle: TextStyle(
-                  color: Colors.white,
+                  color: Palette.MAIN_BLACK,
                   fontSize: 15,
                 ),
 
                 // 선택된 날짜의 테두리 스타일
                 selectedDecoration: BoxDecoration(
-                  color: Palette.SUB_BLUE,
+                  color: Palette.MAIN_BLUE,
                   shape: BoxShape.circle,
                 ),
                 selectedTextStyle: TextStyle(
-                  color: Palette.MAIN_BLACK,
+                  color: Palette.MAIN_WHITE,
                   fontSize: 15,
                 ),
               ),
@@ -159,23 +124,27 @@ class _AlarmScreenState extends State<AlarmScreen> {
                 ),
               ),
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [Text('필터자리 (계정이 여러개가 있을 경우만 나올것)')],
+              children: [
+                TextButton(
+                    child: Text(alarmList.length.toString()),
+                    onPressed: () {
+                      print(alarmList);
+                    })
+              ],
             ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(children: [
-                  ...data.map<Widget>((alarm) {
-                    int notiTimeSeq = alarm['notiTimeSeq'] as int;
-                    String name = alarm['name'] as String;
-                    DateTime time = DateTime.parse(alarm['time'] as String);
-                    String taken = alarm['taken'] as String;
-                    DateTime? takenTime = alarm['takenTime'] != null
-                        ? DateTime.parse(alarm['takenTime'] as String)
-                        : null;
-                    int accountSeq = alarm['accountSeq'] as int;
-                    int notiSeq = alarm['notiSeq'] as int;
+                  ...filteredAlarmList.map<Widget>((alarm) {
+                    int notiTimeSeq = alarm.notiTimeSeq ?? 0;
+                    String name = alarm.name ?? '';
+                    DateTime time = alarm.time ?? DateTime.now();
+                    String taken = alarm.taken ?? '';
+                    DateTime? takenTime = alarm.takenTime;
+                    int accountSeq = alarm.accountSeq ?? 0;
+                    int notiSeq = alarm.notiSeq ?? 0;
 
                     return AlarmItem(
                       notiTimeSeq: notiTimeSeq,
@@ -319,6 +288,7 @@ class AlarmItem extends StatelessWidget {
                 taken: taken,
                 takenTime: takenTime,
                 notiSeq: notiSeq,
+                notiTimeSeq: notiTimeSeq,
               ),
             ],
           ),
@@ -385,6 +355,7 @@ class CheckEatPillButton extends StatefulWidget {
   final String taken;
   final int notiSeq;
   final DateTime? takenTime;
+  final int notiTimeSeq;
 
   const CheckEatPillButton({
     super.key,
@@ -392,14 +363,164 @@ class CheckEatPillButton extends StatefulWidget {
     required this.time,
     required this.taken,
     required this.notiSeq,
+    required this.notiTimeSeq,
     this.takenTime,
   });
 
   @override
-  _CheckEatPillButtonState createState() => _CheckEatPillButtonState();
+  CheckEatPillButtonState createState() => CheckEatPillButtonState();
 }
 
-class _CheckEatPillButtonState extends State<CheckEatPillButton> {
+class CheckEatPillButtonState extends State<CheckEatPillButton> {
+  // 약 먹었어요
+  Future<void> takenPill(int notiTimeSeq, DateTime takenTime) async {
+    String url = '$URL/noti/time/taken';
+    String accessToken = access_token;
+
+    String formattedTakenTime = takenTime.toIso8601String();
+
+    Map<String, dynamic> requestData = {
+      "notiTimeSeq": notiTimeSeq,
+      "takenTime": formattedTakenTime,
+    };
+
+    try {
+      var response = await http.put(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": accessToken,
+        },
+        body: json.encode(requestData),
+      );
+
+      if (response.statusCode == 200) {
+        print('Medication taken successfully');
+        // 데이터 갱신
+        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+      } else {
+        print('Failed to take medication, status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error taking medication: $e');
+    }
+  }
+
+  // 건너 뛰었어요
+  Future<void> skipPill(int notiTimeSeq) async {
+    String url = '$URL/noti/time/not/$notiTimeSeq';
+    String accessToken = access_token;
+    print(notiTimeSeq);
+
+    try {
+      var response = await http.put(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": accessToken,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Medication skipped successfully');
+        // 데이터 갱신
+        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+      } else {
+        print('Failed to skip medication, status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error skipping medication: $e');
+    }
+  }
+
+  // 건너 뛰기 취소
+  Future<void> cancelSkipPill(int notiTimeSeq) async {
+    String url = '$URL/noti/time/yet/$notiTimeSeq';
+    String accessToken = access_token;
+
+    try {
+      var response = await http.put(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": accessToken,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Medication skip canceled successfully');
+        // 데이터 갱신
+        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+      } else {
+        print(
+            'Failed to cancel medication skip, status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error canceling medication skip: $e');
+    }
+  }
+
+  // 복용 시간 수정
+  Future<void> updateTimePill(int notiTimeSeq, DateTime takenTime) async {
+    String url = '$URL/noti/time/taken';
+    String accessToken = access_token;
+
+    String formattedTakenTime = takenTime.toIso8601String();
+
+    Map<String, dynamic> requestData = {
+      "notiTimeSeq": notiTimeSeq,
+      "takenTime": formattedTakenTime,
+    };
+
+    try {
+      var response = await http.put(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": accessToken,
+        },
+        body: json.encode(requestData),
+      );
+
+      if (response.statusCode == 200) {
+        print('Medication taken successfully');
+        // 데이터 갱신
+        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+      } else {
+        print('Failed to take medication, status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error taking medication: $e');
+    }
+  }
+
+  // 먹지 않았어요
+  Future<void> notTakenPill(int notiTimeSeq) async {
+    String url = '$URL/noti/time/yet/$notiTimeSeq';
+    String accessToken = access_token;
+
+    try {
+      var response = await http.put(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": accessToken,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Medication not taken successfully');
+        // 데이터 갱신
+        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+      } else {
+        print(
+            'Failed to not take medication, status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error not taking medication: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String name = widget.name;
@@ -407,6 +528,7 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
     String taken = widget.taken;
     int notiSeq = widget.notiSeq;
     DateTime? takenTime = widget.takenTime;
+    int notiTimeSeq = widget.notiTimeSeq;
 
     return Center(
       child: RoundedRectangle(
@@ -463,6 +585,7 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
             time: time,
             notiSeq: notiSeq,
             takenTime: takenTime,
+            notiTimeSeq: notiTimeSeq,
           );
         },
       ),
@@ -475,6 +598,7 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
     required DateTime time,
     required int notiSeq,
     required DateTime? takenTime,
+    required int notiTimeSeq,
   }) {
     Widget modalContent;
     switch (widget.taken) {
@@ -529,7 +653,10 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                     width: 110,
                     height: 100,
                     // 나중에 수정 api 연결
-                    onTap: () => {Navigator.pop(context)},
+                    onTap: () => {
+                      notTakenPill(notiTimeSeq),
+                      Navigator.pop(context),
+                    },
                     color: Palette.SUB_WHITE,
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -562,6 +689,7 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                         context: context,
                         notiSeq: notiSeq,
                         takenTime: takenTime as DateTime,
+                        notiTimeSeq: notiTimeSeq,
                       );
                     },
                     child: const Column(
@@ -642,7 +770,11 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                     width: 110,
                     height: 100,
                     // 나중에 수정 api 연결
-                    onTap: () => {Navigator.pop(context)},
+                    onTap: () => {
+                      // 건너뛰기 취소 로직
+                      cancelSkipPill(notiTimeSeq),
+                      Navigator.pop(context),
+                    },
                     color: Palette.SUB_WHITE,
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -718,7 +850,10 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                     width: 110,
                     height: 100,
                     color: Palette.SUB_WHITE,
-                    onTap: () => {Navigator.pop(context)},
+                    onTap: () => {
+                      skipPill(notiTimeSeq),
+                      Navigator.pop(context),
+                    },
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -746,11 +881,8 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                     height: 100,
                     color: Palette.SUB_BLUE,
                     onTap: () => {
+                      takenPill(notiTimeSeq, DateTime.now()),
                       Navigator.pop(context),
-                      // 이걸 담아서 주면 됨
-                      print(
-                        DateTime.now(),
-                      )
                     },
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -793,6 +925,7 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
     required BuildContext context,
     required int notiSeq,
     required DateTime takenTime,
+    required int notiTimeSeq,
   }) {
     return showModalBottomSheet(
       context: context,
@@ -966,6 +1099,18 @@ class _CheckEatPillButtonState extends State<CheckEatPillButton> {
                     child: TextButton(
                       onPressed: () {
                         // 시간 수정 api 연결
+                        updateTimePill(
+                          notiTimeSeq,
+                          DateTime(
+                            takenTime.year,
+                            takenTime.month,
+                            takenTime.day,
+                            selectedPeriodIndex == 0
+                                ? selectedHour
+                                : selectedHour + 12,
+                            selectedMinute,
+                          ),
+                        );
                         Navigator.popUntil(context, (route) => route.isFirst);
                       },
                       child: Text(

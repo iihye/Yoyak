@@ -1,12 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:provider/provider.dart';
+import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/base_input.dart';
 import 'package:yoyak/components/bottom_modal.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/components/selectday_button.dart';
 import 'package:yoyak/hooks/format_time.dart';
+import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
@@ -24,6 +29,7 @@ class AlarmCreate extends StatefulWidget {
 
 class _AlarmCreateState extends State<AlarmCreate> {
   final _formKey = GlobalKey<FormState>();
+
   late String _alarmName = '';
   late DateTime _alarmStartDate = DateTime.now();
   late DateTime _alarmEndDate = DateTime.now();
@@ -45,59 +51,177 @@ class _AlarmCreateState extends State<AlarmCreate> {
   late bool isEveryday = true;
 
   late TextEditingController _alarmNameController;
-  var data = [
-    {
-      "accountSeq": 1,
-      "notiSeq": 4,
-      "name": "감기약",
-      "startDate": "2024-04-06",
-      "endDate": "2024-04-10",
-      "period": ["MONDAY", "TUESDAY", "WEDNESDAY"],
-      "time": ["09:00:00", "13:00:00", "20:00:00"]
+
+  Future<void> fetchAlarmData(int notiSeq) async {
+    String url = 'https://j10b102.p.ssafy.io/api/noti/$notiSeq';
+    Uri uri = Uri.parse(url);
+
+    try {
+      var response = await http.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'Authorization': access_token
+      });
+      if (response.statusCode == 200) {
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody);
+        // 여기서 jsonData를 사용하여 폼 데이터 설정
+        setState(() {
+          _alarmName = jsonData['name'];
+          _alarmNameController =
+              TextEditingController(text: _alarmName); // 여기에서 초기화
+          _alarmStartDate = DateTime.parse(jsonData['startDate']);
+          _alarmEndDate = DateTime.parse(jsonData['endDate']);
+          _alarmDays = List<String>.from(jsonData['period']);
+          _alarmTime = (jsonData['time'] as List).map<DateTime>((timeStr) {
+            List<String> parts = timeStr.split(':');
+            return DateTime(
+              _alarmStartDate.year,
+              _alarmStartDate.month,
+              _alarmStartDate.day,
+              int.parse(parts[0]),
+              int.parse(parts[1]),
+              int.parse(parts[2]),
+            );
+          }).toList();
+        });
+      } else {
+        print('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      // 예외 처리
+      print('Error fetching data: $e');
     }
-  ];
+  }
+
+  Future<void> sendAlarmData() async {
+    String accessToken = access_token; // 액세스 토큰
+    String url = '$URL/noti'; // 서버 URL
+
+    // _alarmTime을 "HH:mm" 형식의 문자열로 변환
+    List<String> formattedAlarmTimes = _alarmTime.map((datetime) {
+      return '${datetime.hour.toString().padLeft(2, '0')}:${datetime.minute.toString().padLeft(2, '0')}';
+    }).toList();
+
+    // 서버에 보낼 데이터 준비
+    Map<String, dynamic> alarmData = {
+      'accountSeq': 4, // 실제 계정번호로 대체 필요
+      'name': _alarmName,
+      'startDate': _alarmStartDate.toIso8601String(),
+      'endDate': _alarmEndDate.toIso8601String(),
+      'period': _alarmDays,
+      'time': formattedAlarmTimes,
+    };
+
+    try {
+      // POST 요청 보내기
+      var response = await http.post(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": accessToken,
+        },
+        body: json.encode(alarmData),
+      );
+
+      if (response.statusCode == 200) {
+        print('Alarm data sent successfully');
+        // 알람 데이터를 다시 불러오기
+        if (mounted) {
+          Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        }
+      } else {
+        // 오류 처리
+        print('Failed to send alarm data, status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // 예외 처리
+      print('Error sending alarm data: $e');
+    }
+  }
+
+  Future<void> updateAlarmData(int notiSeq) async {
+    String accessToken = access_token; // 액세스 토큰
+    String url = '$URL/noti'; // 서버 URL
+
+    // _alarmTime을 "HH:mm" 형식의 문자열로 변환
+    List<String> formattedAlarmTimes = _alarmTime.map((datetime) {
+      return '${datetime.hour.toString().padLeft(2, '0')}:${datetime.minute.toString().padLeft(2, '0')}';
+    }).toList();
+
+    // 서버에 보낼 데이터 준비
+    Map<String, dynamic> alarmData = {
+      'notiSeq': notiSeq, // 실제 계정번호로 대체 필요
+      'name': _alarmName,
+      'startDate': _alarmStartDate.toIso8601String(),
+      'endDate': _alarmEndDate.toIso8601String(),
+      'period': _alarmDays,
+      'time': formattedAlarmTimes,
+    };
+
+    try {
+      // POST 요청 보내기
+      var response = await http.put(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": accessToken,
+        },
+        body: json.encode(alarmData),
+      );
+
+      if (response.statusCode == 200) {
+        print('수정 완료');
+        // 알람 데이터를 다시 불러오기
+        if (mounted) {
+          Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        }
+      } else {
+        // 오류 처리
+        print(alarmData);
+        print('Failed to send alarm data, status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // 예외 처리
+      print('Error sending alarm data: $e');
+    }
+  }
+
+  Future<void> deleteAlarmData(int notiSeq) async {
+    String accessToken = access_token; // 액세스 토큰
+    String url = '$URL/noti/time/$notiSeq'; // 서버 URL
+
+    try {
+      // DELETE 요청 보내기
+      var response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": accessToken,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('삭제 완료');
+        // 알람 데이터를 다시 불러오기
+        if (mounted) {
+          Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        }
+      } else {
+        // 오류 처리
+        print('Failed to send alarm data, status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // 예외 처리
+      print('Error sending alarm data: $e');
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-
+    _alarmNameController = TextEditingController();
     if (widget.notiSeq != null) {
-      // notiSeq와 일치하는 알림 데이터 찾기
-      var alarmData = data.firstWhere(
-        (element) => element['notiSeq'] == widget.notiSeq,
-        orElse: () => <String, Object>{},
-      );
-
-      // 해당 데이터로 폼 채우기
-      _alarmName = (alarmData['name'] as String?) ?? '';
-      print(_alarmName);
-      _alarmNameController =
-          TextEditingController(text: alarmData['name'] as String? ?? '');
-      _alarmStartDate =
-          DateTime.parse(alarmData['startDate'] as String? ?? '2020-01-01');
-      _alarmEndDate =
-          DateTime.parse(alarmData['endDate'] as String? ?? '2020-01-01');
-      _alarmDays = (alarmData['period'] as List<dynamic>?)
-              ?.map((day) => day as String)
-              .toList() ??
-          [];
-      _alarmTime =
-          (alarmData['time'] as List<dynamic>? ?? []).map<DateTime>((timeStr) {
-        var timeParts = (timeStr as String).split(':');
-        dateTimeRange =
-            DateTimeRange(start: _alarmStartDate, end: _alarmEndDate);
-        return DateTime(
-          _alarmStartDate.year,
-          _alarmStartDate.month,
-          _alarmStartDate.day,
-          int.parse(timeParts[0]),
-          int.parse(timeParts[1]),
-          int.parse(timeParts[2]),
-        );
-      }).toList();
-    } else {
-      // notiSeq가 null일 때 (새 알림 생성)
-      _alarmNameController = TextEditingController();
+      fetchAlarmData(widget.notiSeq!);
     }
   }
 
@@ -128,6 +252,23 @@ class _AlarmCreateState extends State<AlarmCreate> {
           onPressed: () {
             Navigator.pop(context);
           },
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SizedBox(), // 왼쪽 여백
+            if (widget.notiSeq != null) // 조건 확인
+              BaseButton(
+                height: 35,
+                onPressed: () {
+                  // 삭제 로직 추가
+                  deleteAlarmData(widget.notiSeq!);
+                  Navigator.pop(context);
+                },
+                text: '삭제하기',
+                colorMode: 'blue',
+              ),
+          ],
         ),
       ),
       body: SingleChildScrollView(
@@ -258,7 +399,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
             borderRadius: BorderRadius.circular(0),
           ),
         ),
-        onPressed: () {
+        onPressed: () async {
           bool isFormValid = _formKey.currentState!.validate();
           if (!isFormValid) {
             // 폼의 필드 중 하나라도 유효하지 않은 경우
@@ -322,10 +463,16 @@ class _AlarmCreateState extends State<AlarmCreate> {
             );
             return;
           }
-
-          print(
-              '$_alarmName, $_alarmTime, $_alarmStartDate, $_alarmEndDate, $_alarmDays');
-          // 추가적인 작업 수행...
+          // 알림 생성 시
+          if (widget.notiSeq == null) {
+            await sendAlarmData();
+          } else {
+            // 알림 수정 시
+            await updateAlarmData(widget.notiSeq!);
+          }
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
         },
         child: const Center(
           child: Text(
