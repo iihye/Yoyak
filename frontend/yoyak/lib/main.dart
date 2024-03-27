@@ -5,6 +5,7 @@ import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:yoyak/security/Security.dart';
+import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/camera_store.dart';
 import 'package:yoyak/store/login_store.dart';
 
@@ -17,6 +18,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => CameraStore()),
         ChangeNotifierProvider(create: (context) => LoginStore()),
+        ChangeNotifierProvider(create: (context) => AlarmStore()),
         // 다른 스토어도 이렇게 넣으면 됨
       ],
       child: const MyApp(),
@@ -31,6 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SafeArea(
         child: MaterialApp(
+      // 알림 날짜 선택기를 위한 한국어 설정
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
