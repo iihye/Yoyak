@@ -12,6 +12,7 @@ class KakaoLogin implements SocialLogin {
   @override
   Future<bool> login() async {
 // 카카오톡 설치 여부 확인
+  print("1230");
 // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
     if (await isKakaoTalkInstalled()) {
       try {
