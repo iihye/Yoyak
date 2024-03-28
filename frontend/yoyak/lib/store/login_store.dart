@@ -44,5 +44,6 @@ class LoginStore extends ChangeNotifier {
 
   setAccessToken(token) {
     accessToken = token;
+    notifyListeners();
   }
 }
