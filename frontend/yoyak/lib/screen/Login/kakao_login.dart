@@ -1,18 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yoyak/screen/Login/social_login.dart';
 
-class KakaoLogin implements SocialLogin {
-
-
+class KakaoLogin extends StatelessWidget implements SocialLogin {
+  const KakaoLogin({super.key});
 
   @override
   Future<bool> login() async {
 // 카카오톡 설치 여부 확인
-  print("1230");
 // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
     if (await isKakaoTalkInstalled()) {
       try {
@@ -45,6 +43,9 @@ class KakaoLogin implements SocialLogin {
         var kakaoToken = await UserApi.instance.loginWithKakaoAccount();
         print('카톡 설치 안됐을 때 카카오계정으로 로그인 성공');
         print(kakaoToken.accessToken);
+        // sendKakaoId(kakaoToken);
+
+
         return true;
       } catch (error) {
         print('카카오계정으로 로그인 실패 $error');
@@ -62,5 +63,10 @@ class KakaoLogin implements SocialLogin {
       print(error);
       return false;
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }

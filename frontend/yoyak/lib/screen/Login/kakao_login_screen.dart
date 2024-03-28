@@ -4,6 +4,8 @@ import 'package:yoyak/screen/Login/kakao_login.dart';
 import 'package:yoyak/screen/Login/kakao_view_model.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
+import 'login_screen.dart';
+
 class KakaoLoginScreen extends StatefulWidget {
   const KakaoLoginScreen({super.key});
 
@@ -12,15 +14,14 @@ class KakaoLoginScreen extends StatefulWidget {
 }
 
 class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
-  final viewModel = KakaoViewModel(KakaoLogin());
-
   @override
   Widget build(BuildContext context) {
+    final viewModel = KakaoViewModel(const KakaoLogin(), context); // 바뀐 부분
     // final TextEditingController emailController = TextEditingController();
     // final TextEditingController passwordController = TextEditingController();
     var inputWidth = MediaQuery.of(context).size.width * 0.82;
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF), // 0xFFF5F6F9
+      backgroundColor: const Color(0xFFFFFFFF), // 0xFFF5F6F9
       body: Center(
         child: Container(
           margin: const EdgeInsets.all(24),
@@ -29,8 +30,45 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _header(context),
-                SizedBox(
+                const SizedBox(
                   height: 80,
+                ),
+                Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Palette.MAIN_BLUE, width: 1),
+                      borderRadius: BorderRadius.circular(10),
+                      color: Palette.MAIN_WHITE,
+                    ),
+                    width: inputWidth,
+                    height: 55,
+                    child: TextButton(
+                      child: const Row(
+                        children: [
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(Icons.email, color: Palette.MAIN_BLUE),
+                          SizedBox(
+                            width: 70,
+                          ),
+                          Text(
+                            "이메일 로그인",
+                            style: TextStyle(
+                                color: Palette.MAIN_BLUE,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()));
+                      },
+                    )),
+                const SizedBox(
+                  height: 10,
                 ),
                 Container(
                     decoration: BoxDecoration(
@@ -47,7 +85,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
                           ),
                           Icon(Icons.mail_sharp, color: Colors.white),
                           SizedBox(
-                            width: 85,
+                            width: 70,
                           ),
                           Text(
                             "카카오 로그인",
@@ -64,7 +102,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
                         await viewModel.login();
                       },
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 _signup(context),
@@ -102,7 +140,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
           style: TextStyle(color: Colors.black.withOpacity(0.7), fontSize: 13),
         ),
         GestureDetector(
-          child: Text(
+          child: const Text(
             "회원가입",
             style: TextStyle(color: Palette.MAIN_BLUE, fontSize: 13),
           ),
@@ -110,12 +148,12 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
             Navigator.push(
               context,
               PageRouteBuilder(
-                pageBuilder: (c, a1, a2) => AlarmScreen(),
+                pageBuilder: (c, a1, a2) => const AlarmScreen(),
                 transitionsBuilder: (c, a1, a2, child) => FadeTransition(
                   opacity: a1,
                   child: child,
                 ),
-                transitionDuration: Duration(milliseconds: 700),
+                transitionDuration: const Duration(milliseconds: 700),
               ),
             );
           },
