@@ -40,16 +40,13 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<LoginStore>(context, listen: false).getAccountData();
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    context.read<LoginStore>().getAccountData();
+    context.read<AlarmStore>().getAlarmDatas(context);
+    print(context.read<LoginStore>().accessToken);
     return Scaffold(
       body: mainTabs[curTabIdx],
       bottomNavigationBar: BottomBar(

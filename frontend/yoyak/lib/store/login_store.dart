@@ -41,7 +41,7 @@ class LoginStore extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        print('Request succeeded! status: ${response.statusCode}.');
+        print('유저야 ${response.statusCode}.');
         var decodedBody = utf8.decode(response.bodyBytes);
         List<dynamic> data = json.decode(decodedBody);
         alarmAccounts =

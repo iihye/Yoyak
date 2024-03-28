@@ -474,7 +474,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
       if (response.statusCode == 200) {
         print('Medication taken successfully');
         // 데이터 갱신
-        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        if (mounted) {
+          context.read<AlarmStore>().getAlarmDatas(context);
+        }
       } else {
         print('Failed to take medication, status code: ${response.statusCode}');
       }
@@ -501,7 +503,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
       if (response.statusCode == 200) {
         print('Medication skipped successfully');
         // 데이터 갱신
-        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        if (mounted) {
+          context.read<AlarmStore>().getAlarmDatas(context);
+        }
       } else {
         print('Failed to skip medication, status code: ${response.statusCode}');
       }
@@ -528,7 +532,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
       if (response.statusCode == 200) {
         print('Medication skip canceled successfully');
         // 데이터 갱신
-        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        if (mounted) {
+          context.read<AlarmStore>().getAlarmDatas(context);
+        }
       } else {
         print(
             'Failed to cancel medication skip, status code: ${response.statusCode}');
@@ -564,7 +570,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
       if (response.statusCode == 200) {
         print('Medication taken successfully');
         // 데이터 갱신
-        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        if (mounted) {
+          context.read<AlarmStore>().getAlarmDatas(context);
+        }
       } else {
         print('Failed to take medication, status code: ${response.statusCode}');
       }
@@ -591,7 +599,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
       if (response.statusCode == 200) {
         print('Medication not taken successfully');
         // 데이터 갱신
-        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        if (mounted) {
+          context.read<AlarmStore>().getAlarmDatas(context);
+        }
       } else {
         print(
             'Failed to not take medication, status code: ${response.statusCode}');

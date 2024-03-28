@@ -53,7 +53,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
   // 주기 관련 변수
   late bool isEveryday = true;
   late int _alarmAccountSeq; // 실제 계정번호로 대체 필요
-  
+
   late TextEditingController _alarmNameController;
 
   Future<void> fetchAlarmData(int notiSeq) async {
@@ -139,7 +139,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
         print('Alarm data sent successfully');
         // 알람 데이터를 다시 불러오기
         if (mounted) {
-          Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+          context.read<AlarmStore>().getAlarmDatas(context);
         }
       } else {
         // 오류 처리
@@ -187,11 +187,10 @@ class _AlarmCreateState extends State<AlarmCreate> {
         print('수정 완료');
         // 알람 데이터를 다시 불러오기
         if (mounted) {
-          Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+          context.read<AlarmStore>().getAlarmDatas(context);
         }
       } else {
         // 오류 처리
-        print(alarmData);
         print('Failed to send alarm data, status code: ${response.statusCode}');
       }
     } catch (e) {
@@ -217,10 +216,10 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
       if (response.statusCode == 200) {
         print('삭제 완료');
-        // 알람 데이터를 다시 불러오기
         if (mounted) {
-          Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+          context.read<AlarmStore>().getAlarmDatas(context);
         }
+        // 알람 데이터를 다시 불러오기
       } else {
         // 오류 처리
         print('Failed to send alarm data, status code: ${response.statusCode}');
@@ -240,8 +239,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
     }
 
     // accountList에서 첫 번째 요소의 seq를 가져와서 초기화
-    var accountList =
-        Provider.of<LoginStore>(context, listen: false).alarmAccounts;
+    var accountList = context.read<LoginStore>().alarmAccounts;
     _alarmAccountSeq = accountList.isNotEmpty ? accountList.first.seq ?? 0 : 0;
   }
 
@@ -521,6 +519,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
           // 알림 생성 시
           if (widget.notiSeq == null) {
             await sendAlarmData();
+            print(accountList);
           } else {
             // 알림 수정 시
             await updateAlarmData(widget.notiSeq!);
