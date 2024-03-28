@@ -55,29 +55,29 @@ class LoginStore extends ChangeNotifier {
       // 예외 처리
       print('An error occurred: $error');
     }
+  }
 
-    setGender(String str) {
-      print("성별 $str");
-      gender = str;
-    }
+  setGender(String str) {
+    print("성별 $str");
+    gender = str;
+  }
 
-    setYear(String str) {
-      print("년도 $str");
-      year = str;
-    }
+  setYear(String str) {
+    print("년도 $str");
+    year = str;
+  }
 
-    setMonth(String str) {
-      print("월 $str");
-      month = str;
-    }
+  setMonth(String str) {
+    print("월 $str");
+    month = str;
+  }
 
-    setDay(String str) {
-      print("일 $str");
-      day = str;
-    }
+  setDay(String str) {
+    print("일 $str");
+    day = str;
+  }
 
-    setAccessToken(token) {
-      accessToken = token;
-    }
+  setAccessToken(token) {
+    accessToken = token;
   }
 }

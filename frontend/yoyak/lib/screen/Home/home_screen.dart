@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () => goTo(const PillBoxScreen()),
+                              onTap: () => goTo(const KakaoLoginScreen()),
                               child: const IconInRectangle(
                                 subTitle: "내 약을 한눈에",
                                 title: "MY 약 봉투",

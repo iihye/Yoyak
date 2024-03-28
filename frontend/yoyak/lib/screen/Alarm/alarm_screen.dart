@@ -451,7 +451,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 약 먹었어요
   Future<void> takenPill(int notiTimeSeq, DateTime takenTime) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = API.yoyakToken; // 액세스 토큰
+    String accessToken = context.read<LoginStore>().accessToken; // 액세스 토큰
     String url = '$yoyakURL/noti/time/taken';
 
     String formattedTakenTime = takenTime.toIso8601String();
@@ -486,7 +486,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 건너 뛰었어요
   Future<void> skipPill(int notiTimeSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = API.yoyakToken; // 액세스 토큰
+    String accessToken = context.read<LoginStore>().accessToken; // 액세스 토큰
     String url = '$yoyakURL/noti/time/not/$notiTimeSeq';
 
     try {
@@ -513,7 +513,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 건너 뛰기 취소
   Future<void> cancelSkipPill(int notiTimeSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = API.yoyakToken; // 액세스 토큰
+    String accessToken = context.read<LoginStore>().accessToken; // 액세스 토큰
     String url = '$yoyakURL/noti/time/yet/$notiTimeSeq';
 
     try {
@@ -541,7 +541,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 복용 시간 수정
   Future<void> updateTimePill(int notiTimeSeq, DateTime takenTime) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = API.yoyakToken; // 액세스 토큰
+    String accessToken = context.read<LoginStore>().accessToken; // 액세스 토큰
     String url = '$yoyakURL/noti/time/taken';
 
     String formattedTakenTime = takenTime.toIso8601String();
@@ -576,7 +576,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 먹지 않았어요
   Future<void> notTakenPill(int notiTimeSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = API.yoyakToken; // 액세스 토큰
+    String accessToken = context.read<LoginStore>().accessToken; // 액세스 토큰
     String url = '$yoyakURL/noti/time/yet/$notiTimeSeq';
 
     try {
