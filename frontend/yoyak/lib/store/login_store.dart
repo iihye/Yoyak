@@ -11,7 +11,8 @@ import 'package:http/http.dart' as http;
 class LoginStore extends ChangeNotifier {
   late User user;
   List<AlarmAccountModel> alarmAccounts = [];
-  String accessToken = '';
+  String accessToken =
+      'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyU2VxIjoyLCJ1c2VySWQiOiJzc2FmeTJAc3NhZnkuY29tIiwibmFtZSI6InNzYWZ5MiIsIm5pY2tuYW1lIjoic3NhZnkyIiwiZ2VuZGVyIjoiTSIsImlhdCI6MTcxMTU5OTYwOSwiZXhwIjoxNzk3OTk5NjA5fQ.vErWofXd1kTZUJ2LGYAxf6SmgBuf7gV4yxcyoNlf-FM';
   var UserDetail; // 회원정보 페이지에 뿌려줄 데이터
 
   // 회원가입 정보

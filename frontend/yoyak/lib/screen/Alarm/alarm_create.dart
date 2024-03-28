@@ -53,7 +53,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
   // 주기 관련 변수
   late bool isEveryday = true;
   late int _alarmAccountSeq; // 실제 계정번호로 대체 필요
-  
+
   late TextEditingController _alarmNameController;
 
   Future<void> fetchAlarmData(int notiSeq) async {

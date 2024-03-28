@@ -1,14 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:provider/provider.dart';
+import 'package:yoyak/components/account_filter.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/base_input.dart';
 import 'package:yoyak/components/pill_bag.dart';
 import 'package:yoyak/components/pill_description.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
+import 'package:yoyak/models/alarm/alarmdetail_models.dart';
+import 'package:yoyak/screen/Alarm/alarm_create.dart';
+import 'package:yoyak/screen/Search/pill_bag_modal.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../../styles/colors/palette.dart';
+import 'package:yoyak/store/login_store.dart';
 
 // 효능, 사용법, 보관방법, 경고, 주의사항, 부작용
 final Map<String, dynamic> dummyDetailData = {
@@ -58,7 +63,7 @@ final Map<String, dynamic> dummyPillBags = {
   ]
 };
 
-class PillDetailScreen extends StatelessWidget {
+class PillDetailScreen extends StatefulWidget {
   final int medicineSeq;
 
   const PillDetailScreen({
@@ -66,142 +71,228 @@ class PillDetailScreen extends StatelessWidget {
     required this.medicineSeq,
   });
 
-  // 약 봉투 모달
-  void _showPillBagModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        // 위젯을 포함하는 함수
-        return RoundedRectangle(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.width * 1.5,
-          color: Colors.white,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const SizedBox(
-                    width: 50,
-                  ),
-                  const Text(
-                    "약 봉투에 저장하기",
-                    style: TextStyle(
-                      color: Palette.MAIN_BLACK,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 17,
-                    ),
-                  ),
-                  // const SizedBox(
-                  //   width: 70,
-                  // ),
-                  // 클릭 시, 약 봉투 생성
-                  GestureDetector(
-                    onTap: () {
-                      // 약 봉투 생성 함수..?
-                      print('약 봉투 생성');
-                      showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            backgroundColor: Palette.MAIN_WHITE,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: 300,
-                              child: Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  BaseInput(
-                                    title: "약 봉투 이름",
-                                    width: ScreenSize.getWidth(context) * 0.675,
-                                    // child: TextFormField(
-                                    //   maxLength: 10,
-                                    //   cursorHeight: 20,
-                                    //   cursorColor: Palette.MAIN_BLUE,
-                                    //   style: const TextStyle(
-                                    //     color: Palette.MAIN_BLACK,
-                                    //     fontFamily: 'Pretendard',
-                                    //     fontWeight: FontWeight.w500,
-                                    //     fontSize: 16,
-                                    //   ),
-                                    // ),
-                                    child: const TextField(
-                                      maxLength: 10,
-                                      cursorHeight: 20,
-                                      cursorColor: Palette.MAIN_BLUE,
-                                      style: TextStyle(
-                                        color: Palette.MAIN_BLACK,
-                                        fontFamily: 'Pretendard',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16,
-                                      ),
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.only(
-                                          left: 15,
-                                          bottom: 13,
-                                          top: 13,
-                                        ),
-                                        counterText: '',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Image.asset(
-                      'assets/images/pillbag.png',
-                      width: 40,
-                      height: 40,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              // 돌보미 필터
+  @override
+  State<PillDetailScreen> createState() => _PillDetailScreenState();
+}
 
-              // 약 봉투 리스트
-              Column(
-                children: [
-                  for (var dummypillBag in dummyPillBags["result"])
-                    PillBag(
-                      envelopName: dummypillBag["envelopName"],
-                      medicineSeq: 1,
-                      accountSeq: dummypillBag["accountSeq"],
-                      nickname: dummypillBag["nickname"],
-                      isSavedMedicine: dummypillBag["isSavedMedicine"],
-                      // 컬러코드로 받기
-                      color: dummypillBag["color"],
-                      onClick: () {
-                        // 약 봉투에 저장하기 함수..?
-                        print('클릭');
-                      },
-                    )
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+class _PillDetailScreenState extends State<PillDetailScreen> {
+  // 돌보미 user dummy data
+  final List<Map<String, dynamic>> _users = [
+    {
+      "seq": 2,
+      "nickname": "ssafy2",
+      "gender": "M",
+      "birth": "2024-01-01",
+      "profileImg": 1
+    },
+    {
+      "seq": 4,
+      "nickname": "냥싸피",
+      "gender": "M",
+      "birth": "2024-01-01",
+      "profileImg": 5
+    },
+    {
+      "seq": 5,
+      "nickname": "멍싸피",
+      "gender": "F",
+      "birth": "2024-01-05",
+      "profileImg": 3
+    }
+  ];
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   var accountList = context.watch<LoginStore>().alarmAccounts;
+  //   // accountList에서 첫 번째 요소의 seq를 가져와서 초기화
+  //   // _alarmAccountSeq = accountList.isNotEmpty ? accountList.first.seq ?? 0 : 0;
+  // }
+
+  // // String? _selectedUserNickname; // 선택된 돌보미 닉네임
+  // late int _alarmAccountSeq;
+
+  // 약 봉투 모달
+
+  // void _showPillBagModal(BuildContext context) {
+  //   var accountList = context.read<LoginStore>().alarmAccounts;
+  //   // 돌보미 리스트 가져오기
+  //   // var alarmlist = context.read<LoginStore>().alarmAccounts;
+
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       // 위젯을 포함하는 함수
+  //       return RoundedRectangle(
+  //         width: double.infinity,
+  //         height: MediaQuery.of(context).size.width * 1.5,
+  //         color: Colors.white,
+  //         child: Column(
+  //           children: [
+  //             const SizedBox(
+  //               height: 20,
+  //             ),
+  //             // Header
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //               children: [
+  //                 const SizedBox(
+  //                   width: 50,
+  //                 ),
+  //                 const Text(
+  //                   "약 봉투에 저장하기",
+  //                   style: TextStyle(
+  //                     color: Palette.MAIN_BLACK,
+  //                     fontFamily: 'Pretendard',
+  //                     fontWeight: FontWeight.w700,
+  //                     fontSize: 17,
+  //                   ),
+  //                 ),
+  //                 // const SizedBox(
+  //                 //   width: 70,
+  //                 // ),
+  //                 // 클릭 시, 약 봉투 생성
+  //                 GestureDetector(
+  //                   onTap: () {
+  //                     // 약 봉투 생성 함수..?
+  //                     print('약 봉투 생성');
+  //                     showDialog(
+  //                       context: context,
+  //                       barrierDismissible: true,
+  //                       builder: (BuildContext context) {
+  //                         return Dialog(
+  //                           backgroundColor: Palette.MAIN_WHITE,
+  //                           shape: RoundedRectangleBorder(
+  //                             borderRadius: BorderRadius.circular(10),
+  //                           ),
+  //                           child: SizedBox(
+  //                             width: double.infinity,
+  //                             height: 300,
+  //                             child: Column(
+  //                               children: [
+  //                                 SizedBox(
+  //                                   height: ScreenSize.getWidth(context) * 0.07,
+  //                                 ),
+  //                                 BaseInput(
+  //                                   title: "약 봉투 이름",
+  //                                   width: ScreenSize.getWidth(context) * 0.675,
+  //                                   child: const TextField(
+  //                                     maxLength: 10,
+  //                                     cursorHeight: 20,
+  //                                     cursorColor: Palette.MAIN_BLUE,
+  //                                     style: TextStyle(
+  //                                       color: Palette.MAIN_BLACK,
+  //                                       fontFamily: 'Pretendard',
+  //                                       fontWeight: FontWeight.w500,
+  //                                       fontSize: 16,
+  //                                     ),
+  //                                     decoration: InputDecoration(
+  //                                       border: InputBorder.none,
+  //                                       contentPadding: EdgeInsets.only(
+  //                                         left: 15,
+  //                                         bottom: 13,
+  //                                         top: 13,
+  //                                       ),
+  //                                       counterText: '',
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                                 SizedBox(
+  //                                   height: ScreenSize.getWidth(context) * 0.07,
+  //                                 ),
+  //                                 // BaseInput(
+  //                                 //     title: "약 봉투 주인",
+  //                                 //     width:
+  //                                 //         ScreenSize.getWidth(context) * 0.675,
+  //                                 //     child: DropdownButton(
+  //                                 //       value: _selectedUserNickname,
+  //                                 //       onChanged: (value) {
+  //                                 //         setState(() {
+  //                                 //           _selectedUserNickname =
+  //                                 //               value as String?;
+  //                                 //         });
+  //                                 //         print(_selectedUserNickname);
+  //                                 //       },
+  //                                 //       items: _users.map((user) {
+  //                                 //         return DropdownMenuItem(
+  //                                 //           value: user["nickname"],
+  //                                 //           child: Text(user["nickname"]),
+  //                                 //         );
+  //                                 //       }).toList(),
+  //                                 //     )),
+  //                                 // AccountFilter(
+  //                                 //   title: "누구의 약 봉투인가요?",
+  //                                 //   child: DropdownButton<int>(
+  //                                 //     isDense: true,
+  //                                 //     isExpanded: true,
+  //                                 //     padding: const EdgeInsets.only(
+  //                                 //       left: 15,
+  //                                 //       right: 15,
+  //                                 //       top: 7.5,
+  //                                 //     ),
+  //                                 //     value: _alarmAccountSeq,
+  //                                 //     items: accountList.map((account) {
+  //                                 //       return DropdownMenuItem<int>(
+  //                                 //         value: account.seq,
+  //                                 //         child: Text(
+  //                                 //             account.nickname ?? 'Unknown'),
+  //                                 //       );
+  //                                 //     }).toList(),
+  //                                 //     onChanged: widget.notiSeq == null
+  //                                 //         ? (int? newValue) {
+  //                                 //             setState(() {
+  //                                 //               _alarmAccountSeq = newValue ??
+  //                                 //                   accountList[0].seq!;
+  //                                 //             });
+  //                                 //           }
+  //                                 //         : null, // 수정 상태에서는 드롭다운 비활성화
+  //                                 //   ),
+  //                                 // )
+  //                               ],
+  //                             ),
+  //                           ),
+  //                         );
+  //                       },
+  //                     );
+  //                   },
+  //                   child: Image.asset(
+  //                     'assets/images/pillbag.png',
+  //                     width: 40,
+  //                     height: 40,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //             const SizedBox(
+  //               height: 40,
+  //             ),
+  //             // 돌보미 필터
+
+  //             // 약 봉투 리스트
+  //             Column(
+  //               children: [
+  //                 for (var dummypillBag in dummyPillBags["result"])
+  //                   PillBag(
+  //                     envelopName: dummypillBag["envelopName"],
+  //                     medicineSeq: 1,
+  //                     accountSeq: dummypillBag["accountSeq"],
+  //                     nickname: dummypillBag["nickname"],
+  //                     isSavedMedicine: dummypillBag["isSavedMedicine"],
+  //                     // 컬러코드로 받기
+  //                     color: dummypillBag["color"],
+  //                     onClick: () {
+  //                       // 약 봉투에 저장하기 함수..?
+  //                       print('클릭');
+  //                     },
+  //                   )
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -304,7 +395,12 @@ class PillDetailScreen extends StatelessWidget {
                       // 로그인 안됐을 때는 로그인 창으로 이동
                       BaseButton(
                         onPressed: () {
-                          _showPillBagModal(context);
+                          // _showPillBagModal(context);
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const PillBagModal();
+                              });
                         },
                         text: "저장하기",
                         colorMode: "blue",
