@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyak/screen/SignUp/more_info_screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
+import '../../store/login_store.dart';
 
 class GreetingScreen extends StatefulWidget {
   const GreetingScreen({super.key});
@@ -140,7 +141,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
                           onTap: () {
-                            // context.read<LoginStore>().userName = name;
+                            context.read<LoginStore>().userName = name;
                             if (isValidate()) {
                               Navigator.push(
                                 context,

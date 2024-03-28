@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Login/kakao_login.dart';
 import 'package:yoyak/screen/Login/kakao_view_model.dart';
+import 'package:yoyak/screen/SignUp/greeting_screen.dart';
+import 'package:yoyak/screen/SignUp/user_info.screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
 import 'login_screen.dart';
@@ -148,7 +150,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
             Navigator.push(
               context,
               PageRouteBuilder(
-                pageBuilder: (c, a1, a2) => const AlarmScreen(),
+                pageBuilder: (c, a1, a2) => const UserInfoScreen(),
                 transitionsBuilder: (c, a1, a2, child) => FadeTransition(
                   opacity: a1,
                   child: child,

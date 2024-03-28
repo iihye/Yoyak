@@ -4,9 +4,6 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
 import 'package:yoyak/models/user/alarm_account.dart';
-import 'package:yoyak/screen/Login/kakao_login.dart';
-import 'package:yoyak/screen/Login/kakao_view_model.dart';
-import 'package:http/http.dart' as http;
 
 class LoginStore extends ChangeNotifier {
   late User user;
@@ -26,7 +23,7 @@ class LoginStore extends ChangeNotifier {
 
   // 성별 : enum Type / 남자 : 'MAN', 여자 : 'WOMAN'
   String gender = '';
-
+  String platform = 'ORIGIN';
   Future<void> getAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String url = '$yoyakURL/account'; // 요청할 URL
@@ -55,6 +52,37 @@ class LoginStore extends ChangeNotifier {
       // 예외 처리
       print('An error occurred: $error');
     }
+  }
+
+
+  Future signUp(BuildContext context) async {
+    print("회원가입 요청");
+    String url = "${API.yoyakUrl}/user/signin"; // 회원가입 요청 url
+    print('$userEmail $password $userName');
+
+    var response = await http.post(Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'userId': userEmail,
+          'password': password,
+          'name': userName,
+          'nickname': userName,
+          'gender': gender,
+          'birth' : DateTime(int.parse(year), int.parse(month), int.parse(day)).toIso8601String(),
+          'platform' : platform, // 카카오면 KAKAO, 일반이면 ORIGIN
+        }));
+    print("$userEmail $password $userName $gender $year $month $day $platform");
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print("회원가입 요청 성공");
+    } else {
+      print("회원가입 요청 실패");
+      print(response.body);
+      throw Error();
+    }
+
   }
 
   setGender(String str) {

@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:yoyak/screen/Home/home_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyak/screen/Login/social_login.dart';
 import 'package:http/http.dart' as http;
+import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:yoyak/screen/SignUp/greeting_screen.dart';
+import 'package:yoyak/store/login_store.dart';
 import '../../apis/url.dart';
 
 // 뷰 모델
@@ -26,14 +28,27 @@ class KakaoViewModel {
       }, body: json.encode({
         "id" : kakaoId,
       }));
-      print(response.body);
-      // 회원가입이 안되었을 때 회원가입 화면으로 보내기
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder : (context) => const GreetingScreen(),
-        ),
-      );
+      if (response.statusCode == 200) {
+        // 회원가입이 된 상태면 메인으로
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder : (context) => const MainScreen(),
+          ),
+        );
+      } else {
+        // 회원가입 안 된 상태면 회원가입 화면으로
+        context.read<LoginStore>().platform = "KAKAO"; // 플랫폼 설정하고
+        context.read<LoginStore>().userEmail = kakaoId;
+        context.read<LoginStore>().password = kakaoId;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder : (context) => const GreetingScreen(),
+          ),
+        );
+      }
+
     } catch (error) {
       print("카카오 토큰 전송 실패");
       print(error);
