@@ -5,13 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
+import 'package:yoyak/components/account_filter.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/base_input.dart';
 import 'package:yoyak/components/bottom_modal.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/components/selectday_button.dart';
 import 'package:yoyak/hooks/format_time.dart';
+import 'package:yoyak/models/alarm/alarmdetail_models.dart';
 import 'package:yoyak/store/alarm_store.dart';
+import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
@@ -49,40 +52,48 @@ class _AlarmCreateState extends State<AlarmCreate> {
   late List<DateTime> _alarmTime = [];
   // 주기 관련 변수
   late bool isEveryday = true;
+  late int _alarmAccountSeq; // 실제 계정번호로 대체 필요
 
   late TextEditingController _alarmNameController;
 
   Future<void> fetchAlarmData(int notiSeq) async {
-    String url = 'https://j10b102.p.ssafy.io/api/noti/$notiSeq';
+    String yoyakURL = API.yoyakUrl; // 서버 URL
+    String accessToken = API.yoyakToken; // 액세스 토큰
+    String url = '$yoyakURL/noti/$notiSeq';
     Uri uri = Uri.parse(url);
 
     try {
       var response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
-        'Authorization': access_token
+        "Authorization": 'Bearer $accessToken',
       });
       if (response.statusCode == 200) {
         var decodedBody = utf8.decode(response.bodyBytes);
         var jsonData = json.decode(decodedBody);
-        // 여기서 jsonData를 사용하여 폼 데이터 설정
+
+        // AlarmDetailModels 객체로 변환
+        AlarmDetailModels alarmDetails = AlarmDetailModels.fromJson(jsonData);
+
+        // AlarmDetailModels 객체를 사용하여 폼 데이터 설정
         setState(() {
-          _alarmName = jsonData['name'];
-          _alarmNameController =
-              TextEditingController(text: _alarmName); // 여기에서 초기화
-          _alarmStartDate = DateTime.parse(jsonData['startDate']);
-          _alarmEndDate = DateTime.parse(jsonData['endDate']);
-          _alarmDays = List<String>.from(jsonData['period']);
-          _alarmTime = (jsonData['time'] as List).map<DateTime>((timeStr) {
-            List<String> parts = timeStr.split(':');
-            return DateTime(
-              _alarmStartDate.year,
-              _alarmStartDate.month,
-              _alarmStartDate.day,
-              int.parse(parts[0]),
-              int.parse(parts[1]),
-              int.parse(parts[2]),
-            );
-          }).toList();
+          _alarmName = alarmDetails.name!;
+          _alarmAccountSeq = alarmDetails.accountSeq!;
+          _alarmNameController = TextEditingController(text: _alarmName);
+          _alarmStartDate = DateTime.parse(alarmDetails.startDate ?? '');
+          _alarmEndDate = DateTime.parse(alarmDetails.endDate ?? '');
+          _alarmDays = alarmDetails.period ?? [];
+          _alarmTime = alarmDetails.time?.map<DateTime>((timeStr) {
+                List<String> parts = timeStr.split(':');
+                return DateTime(
+                  _alarmStartDate.year,
+                  _alarmStartDate.month,
+                  _alarmStartDate.day,
+                  int.parse(parts[0]),
+                  int.parse(parts[1]),
+                  int.parse(parts[2]),
+                );
+              }).toList() ??
+              [];
         });
       } else {
         print('Failed to load data ${response.statusCode}');
@@ -94,8 +105,9 @@ class _AlarmCreateState extends State<AlarmCreate> {
   }
 
   Future<void> sendAlarmData() async {
-    String accessToken = access_token; // 액세스 토큰
-    String url = '$URL/noti'; // 서버 URL
+    String yoyakURL = API.yoyakUrl; // 서버 URL
+    String accessToken = API.yoyakToken; // 액세스 토큰
+    String url = '$yoyakURL/noti'; // 서버 URL
 
     // _alarmTime을 "HH:mm" 형식의 문자열로 변환
     List<String> formattedAlarmTimes = _alarmTime.map((datetime) {
@@ -104,7 +116,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
     // 서버에 보낼 데이터 준비
     Map<String, dynamic> alarmData = {
-      'accountSeq': 4, // 실제 계정번호로 대체 필요
+      'accountSeq': _alarmAccountSeq,
       'name': _alarmName,
       'startDate': _alarmStartDate.toIso8601String(),
       'endDate': _alarmEndDate.toIso8601String(),
@@ -118,7 +130,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": accessToken,
+          "Authorization": 'Bearer $accessToken',
         },
         body: json.encode(alarmData),
       );
@@ -140,8 +152,10 @@ class _AlarmCreateState extends State<AlarmCreate> {
   }
 
   Future<void> updateAlarmData(int notiSeq) async {
-    String accessToken = access_token; // 액세스 토큰
-    String url = '$URL/noti'; // 서버 URL
+    String yoyakURL = API.yoyakUrl; // 서버 URL
+    String accessToken = API.yoyakToken; // 액세스 토큰
+
+    String url = '$yoyakURL/noti'; // 서버 URL
 
     // _alarmTime을 "HH:mm" 형식의 문자열로 변환
     List<String> formattedAlarmTimes = _alarmTime.map((datetime) {
@@ -150,7 +164,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
     // 서버에 보낼 데이터 준비
     Map<String, dynamic> alarmData = {
-      'notiSeq': notiSeq, // 실제 계정번호로 대체 필요
+      'notiSeq': notiSeq,
       'name': _alarmName,
       'startDate': _alarmStartDate.toIso8601String(),
       'endDate': _alarmEndDate.toIso8601String(),
@@ -164,7 +178,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": accessToken,
+          "Authorization": 'Bearer $accessToken',
         },
         body: json.encode(alarmData),
       );
@@ -187,8 +201,10 @@ class _AlarmCreateState extends State<AlarmCreate> {
   }
 
   Future<void> deleteAlarmData(int notiSeq) async {
-    String accessToken = access_token; // 액세스 토큰
-    String url = '$URL/noti/time/$notiSeq'; // 서버 URL
+    String yoyakURL = API.yoyakUrl; // 서버 URL
+    String accessToken = API.yoyakToken; // 액세스 토큰
+
+    String url = '$yoyakURL/noti/time/$notiSeq'; // 서버 URL
 
     try {
       // DELETE 요청 보내기
@@ -196,7 +212,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": accessToken,
+          "Authorization": 'Bearer $accessToken',
         },
       );
 
@@ -223,6 +239,11 @@ class _AlarmCreateState extends State<AlarmCreate> {
     if (widget.notiSeq != null) {
       fetchAlarmData(widget.notiSeq!);
     }
+
+    // accountList에서 첫 번째 요소의 seq를 가져와서 초기화
+    var accountList =
+        Provider.of<LoginStore>(context, listen: false).alarmAccounts;
+    _alarmAccountSeq = accountList.isNotEmpty ? accountList.first.seq ?? 0 : 0;
   }
 
   void handleEverydaySelected() {
@@ -243,6 +264,8 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
   @override
   Widget build(BuildContext context) {
+    var accountList = context.watch<LoginStore>().alarmAccounts;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -288,6 +311,39 @@ class _AlarmCreateState extends State<AlarmCreate> {
                 const SizedBox(
                   height: 20,
                 ),
+                // 계정 선택
+                if (accountList.length > 1) ...[
+                  // 계정 선택 섹션
+                  AccountFilter(
+                    title: '돌봄 대상',
+                    child: DropdownButton<int>(
+                      isDense: true,
+                      isExpanded: true,
+                      padding: const EdgeInsets.only(
+                        left: 15,
+                        right: 15,
+                        top: 7.5,
+                      ),
+                      value: _alarmAccountSeq,
+                      items: accountList.map((account) {
+                        return DropdownMenuItem<int>(
+                          value: account.seq,
+                          child: Text(account.nickname ?? 'Unknown'),
+                        );
+                      }).toList(),
+                      onChanged: widget.notiSeq == null
+                          ? (int? newValue) {
+                              setState(() {
+                                _alarmAccountSeq =
+                                    newValue ?? accountList[0].seq!;
+                              });
+                            }
+                          : null, // 수정 상태에서는 드롭다운 비활성화
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+
                 // 기간
                 BaseInput(
                   title: '알림 기간',
@@ -423,7 +479,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                duration: Duration(seconds: 2),
+                duration: Duration(seconds: 1),
               ),
             );
             return;
@@ -442,7 +498,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                duration: Duration(seconds: 2),
+                duration: Duration(seconds: 1),
               ),
             );
             return;
@@ -458,7 +514,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
                       fontFamily: 'pretendard',
                       fontWeight: FontWeight.w500,
                     )),
-                duration: Duration(seconds: 2),
+                duration: Duration(seconds: 1),
               ),
             );
             return;
@@ -804,7 +860,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              duration: Duration(seconds: 2),
+                              duration: Duration(seconds: 1),
                             ),
                           );
                         }

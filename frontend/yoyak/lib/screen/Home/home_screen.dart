@@ -4,6 +4,7 @@ import 'package:yoyak/components/main_appbar.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/screen/Login/kakao_login_screen.dart';
+import 'package:yoyak/screen/Pillbox/pillbox.dart';
 import 'package:yoyak/screen/Search/filter_search_screen.dart';
 import 'package:yoyak/screen/Search/photo_search_screen.dart';
 import 'package:yoyak/screen/Camera/Camera.dart';
@@ -158,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () => goTo(const KakaoLoginScreen()),
+                              onTap: () => goTo(const PillBoxScreen()),
                               child: const IconInRectangle(
                                 subTitle: "내 약을 한눈에",
                                 title: "MY 약 봉투",

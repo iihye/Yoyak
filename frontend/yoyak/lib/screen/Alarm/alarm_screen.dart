@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -9,8 +11,11 @@ import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/components/bottom_modal.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/format_time.dart';
+import 'package:yoyak/models/alarm/alarm_models.dart';
+import 'package:yoyak/models/user/alarm_account.dart';
 import 'package:yoyak/screen/Alarm/alarm_create.dart';
 import 'package:yoyak/store/alarm_store.dart';
+import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
@@ -24,8 +29,9 @@ class AlarmScreen extends StatefulWidget {
 class _AlarmScreenState extends State<AlarmScreen> {
   final CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  DateTime? _selectedDay = DateTime.now();
   MediaQueryData? queryData;
+  String selectedAccountSeq = '모두';
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +40,35 @@ class _AlarmScreenState extends State<AlarmScreen> {
     DateTime now = DateTime.now();
 
     var alarmList = context.watch<AlarmStore>().alarms;
+    var accountList = context.watch<LoginStore>().alarmAccounts;
 
+    // 선택된 날짜에 해당하는 alarmList를 필터링
     var filteredAlarmList = _selectedDay != null
         ? alarmList.where((alarm) {
             return alarm.time != null && isSameDay(_selectedDay, alarm.time);
           }).toList()
         : alarmList;
+
+    // 드롭다운에서 선택된 accountSeq에 따라 추가 필터링
+    List<AlarmModel> finalFilteredAlarmList;
+    if (selectedAccountSeq == '모두') {
+      finalFilteredAlarmList = filteredAlarmList;
+    } else {
+      // 드롭다운에서 선택된 계정의 seq를 찾음
+      var selectedSeq = accountList
+          .firstWhere((account) => account.nickname == selectedAccountSeq,
+              orElse: () => AlarmAccountModel(seq: null))
+          .seq;
+
+      // 선택된 seq와 일치하는 alarmList 필터링
+      finalFilteredAlarmList = filteredAlarmList.where((alarm) {
+        return alarm.accountSeq == selectedSeq;
+      }).toList();
+    }
+    // 드롭다운 메뉴 아이템 목록 생성: '모두' + 모든 계정의 닉네임
+    List<String> dropdownItems = ['모두'];
+    dropdownItems
+        .addAll(accountList.map((account) => account.nickname ?? 'Unknown'));
 
     return Scaffold(
       // 배경색
@@ -127,17 +156,52 @@ class _AlarmScreenState extends State<AlarmScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton(
-                    child: Text(alarmList.length.toString()),
-                    onPressed: () {
-                      print(alarmList);
-                    })
+                if (accountList.length > 1)
+                  DropdownButton(
+                    elevation: 6,
+                    style: const TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 15,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                    ),
+                    underline: Container(
+                      color: Palette.SUB_WHITE,
+                      height: 1,
+                    ),
+                    iconSize: 30,
+                    iconEnabledColor: Palette.MAIN_BLACK,
+                    borderRadius: BorderRadius.circular(10),
+                    value: selectedAccountSeq,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedAccountSeq = newValue ?? '모두';
+                      });
+                    },
+                    items: dropdownItems.map<DropdownMenuItem<String>>(
+                      (String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
               ],
             ),
+            if (accountList.length > 1)
+              SizedBox(height: ScreenSize.getHeight(context) * 0.01),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(children: [
-                  ...filteredAlarmList.map<Widget>((alarm) {
+                  ...finalFilteredAlarmList.map<Widget>((alarm) {
                     int notiTimeSeq = alarm.notiTimeSeq ?? 0;
                     String name = alarm.name ?? '';
                     DateTime time = alarm.time ?? DateTime.now();
@@ -158,8 +222,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
                   }),
                   SizedBox(
                     // 없으면 카드 좌우 그림자가 짤림
-                    width: MediaQuery.of(context).size.width,
-                    height: 70,
+                    width: ScreenSize.getWidth(context) * 0.9,
+                    height: ScreenSize.getHeight(context) * 0.09,
                   ),
                 ]),
               ),
@@ -196,9 +260,6 @@ class AlarmItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     void goToAlarmUpdate(int? notiSeq) {
       Navigator.push(
         context,
@@ -212,75 +273,90 @@ class AlarmItem extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.only(
-        top: screenHeight * 0.03,
+        top: ScreenSize.getHeight(context) * 0.03,
       ),
       child: RoundedRectangle(
         onTap: () {
           // 수정페이지로 이동하게 해야함 ** 서버에서 받아온 notiSeq 데이터를 넘겨줘야함
           goToAlarmUpdate(notiSeq);
         },
-        width: MediaQuery.of(context).size.width * 0.9,
-        height: 100,
+        width: ScreenSize.getWidth(context) * 0.9,
+        height: ScreenSize.getHeight(context) * 0.12,
         child: Padding(
           padding: EdgeInsets.only(
-            left: screenWidth * 0.10,
-            right: screenWidth * 0.03,
+            left: ScreenSize.getWidth(context) * 0.09,
+            right: ScreenSize.getWidth(context) * 0.03,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               taken == 'TAKEN'
-                  ? Text(
-                      name,
-                      style: const TextStyle(
-                          color: Palette.MAIN_BLUE,
-                          fontSize: 15,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700),
+                  ? Expanded(
+                      child: Text(
+                        name,
+                        style: const TextStyle(
+                            color: Palette.MAIN_BLUE,
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700),
+                      ),
                     )
                   : taken == 'NOT_TAKEN'
-                      ? Text(
-                          name,
-                          style: const TextStyle(
-                              color: Palette.SUB_BLACK,
-                              fontSize: 15,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w700),
+                      ? Expanded(
+                          child: Text(
+                            name,
+                            style: const TextStyle(
+                                color: Palette.SUB_BLACK,
+                                fontSize: 15,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w700),
+                          ),
                         )
-                      : Text(
-                          name,
-                          style: const TextStyle(
-                              color: Palette.MAIN_BLACK,
-                              fontSize: 15,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w700),
+                      : Expanded(
+                          child: Text(
+                            name,
+                            style: const TextStyle(
+                                color: Palette.MAIN_BLACK,
+                                fontSize: 15,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w700),
+                          ),
                         ),
               taken == 'TAKEN'
-                  ? Text(
-                      formatTime(time),
-                      style: const TextStyle(
-                          color: Palette.MAIN_BLUE,
-                          fontSize: 15,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700),
+                  ? Flexible(
+                      flex: 2,
+                      child: Text(
+                        formatTime(time),
+                        style: const TextStyle(
+                            color: Palette.MAIN_BLUE,
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700),
+                      ),
                     )
                   : taken == 'YET_TAKEN'
-                      ? Text(
-                          formatTime(time),
-                          style: const TextStyle(
-                              color: Palette.MAIN_BLACK,
-                              fontSize: 15,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w700),
+                      ? Flexible(
+                          flex: 2,
+                          child: Text(
+                            formatTime(time),
+                            style: const TextStyle(
+                                color: Palette.MAIN_BLACK,
+                                fontSize: 15,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w700),
+                          ),
                         )
-                      : Text(
-                          formatTime(time),
-                          style: const TextStyle(
-                              color: Palette.SUB_BLACK,
-                              fontSize: 15,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w700),
+                      : Flexible(
+                          flex: 2,
+                          child: Text(
+                            formatTime(time),
+                            style: const TextStyle(
+                                color: Palette.SUB_BLACK,
+                                fontSize: 15,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w700),
+                          ),
                         ),
               CheckEatPillButton(
                 name: name,
@@ -374,8 +450,9 @@ class CheckEatPillButton extends StatefulWidget {
 class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 약 먹었어요
   Future<void> takenPill(int notiTimeSeq, DateTime takenTime) async {
-    String url = '$URL/noti/time/taken';
-    String accessToken = access_token;
+    String yoyakURL = API.yoyakUrl; // 서버 URL
+    String accessToken = API.yoyakToken; // 액세스 토큰
+    String url = '$yoyakURL/noti/time/taken';
 
     String formattedTakenTime = takenTime.toIso8601String();
 
@@ -389,7 +466,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": accessToken,
+          'Authorization': 'Bearer $accessToken',
         },
         body: json.encode(requestData),
       );
@@ -408,16 +485,16 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
 
   // 건너 뛰었어요
   Future<void> skipPill(int notiTimeSeq) async {
-    String url = '$URL/noti/time/not/$notiTimeSeq';
-    String accessToken = access_token;
-    print(notiTimeSeq);
+    String yoyakURL = API.yoyakUrl; // 서버 URL
+    String accessToken = API.yoyakToken; // 액세스 토큰
+    String url = '$yoyakURL/noti/time/not/$notiTimeSeq';
 
     try {
       var response = await http.put(
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": accessToken,
+          'Authorization': 'Bearer $accessToken',
         },
       );
 
@@ -435,15 +512,16 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
 
   // 건너 뛰기 취소
   Future<void> cancelSkipPill(int notiTimeSeq) async {
-    String url = '$URL/noti/time/yet/$notiTimeSeq';
-    String accessToken = access_token;
+    String yoyakURL = API.yoyakUrl; // 서버 URL
+    String accessToken = API.yoyakToken; // 액세스 토큰
+    String url = '$yoyakURL/noti/time/yet/$notiTimeSeq';
 
     try {
       var response = await http.put(
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": accessToken,
+          'Authorization': 'Bearer $accessToken',
         },
       );
 
@@ -462,8 +540,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
 
   // 복용 시간 수정
   Future<void> updateTimePill(int notiTimeSeq, DateTime takenTime) async {
-    String url = '$URL/noti/time/taken';
-    String accessToken = access_token;
+    String yoyakURL = API.yoyakUrl; // 서버 URL
+    String accessToken = API.yoyakToken; // 액세스 토큰
+    String url = '$yoyakURL/noti/time/taken';
 
     String formattedTakenTime = takenTime.toIso8601String();
 
@@ -477,7 +556,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": accessToken,
+          'Authorization': 'Bearer $accessToken',
         },
         body: json.encode(requestData),
       );
@@ -496,15 +575,16 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
 
   // 먹지 않았어요
   Future<void> notTakenPill(int notiTimeSeq) async {
-    String url = '$URL/noti/time/yet/$notiTimeSeq';
-    String accessToken = access_token;
+    String yoyakURL = API.yoyakUrl; // 서버 URL
+    String accessToken = API.yoyakToken; // 액세스 토큰
+    String url = '$yoyakURL/noti/time/yet/$notiTimeSeq';
 
     try {
       var response = await http.put(
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": accessToken,
+          'Authorization': 'Bearer $accessToken',
         },
       );
 
@@ -532,8 +612,8 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
 
     return Center(
       child: RoundedRectangle(
-        width: 68,
-        height: 64,
+        width: 74,
+        height: 70,
         color: taken == 'TAKEN' ? Palette.SUB_BLUE : Palette.SUB_WHITE,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -543,15 +623,22 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
 
             // 버튼 아이콘
             taken == 'TAKEN'
-                ? const Icon(Icons.check, color: Palette.MAIN_BLUE, size: 36)
+                ? const Icon(
+                    Icons.check,
+                    color: Palette.MAIN_BLUE,
+                    size: 40,
+                  )
                 : taken == 'YET_TAKEN'
                     ? Image.asset(
                         'assets/images/medicine.png',
-                        width: 44,
-                        height: 44,
+                        width: 45,
+                        height: 45,
                       )
-                    : const Icon(Icons.close,
-                        color: Palette.SUB_BLACK, size: 33),
+                    : const Icon(
+                        Icons.close,
+                        color: Palette.SUB_BLACK,
+                        size: 40,
+                      ),
 
             // 버튼 텍스트
             taken == 'TAKEN'
@@ -559,7 +646,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
                     formatTime(takenTime as DateTime),
                     style: const TextStyle(
                         color: Palette.MAIN_BLUE,
-                        fontSize: 10,
+                        fontSize: 11,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w700),
                   )
@@ -570,7 +657,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
                     : const Text(
                         '건너 뛰었어요',
                         style: TextStyle(
-                          fontSize: 9,
+                          fontSize: 10,
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w700,
                           color: Palette.SUB_BLACK,
@@ -1092,36 +1179,37 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
                       ],
                     ),
                   ),
-                  Container(
-                    width: ScreenSize.getWidth(context),
-                    height: 50.8,
-                    color: Palette.MAIN_BLUE,
-                    child: TextButton(
-                      onPressed: () {
-                        // 시간 수정 api 연결
-                        updateTimePill(
-                          notiTimeSeq,
-                          DateTime(
-                            takenTime.year,
-                            takenTime.month,
-                            takenTime.day,
-                            selectedPeriodIndex == 0
-                                ? selectedHour
-                                : selectedHour + 12,
-                            selectedMinute,
+                  Expanded(
+                    child: Container(
+                      width: ScreenSize.getWidth(context),
+                      color: Palette.MAIN_BLUE,
+                      child: TextButton(
+                        onPressed: () {
+                          // 시간 수정 api 연결
+                          updateTimePill(
+                            notiTimeSeq,
+                            DateTime(
+                              takenTime.year,
+                              takenTime.month,
+                              takenTime.day,
+                              selectedPeriodIndex == 0
+                                  ? selectedHour
+                                  : selectedHour + 12,
+                              selectedMinute,
+                            ),
+                          );
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                        },
+                        child: Text(
+                          selectedPeriodIndex == 0
+                              ? '오전 $selectedHour : ${selectedMinute.toString().padLeft(2, '0')}'
+                              : '오후 $selectedHour : ${selectedMinute.toString().padLeft(2, '0')}',
+                          style: const TextStyle(
+                            color: Palette.MAIN_WHITE,
+                            fontSize: 20,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w700,
                           ),
-                        );
-                        Navigator.popUntil(context, (route) => route.isFirst);
-                      },
-                      child: Text(
-                        selectedPeriodIndex == 0
-                            ? '오전 $selectedHour : ${selectedMinute.toString().padLeft(2, '0')}'
-                            : '오후 $selectedHour : ${selectedMinute.toString().padLeft(2, '0')}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),

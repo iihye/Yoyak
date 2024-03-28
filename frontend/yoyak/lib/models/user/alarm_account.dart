@@ -5,8 +5,13 @@ class AlarmAccountModel {
   String? birth;
   int? profileImg;
 
-  AlarmAccountModel(
-      {this.seq, this.nickname, this.gender, this.birth, this.profileImg});
+  AlarmAccountModel({
+    this.seq,
+    this.nickname,
+    this.gender,
+    this.birth,
+    this.profileImg,
+  });
 
   AlarmAccountModel.fromJson(Map<String, dynamic> json) {
     seq = json['seq'];

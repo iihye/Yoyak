@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/bottom_bar.dart';
+import 'package:yoyak/models/user/alarm_account.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/screen/Search/photo_search_screen.dart';
 import 'package:yoyak/store/alarm_store.dart';
+import 'package:yoyak/store/login_store.dart';
 import '../Home/home_screen.dart';
 
 // MainScreen
@@ -40,6 +42,9 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<LoginStore>(context, listen: false).getAccountData();
     });
   }
 
