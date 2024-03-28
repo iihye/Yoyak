@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -6,10 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:yoyak/apis/url.dart';
 import 'dart:convert';
-
 import 'package:yoyak/styles/colors/palette.dart';
-
 import '../../store/login_store.dart';
+import '../Main/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -127,6 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     String url = "${API.yoyakUrl}/user/login/origin"; // 바꾸기
+
     login(String email, String password) async {
       print('$email $password');
       var response = await http.post(Uri.parse(url),
@@ -144,6 +143,12 @@ class _LoginScreenState extends State<LoginScreen> {
         context
             .read<LoginStore>()
             .setAccessToken(accessToken); // provider에 받은 토큰 저장
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreen()),
+          (route) => false,
+        );
         // return accessToken;
       } else {
         print("회원정보가 없는경우");
@@ -160,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF), // 0xFFF5F6F9
+      backgroundColor: const Color(0xFFFFFFFF), // 0xFFF5F6F9
       body: Center(
         child: Container(
           margin: const EdgeInsets.all(24),
@@ -169,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _header(context),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 _inputField(context, emailController, passwordController,

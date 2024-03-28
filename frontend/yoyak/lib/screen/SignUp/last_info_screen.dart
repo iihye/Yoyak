@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyak/screen/Login/login_screen.dart';
 import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
@@ -276,12 +277,14 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                         context.read<LoginStore>().setMonth(month);
                         context.read<LoginStore>().setDay(day);
 
+                        context.read<LoginStore>().signUp(context); // 회원 가입
+
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/', (_) => false);
                         Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (c, a1, a2) => const MainScreen(),
+                            pageBuilder: (c, a1, a2) => const LoginScreen(),
                             transitionsBuilder: (c, a1, a2, child) =>
                                 SlideTransition(
                               position: Tween(
@@ -304,7 +307,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                           color: Palette.MAIN_BLUE.withOpacity(0.9), // 원의 배경색
                         ),
                         child: const Text(
-                          '시작하기',
+                          '가입하기',
                           style: TextStyle(
                             color: Colors.white, // 텍스트의 색상
                           ),

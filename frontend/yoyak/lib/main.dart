@@ -8,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:yoyak/security/Security.dart';
 import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/camera_store.dart';
+import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/store/login_store.dart';
 
 void main() async {
@@ -21,6 +22,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => CameraStore()),
         ChangeNotifierProvider(create: (context) => LoginStore()),
         ChangeNotifierProvider(create: (context) => AlarmStore()),
+        ChangeNotifierProvider(create: (context) => ChallengeStore()),
         // 다른 스토어도 이렇게 넣으면 됨
       ],
       child: const MyApp(),
