@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yoyak/components/base_button.dart';
+import 'package:yoyak/components/base_input.dart';
 import 'package:yoyak/components/pill_bag.dart';
 import 'package:yoyak/components/pill_description.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
+import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../../styles/colors/palette.dart';
 
 // 효능, 사용법, 보관방법, 경고, 주의사항, 부작용
@@ -25,30 +28,30 @@ final Map<String, dynamic> dummyDetailData = {
 };
 
 // 약 봉투 dummy data
-final Map<String, dynamic> dummyPillBag = {
+final Map<String, dynamic> dummyPillBags = {
   "count": 3,
   "result": [
     {
       "medicineEnvelopSeq": 1,
-      "color": "orange",
+      "color": "0xfff59c42",
       "accountSeq": 1,
-      "nickname": "gildong_acc",
+      "nickname": "지원",
       "isSavedMedicine": false,
-      "envelopName": "감기약 봉투"
+      "envelopName": "감기약"
     },
     {
       "medicineEnvelopSeq": 2,
-      "color": "green",
+      "color": "0xff49de60",
       "accountSeq": 2,
-      "nickname": "seobang_acc",
+      "nickname": "오지훈",
       "isSavedMedicine": false,
       "envelopName": "두통약 봉투"
     },
     {
       "medicineEnvelopSeq": 3,
-      "color": "blue",
+      "color": "0xff4287f5",
       "accountSeq": 2,
-      "nickname": "seobang_acc",
+      "nickname": "김성현",
       "isSavedMedicine": false,
       "envelopName": "상비약 봉투"
     }
@@ -98,28 +101,94 @@ class PillDetailScreen extends StatelessWidget {
                   //   width: 70,
                   // ),
                   // 클릭 시, 약 봉투 생성
-                  Image.asset(
-                    'assets/images/pillbag.png',
-                    width: 40,
-                    height: 40,
-                  )
+                  GestureDetector(
+                    onTap: () {
+                      // 약 봉투 생성 함수..?
+                      print('약 봉투 생성');
+                      showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            backgroundColor: Palette.MAIN_WHITE,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: 300,
+                              child: Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  BaseInput(
+                                    title: "약 봉투 이름",
+                                    width: ScreenSize.getWidth(context) * 0.675,
+                                    // child: TextFormField(
+                                    //   maxLength: 10,
+                                    //   cursorHeight: 20,
+                                    //   cursorColor: Palette.MAIN_BLUE,
+                                    //   style: const TextStyle(
+                                    //     color: Palette.MAIN_BLACK,
+                                    //     fontFamily: 'Pretendard',
+                                    //     fontWeight: FontWeight.w500,
+                                    //     fontSize: 16,
+                                    //   ),
+                                    // ),
+                                    child: const TextField(
+                                      maxLength: 10,
+                                      cursorHeight: 20,
+                                      cursorColor: Palette.MAIN_BLUE,
+                                      style: TextStyle(
+                                        color: Palette.MAIN_BLACK,
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                      ),
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        contentPadding: EdgeInsets.only(
+                                          left: 15,
+                                          bottom: 13,
+                                          top: 13,
+                                        ),
+                                        counterText: '',
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Image.asset(
+                      'assets/images/pillbag.png',
+                      width: 40,
+                      height: 40,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(
-                height: 20,
+                height: 40,
               ),
               // 돌보미 필터
 
               // 약 봉투 리스트
               Column(
                 children: [
-                  for (var pillBag in dummyPillBag["result"])
+                  for (var dummypillBag in dummyPillBags["result"])
                     PillBag(
-                      envelopName: pillBag["envelopName"],
+                      envelopName: dummypillBag["envelopName"],
                       medicineSeq: 1,
-                      accountSeq: pillBag["accountSeq"],
-                      nickname: pillBag["nickname"],
-                      isSavedMedicine: pillBag["isSavedMedicine"],
+                      accountSeq: dummypillBag["accountSeq"],
+                      nickname: dummypillBag["nickname"],
+                      isSavedMedicine: dummypillBag["isSavedMedicine"],
+                      // 컬러코드로 받기
+                      color: dummypillBag["color"],
                       onClick: () {
                         // 약 봉투에 저장하기 함수..?
                         print('클릭');
@@ -232,6 +301,7 @@ class PillDetailScreen extends StatelessWidget {
                         height: MediaQuery.of(context).size.width * 0.07,
                       ),
                       // 저장하기 버튼
+                      // 로그인 안됐을 때는 로그인 창으로 이동
                       BaseButton(
                         onPressed: () {
                           _showPillBagModal(context);
