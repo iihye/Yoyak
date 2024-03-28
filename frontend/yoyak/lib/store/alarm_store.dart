@@ -1,22 +1,25 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/models/alarm/alarm_models.dart';
+import 'package:yoyak/store/login_store.dart';
 
 class AlarmStore extends ChangeNotifier {
   List<AlarmModel> alarms = [];
 
   Future<void> getAlarmDatas() async {
-    String accessToken = access_token; // 액세스 토큰
-    String url = '$URL/noti/time'; // 요청할 URL
+    String yoyakURL = API.yoyakUrl; // 서버 URL
+    String accessToken = LoginStore().accessToken; // 액세스 토큰
+    String url = '$yoyakURL/noti/time'; // 요청할 URL
 
     try {
       final response = await http.get(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': accessToken,
+          'Authorization': 'Bearer $accessToken',
         },
       );
 

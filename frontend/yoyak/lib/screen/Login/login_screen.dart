@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String url = "$URL/user/login/origin"; // 바꾸기
+    String url = "${API.yoyakUrl}/user/login/origin"; // 바꾸기
     login(String email, String password) async {
       print('$email $password');
       var response = await http.post(Uri.parse(url),

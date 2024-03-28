@@ -20,7 +20,7 @@ class KakaoViewModel {
 
   Future sendKakaoId (kakaoId) async {
     try {
-      var url = "$URL/user/login/kakao";
+      var url = "${API.yoyakUrl}/user/login/kakao";
       var response = await http.post(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
       }, body: json.encode({
