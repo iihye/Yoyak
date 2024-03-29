@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/SignUp/last_info_screen.dart';
 import 'package:yoyak/store/login_store.dart';
@@ -28,7 +27,9 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   const Text(
                     "원하는 시간에",
                     style: TextStyle(
@@ -55,11 +56,12 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-
                       ],
                     ),
                   ),
-                  const SizedBox(height: 40,),
+                  const SizedBox(
+                    height: 40,
+                  ),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10), // 둥근 모서리 반경 설정
                     child: Image.asset(
@@ -72,9 +74,6 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                   const SizedBox(
                     height: 40,
                   ),
-
-
-
                   RichText(
                     text: const TextSpan(
                       children: [
@@ -90,7 +89,6 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                       ],
                     ),
                   ),
-
                 ],
               ),
               Center(
@@ -99,22 +97,23 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                     // 남자에요
                     GestureDetector(
                       onTap: () {
-                        context.read<LoginStore>().setGender('MAN'); // 성별 저장
+                        context.read<LoginStore>().setGender('M'); // 성별 저장
                         Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
                             pageBuilder: (c, a1, a2) => const LastInfoScreen(),
                             transitionsBuilder: (c, a1, a2, child) =>
                                 SlideTransition(
-                                  position: Tween(
-                                    begin: const Offset(1.0, 0.0),
-                                    end: const Offset(0.0, 0.0),
-                                  )
-                                      .chain(CurveTween(curve: Curves.easeInOut))
-                                      .animate(a1),
-                                  child: child,
-                                ),
-                            transitionDuration: const Duration(milliseconds: 400),
+                              position: Tween(
+                                begin: const Offset(1.0, 0.0),
+                                end: const Offset(0.0, 0.0),
+                              )
+                                  .chain(CurveTween(curve: Curves.easeInOut))
+                                  .animate(a1),
+                              child: child,
+                            ),
+                            transitionDuration:
+                                const Duration(milliseconds: 400),
                           ),
                         );
                       },
@@ -146,23 +145,25 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                     // 여자에요
                     GestureDetector(
                       onTap: () {
-                        context.read<LoginStore>().setGender('WOMAN'); // 성별 저장
-                        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                        context.read<LoginStore>().setGender('W'); // 성별 저장
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/', (_) => false);
                         Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
                             pageBuilder: (c, a1, a2) => const LastInfoScreen(),
                             transitionsBuilder: (c, a1, a2, child) =>
                                 SlideTransition(
-                                  position: Tween(
-                                    begin: const Offset(1.0, 0.0),
-                                    end: const Offset(0.0, 0.0),
-                                  )
-                                      .chain(CurveTween(curve: Curves.easeInOut))
-                                      .animate(a1),
-                                  child: child,
-                                ),
-                            transitionDuration: const Duration(milliseconds: 400),
+                              position: Tween(
+                                begin: const Offset(1.0, 0.0),
+                                end: const Offset(0.0, 0.0),
+                              )
+                                  .chain(CurveTween(curve: Curves.easeInOut))
+                                  .animate(a1),
+                              child: child,
+                            ),
+                            transitionDuration:
+                                const Duration(milliseconds: 400),
                           ),
                         );
                       },
@@ -188,7 +189,6 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                         ),
                       ),
                     ),
-
 
                     const SizedBox(
                       height: 30,

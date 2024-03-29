@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import '../../styles/colors/palette.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:lottie/lottie.dart';

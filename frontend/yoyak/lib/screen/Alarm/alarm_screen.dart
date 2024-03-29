@@ -1,8 +1,5 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -474,7 +471,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
       if (response.statusCode == 200) {
         print('Medication taken successfully');
         // 데이터 갱신
-        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        if (mounted) {
+          context.read<AlarmStore>().getAlarmDatas(context);
+        }
       } else {
         print('Failed to take medication, status code: ${response.statusCode}');
       }
@@ -501,7 +500,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
       if (response.statusCode == 200) {
         print('Medication skipped successfully');
         // 데이터 갱신
-        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        if (mounted) {
+          context.read<AlarmStore>().getAlarmDatas(context);
+        }
       } else {
         print('Failed to skip medication, status code: ${response.statusCode}');
       }
@@ -528,7 +529,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
       if (response.statusCode == 200) {
         print('Medication skip canceled successfully');
         // 데이터 갱신
-        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        if (mounted) {
+          context.read<AlarmStore>().getAlarmDatas(context);
+        }
       } else {
         print(
             'Failed to cancel medication skip, status code: ${response.statusCode}');
@@ -564,7 +567,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
       if (response.statusCode == 200) {
         print('Medication taken successfully');
         // 데이터 갱신
-        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        if (mounted) {
+          context.read<AlarmStore>().getAlarmDatas(context);
+        }
       } else {
         print('Failed to take medication, status code: ${response.statusCode}');
       }
@@ -591,7 +596,9 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
       if (response.statusCode == 200) {
         print('Medication not taken successfully');
         // 데이터 갱신
-        Provider.of<AlarmStore>(context, listen: false).getAlarmDatas();
+        if (mounted) {
+          context.read<AlarmStore>().getAlarmDatas(context);
+        }
       } else {
         print(
             'Failed to not take medication, status code: ${response.statusCode}');

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyak/store/challenge_store.dart';
+import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
-
-import '../../components/base_input.dart';
-import '../../components/rounded_rectangle.dart';
 
 class RegistChallengeScreen extends StatefulWidget {
   const RegistChallengeScreen({super.key});
@@ -43,8 +41,8 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back_ios, size: 25,),
-        title: Text("챌린지 시작하기", style: TextStyle(
+        leading: const Icon(Icons.arrow_back_ios, size: 25,),
+        title: const Text("챌린지 시작하기", style: TextStyle(
           color: Palette.MAIN_BLACK,
           fontFamily: 'Pretendard',
           fontWeight: FontWeight.w500,
@@ -60,7 +58,7 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               SizedBox(
@@ -82,7 +80,7 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     Container(
                         width: inputWidth,
                         height: 55,
@@ -168,7 +166,8 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
           ),
         ),
         onPressed: () {
-
+          // 챌린지 등록
+          context.read<ChallengeStore>().registChallenge(name, _alarmStartDate, _alarmEndDate, context.read<LoginStore>().accessToken, context);
         },
         child: const Center(
           child: Text(

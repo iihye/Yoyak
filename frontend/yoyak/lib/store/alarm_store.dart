@@ -9,10 +9,9 @@ import 'package:yoyak/store/login_store.dart';
 class AlarmStore extends ChangeNotifier {
   List<AlarmModel> alarms = [];
 
-  Future<void> getAlarmDatas() async {
+  Future<void> getAlarmDatas(BuildContext context) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken =
-        'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyU2VxIjoyLCJ1c2VySWQiOiJzc2FmeTJAc3NhZnkuY29tIiwibmFtZSI6InNzYWZ5MiIsIm5pY2tuYW1lIjoic3NhZnkyIiwiZ2VuZGVyIjoiTSIsImlhdCI6MTcxMTU5OTYwOSwiZXhwIjoxNzk3OTk5NjA5fQ.vErWofXd1kTZUJ2LGYAxf6SmgBuf7gV4yxcyoNlf-FM'; // 액세스 토큰
+    String accessToken = context.read<LoginStore>().accessToken;
     String url = '$yoyakURL/noti/time'; // 요청할 URL
 
     try {
@@ -31,11 +30,11 @@ class AlarmStore extends ChangeNotifier {
         notifyListeners();
       } else {
         // 오류 처리
-        print('Request failed with status: ${response.statusCode}.');
+        print('알림 데이터야 ${response.statusCode}.');
       }
     } catch (error) {
       // 예외 처리
-      print('An error occurred: $error');
+      print('알림 데이터야 $error');
     }
   }
 }

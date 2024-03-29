@@ -1,10 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:yoyak/components/pill_preview.dart';
 import '../../styles/colors/palette.dart';
-import 'package:yoyak/components/rounded_rectangle.dart';
-import 'package:lottie/lottie.dart';
 
 class FilterResult extends StatefulWidget {
   final Map<String, dynamic> data;

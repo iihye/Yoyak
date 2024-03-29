@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
-
 import '../screen/Challenge/upload_challenge_screen.dart';
 
 class CameraStore extends ChangeNotifier {
