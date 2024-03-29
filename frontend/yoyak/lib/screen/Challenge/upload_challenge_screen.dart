@@ -1,13 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
-
-import '../../components/rounded_rectangle.dart';
 import '../../store/camera_store.dart';
 import '../../styles/colors/palette.dart';
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/SignUp/last_info_screen.dart';
 import 'package:yoyak/store/login_store.dart';

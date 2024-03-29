@@ -5,8 +5,6 @@ import 'package:yoyak/screen/SignUp/greeting_screen.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
-import '../Login/login_screen.dart';
-
 class UserInfoScreen extends StatefulWidget {
   const UserInfoScreen({super.key});
 
