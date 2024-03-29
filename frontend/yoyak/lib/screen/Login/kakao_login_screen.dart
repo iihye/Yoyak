@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Login/kakao_login.dart';
 import 'package:yoyak/screen/Login/kakao_view_model.dart';
+import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:yoyak/screen/SignUp/greeting_screen.dart';
 import 'package:yoyak/screen/SignUp/user_info.screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
@@ -66,7 +67,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const LoginScreen()));
+                                builder: (context) => const LoginScreen(destination: MainScreen(),)));
                       },
                     )),
                 const SizedBox(

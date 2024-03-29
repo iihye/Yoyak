@@ -284,7 +284,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                         Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (c, a1, a2) => const LoginScreen(),
+                            pageBuilder: (c, a1, a2) => const LoginScreen(destination: MainScreen(),),
                             transitionsBuilder: (c, a1, a2, child) =>
                                 SlideTransition(
                               position: Tween(

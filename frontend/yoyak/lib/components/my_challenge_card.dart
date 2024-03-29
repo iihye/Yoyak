@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
+import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
 import '../styles/colors/palette.dart';
@@ -19,6 +21,7 @@ class MyChallengeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double cardListWidth = MediaQuery.of(context).size.width * 0.9;
+    var myChallengeList = context.watch<ChallengeStore>().myChallengeList;
     return RoundedRectangle(
       width: ScreenSize.getWidth(context),
       height: 300,
@@ -63,19 +66,20 @@ class MyChallengeCard extends StatelessWidget {
             ),
 
           // 챌린지 시작했을 때, 안했을 때 분기
-          false
+          myChallengeList.isNotEmpty
               ? SizedBox(
                   width: cardListWidth,
                   height: 300,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      itemCount: 6, // 개수 고치기 배열의 길이로
+                      itemCount: myChallengeList.length, // 개수 고치기 배열의 길이로
                       itemBuilder: (context, i) {
-                        return const ChallengeCard();
+                        // 사버에서 받은 데이터로 넘겨주기
+                        return ChallengeCard(challenge: myChallengeList[i]);
                       }),
                 )
-              : Container(
+              : SizedBox(
                   width: ScreenSize.getWidth(context),
                   height: 200,
                   child: Center(child: Column(
