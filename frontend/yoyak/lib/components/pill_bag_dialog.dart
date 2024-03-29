@@ -24,7 +24,6 @@ class _PillBagDialogState extends State<PillBagDialog> {
   // selectedAccountSeq 초기에 null값인거 바꾸기
   int? _selectedAccountSeq;
 
-  // 이게 안먹어
   @override
   void dispose() {
     _nameController.dispose();
