@@ -22,11 +22,13 @@ class _FilterResultState extends State<FilterResult> {
   final int _perPage = 30; // 한 페이지에 표시될 알약 수
   bool _hasMoreData = true; // 더 불러올 데이터가 있는지 여부
 
-  // 추가 데이터 로드
+  // 초기 데이터 로드
   @override
   void initState() {
     super.initState();
-    _loadMoreData(); // 초기 데이터 로드
+    if (widget.data["result"] != null) {
+      _loadMoreData(); // 초기 데이터 로드
+    }
     // 스크롤 이벤트 리스너 추가: 사용자가 리스트의 끝에 도달하면 추가 데이터 로드
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -181,9 +183,11 @@ class _FilterResultState extends State<FilterResult> {
                           ),
                         ],
                 ),
-                if (_hasMoreData) // 더 로드할 데이터가 있으면 로딩 인디케이터 표시
+                if (isResult && _hasMoreData) // 더 로드할 데이터가 있으면 로딩 인디케이터 표시
                   const Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      color: Palette.MAIN_BLUE,
+                    ),
                   )
               ],
             ),
