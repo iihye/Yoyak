@@ -17,12 +17,12 @@ class AccountItem extends StatefulWidget {
 }
 
 class _AccountItemState extends State<AccountItem> {
-  void goToAccountUpdate(int? accountSeq) {
+  void goToAccountUpdate(AccountModel accountitem) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => UpdateAccountScreen(
-          accountSeq: widget.accountitem.seq,
+          accountitem: widget.accountitem,
           isUser: false,
         ),
       ),
@@ -33,7 +33,7 @@ class _AccountItemState extends State<AccountItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        goToAccountUpdate(widget.accountitem.seq);
+        goToAccountUpdate(widget.accountitem);
       },
       child: Container(
         width: 70,

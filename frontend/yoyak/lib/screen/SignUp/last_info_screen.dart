@@ -18,7 +18,6 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
   final TextEditingController monthController = TextEditingController();
   final TextEditingController dayController = TextEditingController();
 
-
   late FocusNode monthFocusNode;
   late FocusNode dayFocusNode;
 
@@ -69,8 +68,9 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   const Text(
                     "약을 검색하고",
                     style: TextStyle(
@@ -97,11 +97,12 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-
                       ],
                     ),
                   ),
-                  const SizedBox(height: 40,),
+                  const SizedBox(
+                    height: 40,
+                  ),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10), // 둥근 모서리 반경 설정
                     child: Image.asset(
@@ -114,9 +115,6 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                   const SizedBox(
                     height: 70,
                   ),
-
-
-
                   RichText(
                     text: TextSpan(
                       children: [
@@ -139,7 +137,6 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                       ],
                     ),
                   ),
-
                   const SizedBox(
                     height: 40,
                   ),
@@ -152,43 +149,45 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                            width: inputWidth,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.grey.shade200, width: 0.1),
-                              borderRadius: BorderRadius.circular(20),
-                              color: Palette.MAIN_BLACK.withOpacity(0.1),
-                            ),
-                            child: Center(
-                              child: TextField(
-                                textAlign: TextAlign.center,
-                                keyboardType: TextInputType.datetime,
-                                autofocus: true,
-                                controller: yearController,
-                                onChanged: (value) {
-                                  setState(() {
-                                    year = value;
-                                  });
-                                },
-                                maxLength: 4,
-                                decoration: const InputDecoration(
-                                  counterText: '',
-                                  hintText: "년",
-                                  hintStyle: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                  ),
-                                  border: InputBorder.none,
+                          width: inputWidth,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.grey.shade200, width: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            color: Palette.MAIN_BLACK.withOpacity(0.1),
+                          ),
+                          child: Center(
+                            child: TextField(
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.datetime,
+                              autofocus: true,
+                              controller: yearController,
+                              onChanged: (value) {
+                                setState(() {
+                                  year = value;
+                                });
+                              },
+                              maxLength: 4,
+                              decoration: const InputDecoration(
+                                counterText: '',
+                                hintText: "년",
+                                hintStyle: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
                                 ),
-                                onEditingComplete: () {
-                                  if (yearController.text.length == 4) { // 입력값이 변경되면 다음 입력 필드로 포커스 이동
-                                    FocusScope.of(context).requestFocus(monthFocusNode);
-                                  }
-                                },
-
+                                border: InputBorder.none,
                               ),
-                            )),
+                              onEditingComplete: () {
+                                if (yearController.text.length == 4) {
+                                  // 입력값이 변경되면 다음 입력 필드로 포커스 이동
+                                  FocusScope.of(context)
+                                      .requestFocus(monthFocusNode);
+                                }
+                              },
+                            ),
+                          ),
+                        ),
                         const SizedBox(
                           width: 15,
                         ),
@@ -224,13 +223,17 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                                   border: InputBorder.none,
                                 ),
                                 onEditingComplete: () {
-                                  if (monthController.text.length == 4) { // 입력값이 변경되면 다음 입력 필드로 포커스 이동
-                                    FocusScope.of(context).requestFocus(dayFocusNode);
+                                  if (monthController.text.length == 4) {
+                                    // 입력값이 변경되면 다음 입력 필드로 포커스 이동
+                                    FocusScope.of(context)
+                                        .requestFocus(dayFocusNode);
                                   }
                                 },
                               ),
                             )),
-                        const SizedBox(width: 15,),
+                        const SizedBox(
+                          width: 15,
+                        ),
                         // 일 입력
                         Container(
                             width: inputWidth,
@@ -284,7 +287,9 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                         Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (c, a1, a2) => const LoginScreen(destination: MainScreen(),),
+                            pageBuilder: (c, a1, a2) => const LoginScreen(
+                              destination: MainScreen(),
+                            ),
                             transitionsBuilder: (c, a1, a2, child) =>
                                 SlideTransition(
                               position: Tween(

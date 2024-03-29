@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:yoyak/components/accountlist_view.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/models/user/account_models.dart';
+import 'package:yoyak/models/user/accountdetail_models.dart';
 import 'package:yoyak/screen/Mypage/privacy_policy.dart';
 import 'package:yoyak/screen/Mypage/updateaccount_Screen.dart';
 import 'package:yoyak/store/login_store.dart';
@@ -16,9 +17,10 @@ class MypageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<AccountModel> alarmAccounts =
-        context.read<LoginStore>().alarmAccounts;
+        context.watch<LoginStore>().alarmAccounts;
 
-    final int accountSeq = context.read<LoginStore>().alarmAccounts[0].seq!;
+    final AccountModel accountitem =
+        context.read<LoginStore>().alarmAccounts[0];
 
     final String userName =
         context.read<LoginStore>().alarmAccounts[0].nickname!;
@@ -39,12 +41,13 @@ class MypageScreen extends StatelessWidget {
     final int profileImg =
         context.read<LoginStore>().alarmAccounts[0].profileImg!;
 
-    void goToAccountUpdate(int? accountSeq, bool isUser) {
+    void goToAccountUpdate(AccountModel? accountitem, bool isUser) {
+      accountitem ??= AccountModel();
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => UpdateAccountScreen(
-            accountSeq: accountSeq,
+            accountitem: accountitem!,
             isUser: isUser,
           ),
         ),
@@ -91,7 +94,7 @@ class MypageScreen extends StatelessWidget {
                             iconSize: 28,
                             onPressed: () {
                               // 내 정보 수정 페이지로 이동
-                              goToAccountUpdate(accountSeq, true);
+                              goToAccountUpdate(accountitem, true);
                             },
                           ),
                         ],
@@ -287,11 +290,11 @@ class MypageScreen extends StatelessWidget {
                         ],
                       ),
                       AccountList(accountList: alarmAccounts.sublist(1)),
-                      if (alarmAccounts.length < 3)
+                      if (alarmAccounts.length < 4)
                         const SizedBox(
                           height: 10,
                         ),
-                      if (alarmAccounts.length < 3)
+                      if (alarmAccounts.length < 4)
                         GestureDetector(
                           onTap: () {
                             goToAccountUpdate(null, false);

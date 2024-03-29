@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:yoyak/screen/Login/login_screen.dart';
-
 import '../hooks/goto_screen.dart';
-import '../screen/Challenge/regist_challenge_screen.dart';
 import '../styles/colors/palette.dart';
 
 class DialogUI extends StatelessWidget {
-  const DialogUI({Key? key, required this.destination}) : super(key: key);
-  final destination;
+  const DialogUI({super.key, required this.destination});
+  final Widget destination;
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -15,7 +12,7 @@ class DialogUI extends StatelessWidget {
       child: Container(
         width: 300,
         height: 200,
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -29,7 +26,9 @@ class DialogUI extends StatelessWidget {
                 fontSize: 17,
               ),
             ),
-            SizedBox(height: 5,),
+            const SizedBox(
+              height: 5,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

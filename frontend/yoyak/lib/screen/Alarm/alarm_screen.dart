@@ -9,11 +9,14 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/components/bottom_modal.dart';
+import 'package:yoyak/components/dialog.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/format_time.dart';
 import 'package:yoyak/models/alarm/alarm_models.dart';
 import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/screen/Alarm/alarm_create.dart';
+import 'package:yoyak/screen/Login/login_screen.dart';
+import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
@@ -379,7 +382,6 @@ class AlarmItem extends StatelessWidget {
 
 // 알림 생성 버튼
 class AlarmCreateButton extends StatelessWidget {
-  
   final bool isLogin;
 
   const AlarmCreateButton({
@@ -390,7 +392,17 @@ class AlarmCreateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void goToAlarmCreate(int? notiSeq, bool isLogin) {
-      if (isLogin == false) {
+      if (!isLogin) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const DialogUI(
+              destination: LoginScreen(
+                destination: MainScreen(),
+              ),
+            );
+          },
+        );
       } else {
         Navigator.push(
           context,

@@ -8,11 +8,12 @@ class AccountModel {
 
   AccountModel({
     this.seq,
-    this.nickname,
-    this.gender,
-    this.birth,
-    this.disease,
-    this.profileImg,
+    this.nickname = '',
+    this.gender = 'N',
+    this.birth = '',
+    this.disease = '',
+    // 기본값 0으로 설정
+    this.profileImg = 0,
   });
 
   AccountModel.fromJson(Map<String, dynamic> json) {

@@ -143,6 +143,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
         }
       } else {
         // 오류 처리
+        print(accessToken);
         print('Failed to send alarm data, status code: ${response.statusCode}');
       }
     } catch (e) {
@@ -264,9 +265,9 @@ class _AlarmCreateState extends State<AlarmCreate> {
     var accountList = context.watch<LoginStore>().alarmAccounts;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Palette.MAIN_WHITE,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Palette.MAIN_WHITE,
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
@@ -546,8 +547,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
   Widget alarmnameInput() {
     return TextFormField(
       controller: _alarmNameController,
-      // autofocus: true,
-      maxLength: 10,
+      maxLength: 6,
       cursorHeight: 20,
       cursorColor: Palette.MAIN_BLUE,
       style: const TextStyle(
