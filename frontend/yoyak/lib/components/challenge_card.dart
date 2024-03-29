@@ -5,7 +5,8 @@ import '../styles/colors/palette.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class ChallengeCard extends StatelessWidget {
-  const ChallengeCard({super.key});
+  const ChallengeCard({super.key, this.challenge});
+  final challenge;
 
   @override
   Widget build(BuildContext context) {
@@ -42,18 +43,18 @@ class ChallengeCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '알약 인증합니다',
-                      style: TextStyle(
+                    Text(
+                      challenge?.title ?? "ASDF",
+                      style: const TextStyle(
                         color: Palette.MAIN_BLACK,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w600,
                         fontSize: 17,
                       ),
                     ), // 게시물 제목
-                    const Text(
-                      '성혀니',
-                      style: TextStyle(
+                    Text(
+                      challenge?.userNickname ?? "ASDF",
+                      style: const TextStyle(
                         color: Palette.SUB_BLACK,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
