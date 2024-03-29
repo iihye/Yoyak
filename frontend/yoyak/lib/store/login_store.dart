@@ -1,14 +1,20 @@
 import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
 import 'package:yoyak/models/user/account_models.dart';
 
 class LoginStore extends ChangeNotifier {
-  late User user;
+  dynamic userInfo = ""; // storage에 있는 유저 정보 저장
   List<AccountModel> alarmAccounts = [];
+  final storage = FlutterSecureStorage();
+
   String accessToken = '';
+  String? deviceToken = "";
+
   var UserDetail; // 회원정보 페이지에 뿌려줄 데이터
 
   // 회원가입 정보
@@ -24,6 +30,54 @@ class LoginStore extends ChangeNotifier {
   // 성별 : enum Type / 남자 : 'MAN', 여자 : 'WOMAN'
   String gender = '';
   String platform = 'ORIGIN';
+
+  // device token 가져오기
+  void getDeviceToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      deviceToken = token;
+    });
+  }
+
+  Future login(BuildContext context, String email, String password,
+      Widget destination) async {
+
+    String url = "${API.yoyakUrl}/user/login/origin"; // 바꾸기
+    print('$email $password');
+    var response = await http.post(Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'userId': email,
+          'password': password,
+          'deviceToken': context.read<LoginStore>().deviceToken,
+        }));
+
+    print(response.body);
+    var accessToken = response.body; // 액세스 토큰 저장
+    if (response.statusCode == 200) {
+      print("로그인 성공");
+      context
+          .read<LoginStore>()
+          .setAccessToken(accessToken); // provider에 받은 토큰 저장
+
+      storage.deleteAll(); // 기존 토큰 삭제
+      storage.write(key: 'accessToken', value: accessToken); // accessToken 저장
+      storage.write(key: 'deviceToken', value: deviceToken); // deviceToken 저장
+      notifyListeners();
+
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => destination),
+        (route) => false,
+      );
+      // return accessToken;
+    } else {
+      print("회원정보가 없는경우");
+      throw Error();
+    }
+  }
 
   Future<void> getAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
@@ -86,22 +140,18 @@ class LoginStore extends ChangeNotifier {
   }
 
   setGender(String str) {
-    print("성별 $str");
     gender = str;
   }
 
   setYear(String str) {
-    print("년도 $str");
     year = str;
   }
 
   setMonth(String str) {
-    print("월 $str");
     month = str;
   }
 
   setDay(String str) {
-    print("일 $str");
     day = str;
   }
 

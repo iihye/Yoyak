@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/base_input.dart';
 import 'package:yoyak/components/pill_bag.dart';

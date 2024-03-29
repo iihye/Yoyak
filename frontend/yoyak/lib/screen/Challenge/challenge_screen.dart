@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/my_challenge_card.dart';
 import 'package:yoyak/components/challenge_appbar.dart';
-import 'package:yoyak/components/main_appbar.dart';
 import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
-import 'package:yoyak/styles/screenSize/screen_size.dart';
-
 import '../../components/other_challenge_card.dart';
 import '../../store/login_store.dart';
 

@@ -25,6 +25,7 @@ class ChallengeaAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     var myChallengeList = context.watch<ChallengeStore>().myChallengeList;
+    var storage = context.watch<LoginStore>().storage;
     var accessToken = context.read<LoginStore>().accessToken;
     var getImageAndNavigate = context.read<CameraStore>().getImageAndNavigate;
     return AppBar(
@@ -54,7 +55,8 @@ class ChallengeaAppBar extends StatelessWidget implements PreferredSizeWidget {
                           height: 40,
                           fontSize: 15,
                           onPressed: () {
-                            accessToken != "" ? goToScreen(context, const RegistChallengeScreen()) // 로그인 되어있다면
+                            print("tqtqtqtq: ${storage.read(key: 'accessToken')}");
+                            storage.read(key: 'accessToken') != null ? goToScreen(context, const RegistChallengeScreen()) // 로그인 되어있다면
                                 : showDialog(context: context, builder: (context) { // 로그인 안되어있을 경우
                                   return const DialogUI(destination: LoginScreen(destination: RegistChallengeScreen(),),);
                             });

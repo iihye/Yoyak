@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyak/store/challenge_store.dart';
+import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
-
-import '../../components/base_input.dart';
-import '../../components/rounded_rectangle.dart';
 
 class RegistChallengeScreen extends StatefulWidget {
   const RegistChallengeScreen({super.key});
@@ -168,7 +166,8 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
           ),
         ),
         onPressed: () {
-
+          // 챌린지 등록
+          context.read<ChallengeStore>().registChallenge(name, _alarmStartDate, _alarmEndDate, context.read<LoginStore>().accessToken, context);
         },
         child: const Center(
           child: Text(

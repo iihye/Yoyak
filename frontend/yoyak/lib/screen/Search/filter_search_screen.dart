@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
