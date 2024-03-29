@@ -10,7 +10,8 @@ import '../../store/login_store.dart';
 import '../Main/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key, required this.destination});
+  final destination;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -128,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     String url = "${API.yoyakUrl}/user/login/origin"; // 바꾸기
 
-    login(String email, String password) async {
+    login(String email, String password, Widget destination) async {
       print('$email $password');
       var response = await http.post(Uri.parse(url),
           headers: {
@@ -148,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const MainScreen()),
+          MaterialPageRoute(builder: (context) => destination),
           (route) => false,
         );
         // return accessToken;
@@ -264,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
               if (isValidate()) {
                 try {
                   final loginCheck = await login(
-                      emailController.text, passwordController.text);
+                      emailController.text, passwordController.text, widget.destination);
                   print('로그인 버튼 눌림');
                   // 로그인 확인
                   if (loginCheck == '-1') {
@@ -306,7 +307,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           topRight: Radius.circular(15)),
                     ),
                     content: Text(
-                      "회원정보가 없습니다",
+                      "로그인 되었습니다",
                       style: TextStyle(color: Palette.MAIN_BLACK),
                     ),
                     backgroundColor: Colors.yellow,

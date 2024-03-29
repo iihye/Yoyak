@@ -43,8 +43,8 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back_ios, size: 25,),
-        title: Text("챌린지 시작하기", style: TextStyle(
+        leading: const Icon(Icons.arrow_back_ios, size: 25,),
+        title: const Text("챌린지 시작하기", style: TextStyle(
           color: Palette.MAIN_BLACK,
           fontFamily: 'Pretendard',
           fontWeight: FontWeight.w500,
@@ -60,7 +60,7 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               SizedBox(
@@ -82,7 +82,7 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     Container(
                         width: inputWidth,
                         height: 55,
