@@ -61,7 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
         shape: RoundedRectangleBorder(
           // ShapeDecoration을 사용하여 borderRadius 적용
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15),
+          ),
         ),
         content: Text(
           "이메일을 입력해주세요",

@@ -12,7 +12,7 @@ import 'package:yoyak/components/bottom_modal.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/format_time.dart';
 import 'package:yoyak/models/alarm/alarm_models.dart';
-import 'package:yoyak/models/user/alarm_account.dart';
+import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/screen/Alarm/alarm_create.dart';
 import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/login_store.dart';
@@ -41,6 +41,9 @@ class _AlarmScreenState extends State<AlarmScreen> {
 
     var alarmList = context.watch<AlarmStore>().alarms;
     var accountList = context.watch<LoginStore>().alarmAccounts;
+    var accessToken = context.watch<LoginStore>().accessToken;
+
+    var isLogin = accessToken.isNotEmpty;
 
     // 선택된 날짜에 해당하는 alarmList를 필터링
     var filteredAlarmList = _selectedDay != null
@@ -57,7 +60,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
       // 드롭다운에서 선택된 계정의 seq를 찾음
       var selectedSeq = accountList
           .firstWhere((account) => account.nickname == selectedAccountSeq,
-              orElse: () => AlarmAccountModel(seq: null))
+              orElse: () => AccountModel(seq: null))
           .seq;
 
       // 선택된 seq와 일치하는 alarmList 필터링
@@ -231,7 +234,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
           ],
         ),
       ),
-      floatingActionButton: const AlarmCreateButton(),
+      floatingActionButton: AlarmCreateButton(isLogin: isLogin),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -376,20 +379,26 @@ class AlarmItem extends StatelessWidget {
 
 // 알림 생성 버튼
 class AlarmCreateButton extends StatelessWidget {
+  
+  final bool isLogin;
+
   const AlarmCreateButton({
     super.key,
+    required this.isLogin,
   });
 
   @override
   Widget build(BuildContext context) {
-    void goToAlarmCreate(int? notiSeq) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          // 수정 할 것
-          builder: (context) => AlarmCreate(notiSeq: notiSeq),
-        ),
-      );
+    void goToAlarmCreate(int? notiSeq, bool isLogin) {
+      if (isLogin == false) {
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AlarmCreate(notiSeq: notiSeq),
+          ),
+        );
+      }
     }
 
     return SizedBox(
@@ -399,7 +408,7 @@ class AlarmCreateButton extends StatelessWidget {
         backgroundColor: Palette.MAIN_BLUE,
         elevation: 3,
         onPressed: () {
-          goToAlarmCreate(null);
+          goToAlarmCreate(null, isLogin);
         },
         child: const Padding(
           padding: EdgeInsets.only(right: 4.6),

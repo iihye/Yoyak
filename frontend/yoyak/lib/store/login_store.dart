@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
-import 'package:yoyak/models/user/alarm_account.dart';
+import 'package:yoyak/models/user/account_models.dart';
 
 class LoginStore extends ChangeNotifier {
   late User user;
-  List<AlarmAccountModel> alarmAccounts = [];
+  List<AccountModel> alarmAccounts = [];
   String accessToken = '';
   var UserDetail; // 회원정보 페이지에 뿌려줄 데이터
 
@@ -24,6 +24,7 @@ class LoginStore extends ChangeNotifier {
   // 성별 : enum Type / 남자 : 'MAN', 여자 : 'WOMAN'
   String gender = '';
   String platform = 'ORIGIN';
+
   Future<void> getAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String url = '$yoyakURL/account'; // 요청할 URL
@@ -42,7 +43,7 @@ class LoginStore extends ChangeNotifier {
         var decodedBody = utf8.decode(response.bodyBytes);
         List<dynamic> data = json.decode(decodedBody);
         alarmAccounts =
-            data.map((json) => AlarmAccountModel.fromJson(json)).toList();
+            data.map((json) => AccountModel.fromJson(json)).toList();
         notifyListeners();
       } else {
         // 오류 처리
@@ -53,7 +54,6 @@ class LoginStore extends ChangeNotifier {
       print('An error occurred: $error');
     }
   }
-
 
   Future signUp(BuildContext context) async {
     print("회원가입 요청");
@@ -70,8 +70,9 @@ class LoginStore extends ChangeNotifier {
           'name': userName,
           'nickname': userName,
           'gender': gender,
-          'birth' : DateTime(int.parse(year), int.parse(month), int.parse(day)).toIso8601String(),
-          'platform' : platform, // 카카오면 KAKAO, 일반이면 ORIGIN
+          'birth': DateTime(int.parse(year), int.parse(month), int.parse(day))
+              .toIso8601String(),
+          'platform': platform, // 카카오면 KAKAO, 일반이면 ORIGIN
         }));
     print("$userEmail $password $userName $gender $year $month $day $platform");
     print(response.statusCode);
@@ -82,7 +83,6 @@ class LoginStore extends ChangeNotifier {
       print(response.body);
       throw Error();
     }
-
   }
 
   setGender(String str) {

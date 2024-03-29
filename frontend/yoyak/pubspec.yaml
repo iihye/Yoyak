@@ -81,6 +81,7 @@ flutter:
     - assets/images/colors/
     - assets/images/pills/
     - assets/images/lines/
+    - assets/images/profiles/
     - assets/lotties/
     - assets/config/.env
 

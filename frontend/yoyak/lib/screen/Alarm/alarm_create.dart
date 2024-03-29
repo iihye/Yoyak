@@ -72,7 +72,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
         var jsonData = json.decode(decodedBody);
 
         // AlarmDetailModels 객체로 변환
-        AlarmDetailModels alarmDetails = AlarmDetailModels.fromJson(jsonData);
+        AlarmDetailModel alarmDetails = AlarmDetailModel.fromJson(jsonData);
 
         // AlarmDetailModels 객체를 사용하여 폼 데이터 설정
         setState(() {
@@ -340,7 +340,6 @@ class _AlarmCreateState extends State<AlarmCreate> {
                   ),
                   const SizedBox(height: 20),
                 ],
-
                 // 기간
                 BaseInput(
                   title: '알림 기간',
