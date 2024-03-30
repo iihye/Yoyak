@@ -14,7 +14,7 @@ class ChallengeStore extends ChangeNotifier {
   int challengeSeq = 0;
   String challengeContent = "";
   List<dynamic> myChallengeList = [];
-
+  List<dynamic> othersChallengeList = [];
   setHasOwnChallenge() {
     hasOwnChallenge = true;
   }
@@ -144,4 +144,29 @@ class ChallengeStore extends ChangeNotifier {
       print(error);
     }
   }
+
+  // 챌린지 둘러보기 get
+  Future getOthersChallenge(accessToken) async {
+    try {
+      var response =
+      await http.get(Uri.parse('$yoyakUrl/challenge/article'), headers: {
+        'Authorization': 'Bearer $accessToken',
+      });
+
+      print("챌린지 둘러보기 리스트: ${response.body}");
+
+      if (response.statusCode == 200) {
+        print("챌린지 둘러보기 조회 성공");
+        othersChallengeList = json.decode(utf8.decode(response.bodyBytes));
+        notifyListeners();
+      } else {
+        print("챌린지 둘러보기 조회 실패");
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+
+
 }

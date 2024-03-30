@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
-
 import '../styles/colors/palette.dart';
 import 'challenge_card.dart';
 
@@ -25,7 +24,7 @@ class MyChallengeCard extends StatelessWidget {
     var myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
     return RoundedRectangle(
       width: ScreenSize.getWidth(context),
-      height: 390,
+      height: 330,
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -72,7 +71,7 @@ class MyChallengeCard extends StatelessWidget {
           myChallengeList.isNotEmpty ?
           SizedBox(
                   width: cardListWidth,
-                  height: 300,
+                  height: 235,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,

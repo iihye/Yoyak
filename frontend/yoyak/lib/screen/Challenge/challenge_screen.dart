@@ -20,7 +20,8 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
   @override
   Widget build(BuildContext context) {
     var accessToken = context.read<LoginStore>().accessToken;
-    context.read<ChallengeStore>().getMyChallenge(accessToken);
+    context.read<ChallengeStore>().getMyChallenge(accessToken); // 내 챌린지 호출
+    context.read<ChallengeStore>().getOthersChallenge(accessToken); // 챌린지 둘러보기 호출
 
     return Scaffold(
       backgroundColor: Palette.BG_BLUE,
@@ -78,7 +79,7 @@ class _ChallengeTitleSection extends StatelessWidget {
     print("내 챌린지 목록 길이: ${myChallengeList.length}");
     print("내 챌린지 목록: $myChallengeList");
 
-    var totalDay = myChallengeCard?["day"] + 1;
+    var totalDay = myChallengeCard?["day"]?? 0 + 1;
     var articleSize = myChallengeCard?["articleSize"];
 
     // 챌린지를 시작하지 않은 경우
