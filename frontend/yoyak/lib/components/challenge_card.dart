@@ -31,8 +31,8 @@ class ChallengeCard extends StatelessWidget {
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
                 ), // 둥근 모서리 반경 설정
-                child: Image.asset(
-                  'assets/images/medicine1.jpg',
+                child: Image.network(
+                  challenge?['imgUrl'],
                   width: 200, // 이미지의 가로 크기
                   height: 110, // 이미지의 세로 크기
                   fit: BoxFit.cover, // 이미지의 크기를 설정한 크기에 맞게 조정
@@ -44,7 +44,7 @@ class ChallengeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      challenge?.title ?? "ASDF",
+                      challenge?['title'] ?? "챌린지 이름",
                       style: const TextStyle(
                         color: Palette.MAIN_BLACK,
                         fontFamily: 'Pretendard',
@@ -53,7 +53,7 @@ class ChallengeCard extends StatelessWidget {
                       ),
                     ), // 게시물 제목
                     Text(
-                      challenge?.userNickname ?? "ASDF",
+                      challenge?['userNickname'] ?? "유저 닉네임",
                       style: const TextStyle(
                         color: Palette.SUB_BLACK,
                         fontFamily: 'Pretendard',
