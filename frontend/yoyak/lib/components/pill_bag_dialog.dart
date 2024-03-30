@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/store/login_store.dart';
+import 'package:yoyak/store/pill_bag_store.dart';
 import '../../styles/colors/palette.dart';
 import 'package:yoyak/components/base_input.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
@@ -31,10 +32,17 @@ class _PillBagDialogState extends State<PillBagDialog> {
   }
 
   // 약 봉투 생성 api
-  Future<void> createPillBag(int accountSeq) async {
+  Future<void> createPillBag(int accountSeq, String name) async {
     String yoyakURL = API.yoyakUrl; // 호스트 URL
     String accessToken = context.read<LoginStore>().accessToken;
     String url = '$yoyakURL/medicineEnvelop'; // path
+    // 색상 리스트
+    List<String> colors = [
+      "0XffBED1CF",
+      "0xffE78895",
+      "0xffBBE2EC",
+      "0xffFFE4C9"
+    ];
 
     try {
       final response = await http.post(
@@ -47,8 +55,9 @@ class _PillBagDialogState extends State<PillBagDialog> {
           "accountSeq": accountSeq,
           "name": _nameController.text,
           // 남은 일 : color
-          // color 어떻게 바꾸지?
-          "color": "blue",
+          // @
+          //color 어떻게 바꾸지?
+          "color": colors[accountSeq % 4],
         }),
       );
 
@@ -57,6 +66,7 @@ class _PillBagDialogState extends State<PillBagDialog> {
         if (mounted) {
           Navigator.pop(context);
         }
+        context.read<PillBagStore>().getPillBagDatas(context);
       } else {
         print("약 봉투 생성 실패: ${response.body}");
       }
@@ -147,10 +157,10 @@ class _PillBagDialogState extends State<PillBagDialog> {
                 colorMode: 'blue',
                 onPressed: () {
                   print('약 봉투 생성');
-                  // Navigator.pop(context);
-                  // 약 봉투 생성 API 연결
+
                   createPillBag(
                     _selectedAccountSeq ?? accountList[0].seq!,
+                    _nameController.text,
                   );
                 }),
           ],

@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
-
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
-import 'package:yoyak/components/account_filter.dart';
-import 'package:flutter/widgets.dart';
 import 'package:yoyak/components/base_button.dart';
-import 'package:yoyak/components/base_input.dart';
-import 'package:yoyak/components/pill_bag.dart';
 import 'package:yoyak/components/pill_description.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
-import 'package:yoyak/models/alarm/alarmdetail_models.dart';
-import 'package:yoyak/screen/Alarm/alarm_create.dart';
 import 'package:yoyak/screen/Search/pill_bag_modal.dart';
-import 'package:yoyak/styles/screenSize/screen_size.dart';
+import 'package:yoyak/store/pill_bag_store.dart';
 import '../../styles/colors/palette.dart';
-import 'package:yoyak/store/login_store.dart';
 
 class PillDetailScreen extends StatefulWidget {
   final Map<String, dynamic> medicineInfo;
@@ -27,6 +18,8 @@ class PillDetailScreen extends StatefulWidget {
   @override
   State<PillDetailScreen> createState() => _PillDetailScreenState();
 }
+
+// @ 로그인 되어있으면 약 봉투 목록 여기서 불러오기
 
 class _PillDetailScreenState extends State<PillDetailScreen> {
   @override
@@ -130,10 +123,23 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                       // 로그인 안됐을 때는 로그인 창으로 이동
                       BaseButton(
                         onPressed: () {
+                          // 약 봉투 api get 요청
+                          context.read<PillBagStore>().getPillBagDatas(context);
+                          // 약 봉투 모달창 띄우기
                           showModalBottomSheet(
                               context: context,
                               builder: (BuildContext context) {
-                                return const PillBagModal();
+                                var screenHigh =
+                                    MediaQuery.of(context).size.height;
+                                return StatefulBuilder(builder:
+                                    (BuildContext context,
+                                        StateSetter setState) {
+                                  return PillBagModal(
+                                      sceenHeight: screenHigh,
+                                      medicineSeq:
+                                          widget.medicineInfo["medicineSeq"]);
+                                });
+                                // return const PillBagModal();
                               });
                         },
                         text: "저장하기",

@@ -96,7 +96,6 @@ class _PillPreviewState extends State<PillPreview> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.05,
               ),
-              // 사진 크기, 둥글기는 API 받아오면 그때 다시 설정하자
               ClipRRect(
                   // 자식요소 크기 강제 설정
                   borderRadius: BorderRadius.circular(17),

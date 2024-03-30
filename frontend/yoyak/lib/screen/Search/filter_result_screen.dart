@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:yoyak/components/pill_preview.dart';
@@ -172,7 +171,7 @@ class _FilterResultState extends State<FilterResult> {
                             // fit: BoxFit.fill,
                           ),
                           const Text(
-                            "검색 결과가 없습니다.",
+                            "검색 결과가 없어요.",
                             style: TextStyle(
                               color: Palette.SUB_BLACK,
                               fontFamily: 'Pretendard',
