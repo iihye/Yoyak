@@ -1,34 +1,29 @@
 import 'dart:convert';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
+import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/store/login_store.dart';
 
 class PillBagStore extends ChangeNotifier {
   Map<String, dynamic> pillBags = {}; // 약 봉투 목록
-  // var pillBags; // 약 봉투 목록
+  var storage = SingletonSecureStorage().storage;
 
   // 약 봉투 목록 가져오기 api
-  // Future<void> getPillBagDatas(BuildContext context) async {
   Future<void> getPillBagDatas(
     BuildContext context,
     int medicineSeq,
   ) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String modifiedUrl = yoyakURL.substring(8, yoyakURL.length - 4);
-    String accessToken = context.read<LoginStore>().accessToken;
     String path = '/api/medicineEnvelop'; // path
-    String url = '$yoyakURL/medicineEnvelop'; // path
+    String? accessToken = await storage.read(key: 'accessToken');
 
     print("modified  : $modifiedUrl");
 
-    final uri = Uri.https(
-        "j10b102.p.ssafy.io",
-        '/api/medicineEnvelop',
-        // {"medicineSeq": "200502688"});
-        {"medicineSeq": "$medicineSeq"});
+    final uri = Uri.https(modifiedUrl, path, {"medicineSeq": "$medicineSeq"});
     // print("api 어디로감 ... : $uri");
 
     // API 호출
@@ -74,7 +69,7 @@ class PillBagStore extends ChangeNotifier {
     String name,
   ) async {
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineEnvelop'; // path
     // 색상 리스트
     List<String> colors = [

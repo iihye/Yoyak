@@ -72,7 +72,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
         var jsonData = json.decode(decodedBody);
 
         // AlarmDetailModels 객체로 변환
-        AlarmDetailModels alarmDetails = AlarmDetailModels.fromJson(jsonData);
+        AlarmDetailModel alarmDetails = AlarmDetailModel.fromJson(jsonData);
 
         // AlarmDetailModels 객체를 사용하여 폼 데이터 설정
         setState(() {
@@ -113,6 +113,9 @@ class _AlarmCreateState extends State<AlarmCreate> {
     List<String> formattedAlarmTimes = _alarmTime.map((datetime) {
       return '${datetime.hour.toString().padLeft(2, '0')}:${datetime.minute.toString().padLeft(2, '0')}';
     }).toList();
+    print(
+      '$_alarmAccountSeq, $_alarmName, $_alarmStartDate, $_alarmEndDate, $_alarmDays, $formattedAlarmTimes',
+    );
 
     // 서버에 보낼 데이터 준비
     Map<String, dynamic> alarmData = {
@@ -143,6 +146,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
         }
       } else {
         // 오류 처리
+        print(accessToken);
         print('Failed to send alarm data, status code: ${response.statusCode}');
       }
     } catch (e) {
@@ -264,9 +268,9 @@ class _AlarmCreateState extends State<AlarmCreate> {
     var accountList = context.watch<LoginStore>().alarmAccounts;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Palette.MAIN_WHITE,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Palette.MAIN_WHITE,
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
@@ -340,7 +344,6 @@ class _AlarmCreateState extends State<AlarmCreate> {
                   ),
                   const SizedBox(height: 20),
                 ],
-
                 // 기간
                 BaseInput(
                   title: '알림 기간',
@@ -547,8 +550,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
   Widget alarmnameInput() {
     return TextFormField(
       controller: _alarmNameController,
-      // autofocus: true,
-      maxLength: 10,
+      maxLength: 6,
       cursorHeight: 20,
       cursorColor: Palette.MAIN_BLUE,
       style: const TextStyle(
@@ -673,6 +675,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
               width: ScreenSize.getWidth(context),
               color: Colors.white,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
@@ -707,7 +710,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: Palette.SUB_BLUE.withOpacity(0.5),
                                   ),
-                                  width: ScreenSize.getWidth(context) * 0.85,
+                                  width: ScreenSize.getWidth(context) * 0.75,
                                   height: 40,
                                 ),
                                 Row(
@@ -822,20 +825,25 @@ class _AlarmCreateState extends State<AlarmCreate> {
                       ],
                     ),
                   ),
+                  const Spacer(),
                   Container(
                     width: ScreenSize.getWidth(context),
-                    height: 50.8,
+                    height: 46.7,
                     color: Palette.MAIN_BLUE,
                     child: TextButton(
                       onPressed: () {
-                        // 선택된 시간을 DateTime 객체로 변환
+                        int hour;
+                        if (selectedPeriodIndex == 0) {
+                          hour = selectedHour % 12;
+                        } else {
+                          hour = selectedHour + (selectedHour == 12 ? 0 : 12);
+                        }
+
                         DateTime selectedTime = DateTime(
                           _alarmStartDate.year,
                           _alarmStartDate.month,
                           _alarmStartDate.day,
-                          selectedPeriodIndex == 0
-                              ? selectedHour
-                              : selectedHour + 12,
+                          hour,
                           selectedMinute,
                         );
 
@@ -1029,7 +1037,7 @@ class InputSelectDay extends StatelessWidget {
                         Navigator.pop(context);
                       },
                       child: Container(
-                        width: ScreenSize.getWidth(context) * 0.85,
+                        width: ScreenSize.getWidth(context) * 0.75,
                         color: Palette.MAIN_WHITE,
                         padding: const EdgeInsets.all(8),
                         child: const Text(
@@ -1055,7 +1063,7 @@ class InputSelectDay extends StatelessWidget {
                   children: [
                     GestureDetector(
                       child: Container(
-                        width: ScreenSize.getWidth(context) * 0.85,
+                        width: ScreenSize.getWidth(context) * 0.75,
                         color: Palette.MAIN_WHITE,
                         padding: const EdgeInsets.all(8),
                         child: const Text(
@@ -1077,7 +1085,9 @@ class InputSelectDay extends StatelessWidget {
 
                         print(' $selectedDays');
                         showSpecificDayModal(
-                            context: context, selectedDays: selectedDays);
+                          context: context,
+                          selectedDays: selectedDays,
+                        );
                       },
                     ),
                   ],

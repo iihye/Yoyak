@@ -6,11 +6,14 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/components/bottom_modal.dart';
+import 'package:yoyak/components/dialog.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/format_time.dart';
 import 'package:yoyak/models/alarm/alarm_models.dart';
-import 'package:yoyak/models/user/alarm_account.dart';
+import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/screen/Alarm/alarm_create.dart';
+import 'package:yoyak/screen/Login/login_screen.dart';
+import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
@@ -28,7 +31,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay = DateTime.now();
   MediaQueryData? queryData;
-  String selectedAccountSeq = '모두';
+  int? selectedAccountSeq;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +41,9 @@ class _AlarmScreenState extends State<AlarmScreen> {
 
     var alarmList = context.watch<AlarmStore>().alarms;
     var accountList = context.watch<LoginStore>().alarmAccounts;
+    var accessToken = context.watch<LoginStore>().accessToken;
+
+    var isLogin = accessToken.isNotEmpty;
 
     // 선택된 날짜에 해당하는 alarmList를 필터링
     var filteredAlarmList = _selectedDay != null
@@ -46,26 +52,22 @@ class _AlarmScreenState extends State<AlarmScreen> {
           }).toList()
         : alarmList;
 
-    // 드롭다운에서 선택된 accountSeq에 따라 추가 필터링
     List<AlarmModel> finalFilteredAlarmList;
-    if (selectedAccountSeq == '모두') {
+    if (selectedAccountSeq == null) {
+      // '모두'가 선택되었을 때
       finalFilteredAlarmList = filteredAlarmList;
     } else {
-      // 드롭다운에서 선택된 계정의 seq를 찾음
-      var selectedSeq = accountList
-          .firstWhere((account) => account.nickname == selectedAccountSeq,
-              orElse: () => AlarmAccountModel(seq: null))
-          .seq;
-
-      // 선택된 seq와 일치하는 alarmList 필터링
+      // 특정 계정이 선택되었을 때, 선택된 seq와 일치하는 alarmList를 필터링합니다.
       finalFilteredAlarmList = filteredAlarmList.where((alarm) {
-        return alarm.accountSeq == selectedSeq;
+        return alarm.accountSeq == selectedAccountSeq;
       }).toList();
     }
     // 드롭다운 메뉴 아이템 목록 생성: '모두' + 모든 계정의 닉네임
-    List<String> dropdownItems = ['모두'];
-    dropdownItems
-        .addAll(accountList.map((account) => account.nickname ?? 'Unknown'));
+    // 이전에는 닉네임만 추가했었는데 이제는 seq와 닉네임을 모두 추가합니다.
+    List<AccountModel> dropdownItems = [
+      AccountModel(seq: null, nickname: '모두')
+    ];
+    dropdownItems.addAll(accountList);
 
     return Scaffold(
       // 배경색
@@ -154,7 +156,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 if (accountList.length > 1)
-                  DropdownButton(
+                  DropdownButton<int?>(
                     elevation: 6,
                     style: const TextStyle(
                       color: Palette.MAIN_BLACK,
@@ -170,65 +172,82 @@ class _AlarmScreenState extends State<AlarmScreen> {
                     iconEnabledColor: Palette.MAIN_BLACK,
                     borderRadius: BorderRadius.circular(10),
                     value: selectedAccountSeq,
-                    onChanged: (String? newValue) {
+                    onChanged: (int? newValue) {
                       setState(() {
-                        selectedAccountSeq = newValue ?? '모두';
+                        selectedAccountSeq = newValue;
                       });
                     },
-                    items: dropdownItems.map<DropdownMenuItem<String>>(
-                      (String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                            ),
+                    items: dropdownItems
+                        .map<DropdownMenuItem<int?>>((AccountModel account) {
+                      return DropdownMenuItem<int?>(
+                        value: account.seq,
+                        child: Text(
+                          account.nickname ?? '없음',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
                           ),
-                        );
-                      },
-                    ).toList(),
+                        ),
+                      );
+                    }).toList(),
                   ),
               ],
             ),
             if (accountList.length > 1)
               SizedBox(height: ScreenSize.getHeight(context) * 0.01),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(children: [
-                  ...finalFilteredAlarmList.map<Widget>((alarm) {
-                    int notiTimeSeq = alarm.notiTimeSeq ?? 0;
-                    String name = alarm.name ?? '';
-                    DateTime time = alarm.time ?? DateTime.now();
-                    String taken = alarm.taken ?? '';
-                    DateTime? takenTime = alarm.takenTime;
-                    int accountSeq = alarm.accountSeq ?? 0;
-                    int notiSeq = alarm.notiSeq ?? 0;
+            if (accountList.length > 1)
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ...finalFilteredAlarmList.map<Widget>((alarm) {
+                        int notiTimeSeq = alarm.notiTimeSeq ?? 0;
+                        String name = alarm.name ?? '';
+                        DateTime time = alarm.time ?? DateTime.now();
+                        String taken = alarm.taken ?? '';
+                        DateTime? takenTime = alarm.takenTime;
+                        int accountSeq = alarm.accountSeq ?? 0;
+                        int notiSeq = alarm.notiSeq ?? 0;
 
-                    return AlarmItem(
-                      notiTimeSeq: notiTimeSeq,
-                      name: name,
-                      time: time,
-                      taken: taken,
-                      takenTime: takenTime,
-                      accountSeq: accountSeq,
-                      notiSeq: notiSeq,
-                    );
-                  }),
-                  SizedBox(
-                    // 없으면 카드 좌우 그림자가 짤림
-                    width: ScreenSize.getWidth(context) * 0.9,
-                    height: ScreenSize.getHeight(context) * 0.09,
+                        return AlarmItem(
+                          notiTimeSeq: notiTimeSeq,
+                          name: name,
+                          time: time,
+                          taken: taken,
+                          takenTime: takenTime,
+                          accountSeq: accountSeq,
+                          notiSeq: notiSeq,
+                        );
+                      }),
+                      SizedBox(
+                        // 없으면 카드 좌우 그림자가 짤림
+                        width: ScreenSize.getWidth(context) * 0.9,
+                        height: ScreenSize.getHeight(context) * 0.09,
+                      ),
+                    ],
                   ),
-                ]),
+                ),
               ),
-            ),
+            if (accountList.isEmpty)
+              Column(
+                children: [
+                  SizedBox(height: ScreenSize.getHeight(context) * 0.3),
+                  const Text(
+                    '현재 등록된 알림이 없습니다.',
+                    style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 15,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              )
           ],
         ),
       ),
-      floatingActionButton: const AlarmCreateButton(),
+      floatingActionButton: AlarmCreateButton(isLogin: isLogin),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -373,20 +392,35 @@ class AlarmItem extends StatelessWidget {
 
 // 알림 생성 버튼
 class AlarmCreateButton extends StatelessWidget {
+  final bool isLogin;
+
   const AlarmCreateButton({
     super.key,
+    required this.isLogin,
   });
 
   @override
   Widget build(BuildContext context) {
-    void goToAlarmCreate(int? notiSeq) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          // 수정 할 것
-          builder: (context) => AlarmCreate(notiSeq: notiSeq),
-        ),
-      );
+    void goToAlarmCreate(int? notiSeq, bool isLogin) {
+      if (!isLogin) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const DialogUI(
+              destination: LoginScreen(
+                destination: MainScreen(),
+              ),
+            );
+          },
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AlarmCreate(notiSeq: notiSeq),
+          ),
+        );
+      }
     }
 
     return SizedBox(
@@ -396,7 +430,7 @@ class AlarmCreateButton extends StatelessWidget {
         backgroundColor: Palette.MAIN_BLUE,
         elevation: 3,
         onPressed: () {
-          goToAlarmCreate(null);
+          goToAlarmCreate(null, isLogin);
         },
         child: const Padding(
           padding: EdgeInsets.only(right: 4.6),
@@ -1071,7 +1105,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: Palette.SUB_BLUE.withOpacity(0.5),
                                   ),
-                                  width: ScreenSize.getWidth(context) * 0.85,
+                                  width: ScreenSize.getWidth(context) * 0.75,
                                   height: 40,
                                 ),
                                 Row(

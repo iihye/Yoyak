@@ -1,4 +1,4 @@
-class AlarmDetailModels {
+class AlarmDetailModel {
   int? accountSeq;
   int? notiSeq;
   String? name;
@@ -7,7 +7,7 @@ class AlarmDetailModels {
   List<String>? period;
   List<String>? time;
 
-  AlarmDetailModels(
+  AlarmDetailModel(
       {this.accountSeq,
       this.notiSeq,
       this.name,
@@ -16,7 +16,7 @@ class AlarmDetailModels {
       this.period,
       this.time});
 
-  AlarmDetailModels.fromJson(Map<String, dynamic> json) {
+  AlarmDetailModel.fromJson(Map<String, dynamic> json) {
     accountSeq = json['accountSeq'];
     notiSeq = json['notiSeq'];
     name = json['name'];

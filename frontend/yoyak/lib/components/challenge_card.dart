@@ -22,9 +22,9 @@ class ChallengeCard extends StatelessWidget {
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
           width: cardWidth,
-          height: 270,
+          // height: 270,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRRect(
                 borderRadius: const BorderRadius.only(
@@ -41,7 +41,7 @@ class ChallengeCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       challenge?['title'] ?? "챌린지 이름",
@@ -64,33 +64,9 @@ class ChallengeCard extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    // Progress Bar
-                    AnimatedProgressBar(
-                      width: cardWidth * 0.9,
-                      height: 10,
-                      value: 0.4,
-                      duration: const Duration(seconds: 1),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Colors.lightBlue,
-                          Palette.MAIN_BLUE,
-                        ],
-                      ),
-                      backgroundColor: Palette.BG_BLUE,
-                    ),
                     const SizedBox(
                       height: 20,
                     ),
-                    BaseButton(
-                      width: cardWidth,
-                      height: 40,
-                      fontSize: 15,
-                      borderWidth: 1.0,
-                      onPressed: () {},
-                      text: "응원하기",
-                      colorMode: 'white',
-                      borderRadius: BorderRadius.circular(10),
-                    )
                   ],
                 ),
               )

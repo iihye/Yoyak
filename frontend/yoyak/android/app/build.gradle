@@ -28,6 +28,7 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace "com.example.yoyak"
+    compileSdkVersion 33
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 

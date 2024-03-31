@@ -145,7 +145,7 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                     // 여자에요
                     GestureDetector(
                       onTap: () {
-                        context.read<LoginStore>().setGender('W'); // 성별 저장
+                        context.read<LoginStore>().setGender('F'); // 성별 저장
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/', (_) => false);
                         Navigator.pushReplacement(
