@@ -87,7 +87,7 @@ class _PillBagDialogState extends State<PillBagDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var accountList = context.watch<LoginStore>().alarmAccounts;
+    var accountList = context.watch<LoginStore>().accountList;
 
     return Dialog(
       backgroundColor: Palette.MAIN_WHITE,

@@ -16,7 +16,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<AccountModel> account = context.watch<LoginStore>().alarmAccounts;
+    List<AccountModel> account = context.watch<LoginStore>().accountList;
 
     return AppBar(
       centerTitle: true,
