@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
     // LoginStore에서 alarmAccounts 가져오기
     List<AccountModel> alarmAccounts =
-        context.watch<LoginStore>().alarmAccounts;
+        context.watch<LoginStore>().accountList;
 
     // account 변수를 선언하고 조건에 따라 할당
     AccountModel? account =

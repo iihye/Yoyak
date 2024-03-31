@@ -10,7 +10,7 @@ import '../auto_login/singleton_secure_storage.dart';
 class LoginStore extends ChangeNotifier {
   dynamic userInfo = ""; // storage에 있는 유저 정보 저장
   final storage = SingletonSecureStorage().storage;
-  List<AccountModel> alarmAccounts = [];
+  List<AccountModel> accountList = [];
 
   String accessToken = '';
   String? deviceToken = "";
@@ -88,13 +88,15 @@ class LoginStore extends ChangeNotifier {
   Future<void> getAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String url = '$yoyakURL/account'; // 요청할 URL
-
+    String? accessToken = await storage.read(key: 'accessToken');
+    print("account시발의 accessToken $accessToken");
     try {
+      String? accesstoken = await storage.read(key: 'accessToken');
       final response = await http.get(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $accesstoken',
         },
       );
 
@@ -102,7 +104,7 @@ class LoginStore extends ChangeNotifier {
         print('유저야 ${response.statusCode}.');
         var decodedBody = utf8.decode(response.bodyBytes);
         List<dynamic> data = json.decode(decodedBody);
-        alarmAccounts =
+        accountList =
             data.map((json) => AccountModel.fromJson(json)).toList();
         notifyListeners();
       } else {

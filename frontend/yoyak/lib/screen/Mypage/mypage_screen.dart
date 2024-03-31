@@ -16,30 +16,30 @@ class MypageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<AccountModel> alarmAccounts =
-        context.watch<LoginStore>().alarmAccounts;
+    final List<AccountModel> accountList =
+        context.watch<LoginStore>().accountList;
 
     final AccountModel accountitem =
-        context.read<LoginStore>().alarmAccounts[0];
+        context.read<LoginStore>().accountList[0];
 
     final String userName =
-        context.read<LoginStore>().alarmAccounts[0].nickname!;
+        context.read<LoginStore>().accountList[0].nickname!;
 
     final String userGender =
-        context.read<LoginStore>().alarmAccounts[0].gender!;
+        context.read<LoginStore>().accountList[0].gender!;
     String gender = userGender == 'F' ? '여자' : '남자';
 
-    final String userBirth = context.read<LoginStore>().alarmAccounts[0].birth!;
+    final String userBirth = context.read<LoginStore>().accountList[0].birth!;
 
     final String userdisease =
-        context.read<LoginStore>().alarmAccounts[0].disease ?? '없음';
+        context.read<LoginStore>().accountList[0].disease ?? '없음';
 
     String displayDisease = userdisease.length > 5
         ? '${userdisease.substring(0, 5)}...'
         : userdisease;
 
     final int profileImg =
-        context.read<LoginStore>().alarmAccounts[0].profileImg!;
+        context.read<LoginStore>().accountList[0].profileImg!;
 
     void goToAccountUpdate(AccountModel? accountitem, bool isUser) {
       accountitem ??= AccountModel();
@@ -289,12 +289,12 @@ class MypageScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      AccountList(accountList: alarmAccounts.sublist(1)),
-                      if (alarmAccounts.length < 4)
+                      AccountList(accountList: accountList.sublist(1)),
+                      if (accountList.length < 4)
                         const SizedBox(
                           height: 10,
                         ),
-                      if (alarmAccounts.length < 4)
+                      if (accountList.length < 4)
                         GestureDetector(
                           onTap: () {
                             goToAccountUpdate(null, false);
