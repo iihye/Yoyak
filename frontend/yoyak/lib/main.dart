@@ -36,6 +36,7 @@ void setupFirebaseMessaging() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   //Kakao SDK 초기화 : 카카오 Api 가져다 쓰려면 이렇게 초기화해줘야 함
   KakaoSdk.init(nativeAppKey: Security.NATIVE_APP_KEY);
   await initializeDateFormatting();
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return const SafeArea(
         child: MaterialApp(
       // 알림 날짜 선택기를 위한 한국어 설정
