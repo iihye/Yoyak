@@ -88,7 +88,8 @@ class LoginStore extends ChangeNotifier {
   Future<void> getAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String url = '$yoyakURL/account'; // 요청할 URL
-
+    String? accessToken = await storage.read(key: 'accessToken');
+    print("account시발의 accessToken $accessToken");
     try {
       final response = await http.get(
         Uri.parse(url),
