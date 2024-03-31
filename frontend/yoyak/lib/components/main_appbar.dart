@@ -52,9 +52,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                       });
                 } else {
                   // 토큰이 있을 경우 프로필 이미지를 표시합니다.
-                  print("hello world");
                   List<AccountModel> account = context.watch<LoginStore>().alarmAccounts;
-                  print("account 시발: $account");
+                  print("account 후: $account");
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -72,7 +71,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                 }
               } else {
                 // 데이터를 기다리는 동안 로딩 인디케이터를 표시할 수 있습니다.
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
             },
           ),
