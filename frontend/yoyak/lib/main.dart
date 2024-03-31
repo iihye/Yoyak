@@ -15,7 +15,6 @@ import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'firebase_options.dart';
 
 @pragma('vm:entry-point')
