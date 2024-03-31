@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/Main/main_screen.dart';
@@ -42,7 +39,6 @@ void main() async {
   //Kakao SDK 초기화 : 카카오 Api 가져다 쓰려면 이렇게 초기화해줘야 함
   KakaoSdk.init(nativeAppKey: Security.NATIVE_APP_KEY);
   await initializeDateFormatting();
-  await dotenv.load(fileName: "assets/config/.env");
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
