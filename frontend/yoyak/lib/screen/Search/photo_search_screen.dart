@@ -34,8 +34,8 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
           style: TextStyle(
             color: Palette.MAIN_BLACK,
             fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w400,
-            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
           ),
         ),
         backgroundColor: Palette.BG_BLUE,
@@ -67,19 +67,19 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
                   color: Palette.MAIN_BLACK,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
-                  fontSize: 15),
+                  fontSize: 14),
             ),
             const Text(
-              "밝은 곳에서 알약의 문자가 잘 보이게 촬영해주세요.",
+              "밝은 곳에서 알약의 문자가 잘 보이게 촬영해 주세요.",
               style: TextStyle(
                   color: Palette.MAIN_BLACK,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
-                  fontSize: 15),
+                  fontSize: 14),
             ),
             // 가이드 사진
             Container(
-              margin: const EdgeInsets.only(top: 50, bottom: 40),
+              margin: const EdgeInsets.only(top: 30, bottom: 40),
               child: RoundedRectangle(
                 width: rectangleWidth,
                 height: rectangleHeight,
@@ -92,6 +92,7 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
                 ],
                 // 가이드 사진 && 사진 미리보기
                 child: image != null // 사용자가 사진을 선택한 후!
+                    //  다시 가이드 사진으로 초기화 - 사진으로 검색하기 버튼을 누르면 초기화
                     ? Image.file(File(image.path))
                     : const Image(
                         image: AssetImage('assets/images/guide.png'),
@@ -199,7 +200,7 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
             // 스탈 입히기..
             if (image != null) ...[
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.04,
+                height: MediaQuery.of(context).size.height * 0.06,
               ),
               Center(
                 child: BaseButton(

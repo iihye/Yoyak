@@ -6,8 +6,10 @@ import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/screen/Login/kakao_login_screen.dart';
+import 'package:yoyak/screen/PillBag/pill_bag_screen.dart';
 import 'package:yoyak/screen/Search/filter_search_screen.dart';
 import 'package:yoyak/screen/Search/photo_search_screen.dart';
+import 'package:yoyak/store/pill_bag_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import '../../components/icon_in_rectangle.dart';
 import '../../store/login_store.dart';
@@ -25,8 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
     // LoginStore에서 alarmAccounts 가져오기
-    List<AccountModel> alarmAccounts =
-        context.watch<LoginStore>().accountList;
+    List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
 
     // account 변수를 선언하고 조건에 따라 할당
     AccountModel? account =
@@ -184,7 +185,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           RoundedRectangle(
                               width: rectangleSize,
                               height: rectangleSize,
-                              onTap: () => goTo(const KakaoLoginScreen()),
+                              onTap: () {
+                                goTo(const PillBagScreen());
+                                context.read<PillBagStore>().getPillBagDatas(
+                                      context,
+                                      medicineSeq: 0,
+                                    );
+                              },
                               child: const IconInRectangle(
                                 subTitle: "내 약을 한눈에",
                                 title: "MY 약 봉투",

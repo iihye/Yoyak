@@ -50,7 +50,7 @@ class CameraStore extends ChangeNotifier {
     // pickedFile에 ImagePicker로 가져온 이미지가 담김
     final pickedFile = await picker.pickImage(
       source: imageSource,
-      imageQuality: 10,
+      imageQuality: 100,
     );
     if (pickedFile != null) {
       image = XFile(pickedFile.path); // 가져온 이미지를 image에 저장
@@ -65,7 +65,7 @@ class CameraStore extends ChangeNotifier {
     // pickedFile에 ImagePicker로 가져온 이미지가 담김
     final pickedFile = await picker.pickImage(
       source: imageSource,
-      imageQuality: 10,
+      imageQuality: 100,
     );
     if (pickedFile != null) {
       image = XFile(pickedFile.path); // 가져온 이미지를 image에 저장
